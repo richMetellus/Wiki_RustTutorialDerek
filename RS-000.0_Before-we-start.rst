@@ -1,0 +1,154 @@
+Get Started 
+#############
+
+.. card:: Why use Rust?
+
+   * **High Performance** - system programming language similar to C++
+   * **Memory Safety** - Garbage Collection Not Necessary
+     
+     * Memory errors usually lead to security breaches. Rust focuses on memory 
+       safe practices which make it an attractive language.
+   
+   * **Low memory footprint**
+
+     * can be used in resource constraint environment like embedded systems (no unused variable, no code bloat, great 
+       code optimization)
+   
+   * Rust excels at **Concurrent Programming** 
+     
+     * At compile time many possible concurrent programming problems are pointed 
+       out and the rust compiler is so robust that it normally find errors not 
+       found by other language compilers.
+
+   * **Easy to Understand Errors**.
+
+
+Installation: Setup Build Environment
+****************************************
+
+1. Verify if you don't already have rust compiler (rustc) installed by 
+   opening up a terminal and type ``rustc --version`` command.
+
+#. If you don't have it installed, go to `Rust-lang Official Website`_ then > `Getting started`_ 
+   
+   .. figure:: ./_images/RS-000_Installation_1.0_GetStartedPage.png
+      :width: 350px
+      
+      At the time of this writing, the page looked like this for Windows Users. 
+
+#. Install as per your system type: 
+
+   .. tabs::
+
+      .. group-tab:: Windows 
+         
+         .. admonition:: Decision 
+
+            This method was my selection.
+
+         #. Click on ``Download RUSTUP-INIT.EXE`` button that match your system. 
+
+            .. note:: you may need to install `Visual Studio C++ Build`_ tools since you 
+               may need a *linker* as some common Rust package depends on C code.
+
+         #. Double click the executable to run it.
+            
+         
+         .. collapse:: show/hide log output during installation:
+
+            .. literalinclude:: ./_resources/RS-000_1.0_rust-windows-installation.log
+
+
+      .. group-tab:: Unix/Linux/WSL 
+
+         1. Run in a shell::
+
+               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
+
+            * This command downloads and runs ``rustup-init.sh``, which in turn 
+              downloads and runs the correct version of the rustup-init executable 
+              for your platform.
+
+            * Putting the link ``https://sh.rustup.rs`` in your browser will directly 
+              download the shell script on your system. You can open and view it
+              before deciding whether to run it.
+            
+            .. note:: you may follow `Other Rust Installation Methods`_ if you want 
+               alternative.
+  
+   .. note:: Notice when you run the binary, you get 
+     
+      * ``rustup`` - the Rust installer and version management tool. (kinda like 
+         python version management pyenv)
+
+         * Typing ``rustup doc`` command will open the local copy of rust documentation 
+           right in your browser. No Internet connection required. 
+
+           .. note:: on my windows machine, the doc entry point was 
+              *file:///C:/Users/ricky/.rustup/toolchains/stable-x86_64-pc-windows-msvc/share/doc/rust/html/index.html*
+
+           
+           The doc includes:
+
+           1. "The Rust API documentation" (Rust stand Library)
+           #. "The Rust Programming Language" book 
+           #. The "Rust by Example" book
+           #. "The rustc book" - the rust compiler book, ``rustc`` command
+           #. "The Cargo Book" -  a guide to to Cargo, Rust’s build tool and dependency manager
+              ``cargo`` command.
+           #. "The Rustdoc Book" describes a documentation tool, ``rustdoc``.
+           #. "Clippy Documentation" - rust static analyzer and linting component.
+              
+              * note ``clippy`` is not a recognized command in the terminal.
+
+           #. and many more like Rust Reference, Rust Embedded Book, and external 
+              reference link. 
+           
+      * ``rustc`` the rust compiler 
+      * ``cargo`` - the build tool and package manager for Rust. It's kinda like 
+        npm (node package manager) or python pip.
+      
+      * ``rustdoc``
+      * ``rustfmt`` or cargo fmt - to format your code.
+
+      They really took their time putting this all together.
+    
+#. Install additional development tool like VS Code ``rust-analyzer`` extension. 
+   
+   **Pre-requisites**
+
+   * User must already have VS Code installed. 
+
+   .. seealso:: Follow the instruction provided by Microsoft: `VS Code Setup for Rust`_ 
+
+Uninstall
+************
+
+1. If you already have rustup installed on windows when you click on the 
+   ``rustup-init.exe`` you will see the following:
+
+   .. image:: ./_images/RS-000_Installation_2.0_RustupAlreadyInstalled.png
+      :width: 300px
+
+
+2. To uninstall run ``rustup self uninstall``
+   
+   .. code-block:: console 
+      :caption: example in windows 
+
+      >rustup self uninstall
+
+
+      Thanks for hacking in Rust!
+
+      This will uninstall all Rust toolchains and data, and remove
+      %USERPROFILE%\.cargo/bin from your PATH environment variable.
+
+      Continue? (y/N) y
+
+      info: removing rustup home
+      info: removing cargo home
+      info: removing rustup binaries
+      info: rustup is uninstalled
+
+.. include:: ./relevant_urls.rst

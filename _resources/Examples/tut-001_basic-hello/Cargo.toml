@@ -1,0 +1,6 @@
+[package]
+name = "tut-001_basic-hello"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

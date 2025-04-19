@@ -1,0 +1,79 @@
+Basic 1st Program in Rust 
+###########################
+
+**Objectives**
+
+1. Learn how to create a rust project
+#. Learn how to take basic input from a user and output it in the terminal.
+
+
+Step 1: Create Workspace & Project
+************************************
+
+We need to create a folder that will serve as a workspace to keep all the 
+code examples.
+
+1. I created mine under the repo _resources/Examples.
+   
+   * I (transcriber) will use ``ROOT_REPO= ~/Workspace/Repos/Pers/Wiki_RustTutorialDerek/``
+     as the example for where I am keeping my code and doc locally.
+   
+   .. code-block:: console
+      :caption: from ROOT_REPO= ~/Workspace/Repos/Pers/Wiki_RustTutorialDerek/ 
+
+      mkdir -p _resources/Examples
+
+2. use rust ``cargo`` build system and package manager to create a basic project
+   with the following command
+
+   * syntax: ``cargo new <package-name>`` to create an new binary application.
+   
+   .. warning:: The package name cannot start with a digit
+
+      .. code-block:: console 
+         :caption: example of error 
+         :emphasize-lines: 1
+
+         _resources/Examples (main)$ cargo new 001_basic-hello
+             Creating binary (application) `001_basic-hello` package
+         error: invalid character `0` in package name: `001_basic-hello`, the name cannot start with a digit
+         If you need a package name to not match the directory name, consider using --name flag.
+         If you need a binary with the name "001_basic-hello", use a valid package name, and set the binary name to be different from the package. This can be done by setting the binary filename to `src/bin/001_basic-hello.rs` or change the name in Cargo.toml with:
+
+             [[bin]]
+             name = "001_basic-hello"
+             path = "src/main.rs"
+   
+   .. code-block:: console
+      :emphasize-lines: 1
+      :caption: using git bash terminal in Windows.
+
+      $ cargo new tut-001_basic-hello
+          Creating binary (application) `tut-001_basic-hello` package
+      note: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+   
+   
+   * The following directories and files are created 
+     
+     .. code-block:: console 
+        
+        _resources/Examples(main)$ tree -a .
+        .
+        └── tut-001_basic-hello
+            ├── Cargo.toml
+            └── src
+                └── main.rs
+        
+        2 directories, 2 files
+
+#. Open the newly created project in vscode.
+
+Step 2: Explore the basic Project Created by Cargo 
+****************************************************
+
+
+   
+   
+
+        
