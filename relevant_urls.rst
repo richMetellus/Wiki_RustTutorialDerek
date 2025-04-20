@@ -6,4 +6,5 @@
 .. _Visual Studio C++ Build: https://visualstudio.microsoft.com/visual-cpp-build-tools
 .. _VS Code Setup for Rust: https://code.visualstudio.com/docs/languages/rust
 .. _Learn Rust (rust website): https://www.rust-lang.org/learn
-
+.. _crates.io: https://crates.io/
+.. _Rust By Example - crates: https://doc.rust-lang.org/rust-by-example/crates.html

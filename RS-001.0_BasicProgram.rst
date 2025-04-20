@@ -115,8 +115,8 @@ a .git repository.
    
 * it is safe to say all the content under /target should not be committed.
 
-Step 3: Build  & Run The Project 
-**********************************
+Step 3: Build  & Run The Automatically Created Project 
+********************************************************
 
 1. Build the project with ``cargo build`` or ``rustc main.rs``
    
@@ -223,5 +223,144 @@ Step 3: Build  & Run The Project
 
 #. Commit the change we have so far. Don't forget to not commit target/ folder.
 
-Extend the hello world application 
-***********************************
+Add Tutorial Project Dependencies 
+**********************************
+
+.. note:: throughout this tutorial,
+   
+   * if you want to get rid of warnings about 
+     unused variables then add to the first line of the .rs file, this code 
+     ``#![allow(unused)]``
+
+     * This will get rid of warnings for variables that are declared but not are 
+       in used.
+     
+     .. warning:: Generally, you should not do that but this is just a measure the 
+        instructor used as part of the tutorial.
+
+1. Open src/main.rs file in your text editor 
+#. Start **adding the dependencies** of the project( crates and modules) we will use 
+   throughout the entire tutorial. 
+
+   * There are a ton of libraries that we will use so to add them, 
+     Derek, the instructor, add all of them in one go. 
+     
+     * a crate is just a compilation unit. 
+       
+       .. compound:: `Rust By Example - crates`_ 
+          :class: light-gray-bg
+
+          A crate is a compilation unit in Rust. Whenever ``rustc some_file.rs`` 
+          is called, ``some_file.rs`` is treated as the crate file. If 
+          ``some_file.rs`` has ``mod`` declarations in it, then the contents of 
+          the module files would be inserted in places where ``mod`` declarations 
+          in the crate file are found, before running the compiler over it. 
+          
+          .. important:: In other words, modules do not get compiled individually, 
+             only crates get compiled.
+
+          A crate can be compiled into a binary or into a library. 
+          By default, ``rustc`` will produce a binary from a crate. This behavior 
+          can be overridden by passing the ``--crate-type`` flag to ``lib``.
+
+       
+       * to find all the crate Hub, then visit https://crates.io/
+
+   I. add standard library 
+
+      .. code-block:: rust 
+         :caption: src/main.c 
+         :linenos:
+   
+         #![allow(unused)]
+   
+         use std::io;
+      
+      * Instead of ``std::io``, if you want to bring all public under his library into your 
+        specific scope, you can do ``use std::io::*;`` but ``std::io`` will do just 
+        fine.
+      
+   #. add ``use rand::Rng;`` random range - so you can generate random value.
+     
+      .. code-block:: Rust 
+         :console: src/main.rs 
+         :lineno-start:  4
+
+         use rand::Rng;
+
+      * if you see an a warning by rust-analyzer when you add this line, it means the dependency is 
+        missing. 
+        
+        .. image:: ./_images/RS-001.0_ExtendApp_1.0_RandWarning.png
+           :width: 350px 
+
+        * ``Rand`` is the crate and you can visit `crates.io`_ , search for 
+          ``Rand`` and find the latest version number.
+
+          .. image:: ./_images/RS-001.0_ExtendApp_1.1_RandCrate.png
+             :width: 350px
+
+        A. To get rid of the warning, open ``Cargo.toml`` and under ``[dependencies]``
+           add the crate name and version needed by your program. 
+
+           .. code-block:: toml
+              :caption: Cargo.toml
+              :lineno-start: 6
+              
+              [dependencies]
+              rand = "0.9.1"
+   
+   #. Another thing you can do with these libraries, you can actually use nested 
+      paths if you want to import many of them at once. Add the following to 
+      your main.rs 
+
+      .. code-block:: Rust 
+         :caption: src/main.rs
+         :lineno-start: 5
+
+         use std::io::{Write, BufReader, BufRead, ErrorKind};
+         use std::fs::File;
+         use std::cmp::Ordering;
+      
+      * ``std::io::Write`` is going to be used later in the tutorial to be able to 
+        work with files.
+      
+      * ``std::cmp::Ordering`` is going to be used with something called ``match``
+
+#. Once all changes are added, you can run the application to make sure no issues 
+   are detected. 
+
+   * With rust-analyzer in vscode, you will see a ``Run`` icon on top of main,
+     just click on that to run. It also comes with a basic debugger, you can 
+     add break point and run debug to debug your program.
+     
+     .. image:: ./_images/RS-001.0_ExtendApp_2.0_RunDebug.png
+        :width: 450px
+     
+     .. code-block:: console 
+        :caption: terminal output after clicking on run 
+
+        *  Executing task: C:\Users\ricky\.cargo\bin\cargo.EXE run --package tut-001_basic-hello --bin tut-001_basic-hello 
+
+           Compiling cfg-if v1.0.0
+           Compiling zerocopy v0.8.24
+           Compiling getrandom v0.3.2
+           Compiling rand_core v0.9.3
+           Compiling ppv-lite86 v0.2.21
+           Compiling rand_chacha v0.9.0
+           Compiling rand v0.9.1
+           Compiling tut-001_basic-hello v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-001_basic-hello)
+            Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.33s
+             Running `target\debug\tut-001_basic-hello.exe`
+        Hello, world!
+         *  Terminal will be reused by tasks, press any key to close it. 
+   
+   .. note:: This code serves as the basic template from which all subsequent tutorial 
+      lesson is built upon.
+
+#. Commit the changes so far 
+
+Extend Hello World App 
+*************************
+
+.. include:: ./relevant_urls.rst
