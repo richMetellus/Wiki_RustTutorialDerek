@@ -1,0 +1,6 @@
+Variables, Datatypes & Operators in Rust 
+##########################################
+
+**Pre-reqs**
+
+1. For this tutorial I created a new project with ``cargo new tut-002_var-datatype-ops``

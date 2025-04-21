@@ -466,7 +466,9 @@ Code Writing and Explanation
      * **explanation**: basically the read line function is going to receive name 
        and the reference symbol use ``&`` here before ``mut`` say it is a reference 
        to the variable and this is going to allow readline to save value directly
-       to the name.
+       to the name. like variables, references are immutable by default. Hence, 
+       you need to write ``&mut <variable-name>`` to make the variable reference 
+       mutable.
 
        * ``read_line`` actually return a *Result*. and the result can be an 
          ``enum``, enumerated type which can only be two values are either
@@ -578,6 +580,21 @@ Testing
       Hello Ricky! Nice to meet you
        *  Terminal will be reused by tasks, press any key to close it. 
 
+
+Wrap up
+*********
+
+1. Tag the final section with tag ``RS-001.0_v0.0.4``
+
+TODO 
+*****
+
+* Research the Rust Compilation process. How does cargo and rustc works under 
+  the hood? How does it link the object file(s)?
+  
+  .. seealso:: * `The Big Picture of Compilation in Rust (forum)`_
+     
+     * `Rust Compiler Development Guide`_
 
 .. include:: ./relevant_urls.rst
 
