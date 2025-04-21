@@ -250,7 +250,7 @@ Add Tutorial Project Dependencies
        .. compound:: `Rust By Example - crates`_ 
           :class: light-gray-bg
 
-          A crate is a compilation unit in Rust. Whenever ``rustc some_file.rs`` 
+          A :term:`crate` is a compilation unit in Rust. Whenever ``rustc some_file.rs`` 
           is called, ``some_file.rs`` is treated as the crate file. If 
           ``some_file.rs`` has ``mod`` declarations in it, then the contents of 
           the module files would be inserted in places where ``mod`` declarations 
@@ -259,12 +259,12 @@ Add Tutorial Project Dependencies
           .. important:: In other words, modules do not get compiled individually, 
              only crates get compiled.
 
-          A crate can be compiled into a binary or into a library. 
+          A :term:`crate` can be compiled into a binary or into a library. 
           By default, ``rustc`` will produce a binary from a crate. This behavior 
           can be overridden by passing the ``--crate-type`` flag to ``lib``.
 
        
-       * to find all the crate Hub, then visit https://crates.io/
+       * to find all the crates , there is "CrateHub" https://crates.io/
 
    I. add standard library 
 
@@ -294,7 +294,7 @@ Add Tutorial Project Dependencies
         .. image:: ./_images/RS-001.0_ExtendApp_1.0_RandWarning.png
            :width: 350px 
 
-        * ``Rand`` is the crate and you can visit `crates.io`_ , search for 
+        * ``Rand`` is the :term:`crate` and you can visit `crates.io`_ , search for 
           ``Rand`` and find the latest version number.
 
           .. image:: ./_images/RS-001.0_ExtendApp_1.1_RandCrate.png
@@ -360,7 +360,42 @@ Add Tutorial Project Dependencies
 
 #. Commit the changes so far 
 
+Summary and Code Explanation 
+=================================
+
+Some explanation of the code so far:
+
+.. literalinclude:: ./_resources/Examples/tut-001_basic-hello/src/main.rs.bak 
+   :language: Rust
+
+* function always start with the keyword ``fn`` followed by 1 or more space, 
+  then function name. ``fn main()``. This function takes no parameters. 
+
+  * By default, Rust use 4 white space for indentation.
+
+* the ``println!`` is a macro. Whenever you see a ``!`` next something that may 
+  look like a function name is a macro. 
+
+  .. compound:: Rust By Example 
+     :class: light-gray-bg
+
+     :term:`Rust Macros` - :term:`Macros` are a way of writing code that writes other code, 
+     which is known as metaprogramming.
+
+     * macro name ends with a bang ``!``, 
+     * instead of generating a function call, macros are expanded into source 
+       code that gets compiled with the rest of the program
+
+* Rust has some keyword (strict keyword) that you may not use for naming variables,
+  or functions. You can learn more about `Rust Keyword`_
+* the keyword ``use`` is rust's way of allowing user to import a :term:`crate`.
+* a :term:`crate` is a compilation unit, similar to c translation unit. A crate 
+  can be a library or an application binary.
+
 Extend Hello World App 
 *************************
 
+
 .. include:: ./relevant_urls.rst
+
+.. include:: ../../relevant_urls.rst
