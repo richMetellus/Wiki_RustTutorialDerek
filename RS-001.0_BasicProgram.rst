@@ -395,6 +395,189 @@ Some explanation of the code so far:
 Extend Hello World App 
 *************************
 
+using tag RS-001.0_v0.0.3 as starting point, I will continue documenting the 
+lesson.
+
+**objectives**
+
+* Take input from the user and greet user by name.
+
+Code Writing and Explanation
+=============================
+
+1. I follow the instructor code but remove the imports that are not necessary 
+   for this basic tutorial. I wanted to see if any warnings or error will be 
+   thrown. Made the following changes to the source code.
+
+   .. code-block:: Diff 
+      :caption: src/main
+
+      --- a/_resources/Examples/tut-001_basic-hello/src/main.rs
+      +++ b/_resources/Examples/tut-001_basic-hello/src/main.rs
+      @@ -1,12 +1,12 @@
+      -#![allow(unused)]
+      +// #![allow(unused)]
+
+       use std:: io;
+      -use rand::Rng;
+      -
+      -use std::io::{Write, BufReader, BufRead, ErrorKind};
+      -use std::fs::File;
+      -use std::cmp::Ordering;
+
+       fn main() {
+      -    println!("Hello, world!");
+      +    println!("what is your name?");
+      +    let mut name = String::new();
+      +    let greeting: &str = "Nice to meet you";
+      +    io::stdin().read_line(&mut name)
+      +        .expect("Didn't Receive User Input");
+      +    println!("Hello {}! {}", name.trim_end(), greeting);
+       }
+
+
+.. card:: explanation
+   
+   * we define a mutable variable (i.e one that can change).
+     
+     .. important:: by default, all variable you create inside of rust are immutable. 
+        
+        You can set them up to be mutable by starting them with 
+        ``let mut``
+
+        * ``let`` keyword is used for declaration of a variable.
+        * ``mut`` tells the compiler the variable is mutable. Without ``mut``,
+          the default will apply (immutable.)
+        
+        The reason why have immutable variable by default is because by using 
+        immutable variables, this basically eliminate having to track down how 
+        values change throughout your code, which can save you a ton of time 
+        when it comes to debugging.
+   
+      
+   * ``String::new()`` is a function that will return an empty string.
+   * ``name`` is the mutable variable that will hold the user name.
+   * we use ``io::stdin().read_line`` to read the character typed by the user.
+     
+     * ``&mut name``  say its a mutable parameter and its value is name
+
+     * ``.expect`` is for error checking.
+
+     * **explanation**: basically the read line function is going to receive name 
+       and the reference symbol use ``&`` here before ``mut`` say it is a reference 
+       to the variable and this is going to allow readline to save value directly
+       to the name.
+
+       * ``read_line`` actually return a *Result*. and the result can be an 
+         ``enum``, enumerated type which can only be two values are either
+         ``Ok`` or ``Err``. All this error handling is already built into 
+         rust. And what that allows you to do is say::
+
+            if Err is returned:
+               you can go and say the operation has failed. And Err can tell you 
+               why the function has failed.
+         
+         * ``.expect`` is a way for us to print out the message if we the function 
+           hit an error.
+           
+           .. note:: without ``.expect`` and without ``#![allow(unused)]``, 
+              
+              if I just run the code, then a warning will show. See the testing 
+              method section.
+
+   * in the ``println!`` macro we can use ``{}`` to insert different value to print 
+     as message string formatting.
+
+     ``name.trim_end()`` - the trim.end() function remove the automatic new line 
+     that get inserted at the end ``name`` because the user hit a new line [ENTER]
+
+Testing 
+========
+
+1. I deleted everything under ``target`` so I see what a fresh build will look 
+   like. 
+
+   ``rm -rf tut-001_basic-hello/target/``
+
+2. Press the ``Run`` icon on top of main. 
+   
+   I. Type a name. 
+   #. Capture the result 
+   
+   .. code-block:: console 
+      :caption: program testing
+
+       *  Executing task: C:\Users\ricky\.cargo\bin\cargo.EXE run --package tut-001_basic-hello --bin tut-001_basic-hello 
+
+         Compiling zerocopy v0.8.24
+         Compiling getrandom v0.3.2
+         Compiling cfg-if v1.0.0
+         Compiling rand_core v0.9.3
+         Compiling ppv-lite86 v0.2.21
+         Compiling rand_chacha v0.9.0
+         Compiling rand v0.9.1
+         Compiling tut-001_basic-hello v0.1.0 (Wiki_RustTutorialDerek\_resources\Examples\tut-001_basic-hello)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.82s
+           Running `target\debug\tut-001_basic-hello.exe`
+      what is your name?
+      Ricky
+      Hello Ricky! Nice to meet you
+       *  Terminal will be reused by tasks, press any key to close it. 
+      
+
+**Test 2**:
+
+1. Make the following changes to the main.rs 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-001_basic-hello/src/main.rs
+      +++ b/_resources/Examples/tut-001_basic-hello/src/main.rs
+      @@ -7,6 +7,6 @@ fn main() {
+           let mut name = String::new();
+           let greeting: &str = "Nice to meet you";
+           io::stdin().read_line(&mut name)
+      -        .expect("Didn't Receive User Input");
+      +        /* .expect("Didn't Receive User Input") */;
+           println!("Hello {}! {}", name.trim_end(), greeting);
+       }
+
+
+2. Run the code and capture the result 
+   
+   .. code-block:: console 
+
+        Executing task: C:\Users\ricky\.cargo\bin\cargo.EXE run --package tut-001_basic-hello --bin tut-001_basic-hello 
+
+         Compiling cfg-if v1.0.0
+         Compiling zerocopy v0.8.24
+         Compiling getrandom v0.3.2
+         Compiling rand_core v0.9.3
+         Compiling ppv-lite86 v0.2.21
+         Compiling rand_chacha v0.9.0
+         Compiling rand v0.9.1
+         Compiling tut-001_basic-hello v0.1.0 (Wiki_RustTutorialDerek\_resources\Examples\tut-001_basic-hello)
+      warning: unused `Result` that must be used
+       --> src\main.rs:9:5
+        |
+      9 |     io::stdin().read_line(&mut name)
+        |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        |
+        = note: this `Result` may be an `Err` variant, which should be handled
+        = note: `#[warn(unused_must_use)]` on by default
+      help: use `let _ = ...` to ignore the resulting value
+        |
+      9 |     let _ = io::stdin().read_line(&mut name)
+        |     +++++++
+
+      warning: `tut-001_basic-hello` (bin "tut-001_basic-hello") generated 1 warning
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.16s
+           Running `target\debug\tut-001_basic-hello.exe`
+      what is your name?
+      Ricky
+      Hello Ricky! Nice to meet you
+       *  Terminal will be reused by tasks, press any key to close it. 
+
 
 .. include:: ./relevant_urls.rst
 
