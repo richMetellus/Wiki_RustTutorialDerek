@@ -486,6 +486,10 @@ Code Writing and Explanation
               
               if I just run the code, then a warning will show. See the testing 
               method section.
+       
+       .. note:: notice we don't put the semi colon ``;`` after ``read_line()``
+          as the statement is not ended yet. TODO: Find out what this is type of 
+          style programming is called in rust.
 
    * in the ``println!`` macro we can use ``{}`` to insert different value to print 
      as message string formatting.

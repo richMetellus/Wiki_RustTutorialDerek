@@ -1,6 +1,233 @@
-Variables, Datatypes & Operators in Rust 
-##########################################
+Constants, Variables, Datatypes & Operators in Rust 
+####################################################
 
 **Pre-reqs**
 
 1. For this tutorial I created a new project with ``cargo new tut-002_var-datatype-ops``
+
+
+Constant
+*********
+
+Another thing about variable in rust, is that we can declare them to be constant 
+using the ``const`` keyword.
+
+* the popular nomenclature for constant variable is to use all upper case for 
+  the constant variable name.
+
+  * **syntax**: ``const`` <CONST_NAME> ``:`` <type> ``=`` <value>
+
+  * ex: ``const ONE_MIL: u32 = 1_000_000;``
+    
+    * in rust, you can separate big values using an underscore ``_`` as shown above.
+    * constant must be explicitly typed. Rust is a statically typed language. The 
+      type of the variable is always known at compiled time. Some type must be 
+      explicitly typed during declaration, other are implicitly typed by the compiler.
+
+
+1. Let start type the following code 
+   
+   .. code-block:: diff 
+      :caption: tut-002_var-datatype-ops/src/main.rs
+
+      --- a/_resources/Examples/tut-002_var-datatype-ops/src/main.rs
+      +++ b/_resources/Examples/tut-002_var-datatype-ops/src/main.rs
+      @@ -1,3 +1,14 @@
+      +// constant variables demo code:
+      +
+       fn main() {
+      -    println!("Hello, world!");
+      +    const ONE_MIL: u32 = 1_000_000;
+      +    const PI : f32 = 3.141592;
+      +    let age = "47"; // a string, implicitly typed. defined with double quotes
+      +    let mut age: u32 = age.trim().parse() // LEGAL in rust to re-use the same variable name. Shadowing
+      +        .expect("Age wasn't assigned a number"); 
+      +
+      +    // now that the age is a u32, we can do operation.
+      +    age = age + 1; // increment by 1.
+      +
+      +    println!("I'm {} and I want ${} so I can buy some {}", age, ONE_MIL, PI);
+       }
+
+.. card:: Code explanation
+
+   * we ``age`` as a string and one as a unsigned 32-bit (u32). 
+     
+     * This is perfectly okay in rust. You can define variables with the same 
+       name but with different data types. This is called **shadowing**. The second
+       declaration using ``let`` is what the compiler will see.
+
+       .. seealso:: * `Variable and Mutability | Constant | Shadowing (rust prog lang book)`_
+     
+     * we use ``.trim()`` on the string to get rid of any whitespace, then ``.parse()``
+       to parse on it, which will return a unsigned 32 bit integer in that case.
+
+
+.. card:: Testing 
+
+   1. run the code and observe the terminal output 
+
+   .. code-block:: console
+      :emphasize-lines: 6
+
+       *  Executing task: C:\Users\ricky\.cargo\bin\cargo.EXE run --package tut-002_var-datatype-ops --bin tut-002_var-datatype-ops 
+
+         Compiling tut-002_var-datatype-ops v0.1.0 (Wiki_RustTutorialDerek\_resources\Examples\tut-002_var-datatype-ops)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
+           Running `target\debug\tut-002_var-datatype-ops.exe`
+      I'm 48 and I want $1000000 so I can buy some 3.141592
+
+.. seealso:: Learn more about Constant items:
+   
+   * `Const Keyword (std lib book)`_ 
+   * `Variable and Mutability | Constant | Shadowing (rust prog lang book)`_
+   * `const keyword (rust reference)`_
+
+Data types 
+***********
+
+.. note:: to self: Even though Derek, the instructor, did not expand on some topic,
+   I research the topic and put some better notes and reading links so I can really 
+   frame the lessons correctly.
+
+Data types in rust can be categorized as followed:
+
+1. **Primitive data types** (built-in data types)
+   
+   I. **Scalar types**: 
+      
+      * only 4: integers, float, booleans, characters
+        
+        * although some have variants. ex: i8, i32, u32, f32, etc...
+
+   #. **Compound Types**
+   
+      * only 2: tuples and arrays.
+   
+   #. etc...
+   
+#. **Custom types** 
+      
+   * Examples 
+      
+     - Struct 
+     - Enums
+   
+.. note:: There are more datatypes and information on them. You can 
+   further read using these links:
+
+   .. seealso:: * `Primitive types (Crate std)`_
+
+      * `Data Types (Rust prog lang book)`_
+      * `Type Layout (Rust Reference book)`_
+         
+        * this will teach you about size and alignment and some platform 
+          (64-bit arch, 32-bit arch) specific information.
+
+Scalar Types 
+**************
+
+Integers 
+-----------
+
+* **Unsigned integer**: ``u8``, ``u16``, ``u32``, ``u64``, ``u128``, ``usize``
+  
+  * they can be used to represent positive integers only. 
+
+    * ``usize`` can be used to represent any **unsigned** integer types really and is preferred 
+      to use when indexing some sort of collection (like vectors, array, tuples (more on that later))
+    
+* **signed integer**: ``i8``, ``i16``, ``i32``, ``i64``, ``i128``, ``isize``
+  
+  * can represent negative integers also.
+    
+    * ``isize`` can be used to represent any **signed** integer type really and is preferred 
+      to use when indexing some sort of collection (like vectors, array, tuples (more on that later))
+
+  * the value is stored using 2's complement form.
+
+
++--------+----------+--------------------+
+| Signed | Unsigned | size_of::<Type>()  |
++========+==========+====================+
+| i8     | u8       | 1 byte (8-bit)     |
++--------+----------+--------------------+
+| i16    | u16      | 2 bytes (16-bits)  |
++--------+----------+--------------------+
+| i32    | u32      | 4 bytes (32-bits)  |
++--------+----------+--------------------+
+| i64    | u64      | 8 bytes (64-bit)   |
++--------+----------+--------------------+
+| i128   | u128     | 16 bytes (128-bit) |
++--------+----------+--------------------+
+| isize  | usize    | platform-specific  |
++--------+----------+--------------------+
+
+.. compound:: [5]_
+   :class: light-gray-bg
+
+   * The **alignment** of a value 
+     
+     * specifies what addresses are valid to store the value at. 
+     * is measured in bytes, 
+     * and must be at least 1, and always a power of 2. 
+   
+   * A value of alignment ``n`` must only be stored at an address that is a 
+     multiple of ``n``. 
+     
+     * For example, 
+       
+       1. a value with an alignment of **2** must be stored at an **even address**, 
+       2. while a value with an alignment of **1** can be stored at **any address**. 
+   
+   * The alignment of a value can be checked with the ``align_of_val`` function.
+   * The alignment of primitives is platform-specific
+     
+     * In most cases, their alignment is equal to their size, but it may be less. 
+     * In particular, ``i128`` and ``u128`` are often aligned to 4 or 8 bytes 
+       even though their size is **16**, 
+     * and on many 32-bit platforms, ``i64``, ``u64``, and ``f64`` are only 
+       aligned to 4 bytes, not 8.
+   
+   
+   * The **size** of a value 
+     
+     * is the offset in bytes between successive elements in an array with that 
+       item type including alignment padding.
+     
+     * The size of a value is always a multiple of its alignment. 
+   
+       .. note:: Note that some types are zero-sized; 0 is considered a multiple of 
+          any alignment (for example, on some platforms, the type ``[u16; 0]`` has 
+          size 0 and alignment 2). 
+     
+     * The size of a value can be checked with the ``size_of_val function``.
+
+   .. important:: 
+      
+      * Types where all values have the same size and alignment, and both are known 
+        at compile time, 
+        
+        * implement the `Sized`_ trait 
+        * and can be checked with the ``size_of`` and ``align_of`` functions. 
+      
+      * Types that are not `Sized`_   are known as `dynamically sized types`_. 
+      
+      .. note:: Since all values of a Sized type share the same size and alignment, 
+         we refer to those shared values as the size of the type and the alignment 
+         of the type respectively.
+
+References 
+************
+
+.. [1] `Rust Tutorial Full Course (video)`_
+.. [2] `Variable and Mutability | Constant | Shadowing (rust prog lang book)`_
+.. [3] `Primitive types (Crate std)`_
+.. [4] `Data Types (Rust prog lang book)`_
+.. [5] `Type Layout (Rust Reference book)`_
+
+.. include:: ../../relevant_urls.rst
+.. include:: ./relevant_urls.rst
+
+.. _Sized: https://doc.rust-lang.org/core/marker/trait.Sized.html
+.. _dynamically sized types: https://doc.rust-lang.org/reference/dynamically-sized-types.html
