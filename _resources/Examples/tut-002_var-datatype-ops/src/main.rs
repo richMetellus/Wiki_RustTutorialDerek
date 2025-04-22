@@ -1,4 +1,4 @@
-// constant variables demo code:
+// Constants, Variables, Datatypes & Basic Operators in Rust 
 
 fn main() {
     println!("-------------------------------------------------------------------");
@@ -49,5 +49,34 @@ fn main() {
     println!("people hugging emoji: {}", unassigned_char);
     unassigned_char = '🍎';
     println!("red apple emoji: {}", unassigned_char);
+    println!("-------------------------------------------------------------------\n\n");
+
+    // operators 
+    println!("Float precision testing");
+    // f32 has 6 digits of precision
+    let num_1: f32 = 1.111_111_111_111_111; // the underscore separator be anywhere.
+    println!("  1.111_111_111_111_111");
+    println!("+ 0.111_111_111_111_111");
+    println!("-------------------------");
+
+    println!("f32 : {}", num_1 + 0.111_111_111_111_111);
+
+    // f64 has 14 digits of precision
+    let num_2: f64 = 1.11111_11111_11111; // here _ separate every 5 digits.
+    println!("f64 : {}", num_2 + 0.111111111111111);
+    println!("-------------------------------------------------------------------");
+    // Basic math operators
+    let num_3: u32 = 5;
+    let num_4: u32 = 4;
+    println!("5 + 4 = {}", num_3 + num_4);
+    println!("5 - 4 = {}", num_3 - num_4);
+    println!("5 * 4 = {}", num_3 * num_4);
+    println!("5 / 4 = {}", num_3 / num_4);
+    println!("5 % 4 = {}", num_3 % num_4); // Remainder
     
+    let mut num_5 = 6;
+    println!("num_5 = {}", num_5); 
+    num_5 += 1; // num_5 = num_5 + 1
+    println!("num_5 +=1 = {}", num_5); 
+
 }
