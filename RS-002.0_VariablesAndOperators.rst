@@ -65,6 +65,8 @@ using the ``const`` keyword.
 
 .. card:: Testing 
 
+   :tag: ``RS-001.0_v0.0.5``
+
    1. run the code and observe the terminal output 
 
    .. code-block:: console
@@ -125,10 +127,10 @@ Data types in rust can be categorized as followed:
           (64-bit arch, 32-bit arch) specific information.
 
 Scalar Types 
-**************
+=============
 
 Integers 
------------
+---------
 
 * **Unsigned integer**: ``u8``, ``u16``, ``u32``, ``u64``, ``u128``, ``usize``
   
@@ -162,6 +164,14 @@ Integers
 +--------+----------+--------------------+
 | isize  | usize    | platform-specific  |
 +--------+----------+--------------------+
+
+.. note:: Each signed variant can store numbers from :math:`-(2^{n - 1})` to 
+   :math:`2^{n - 1} - 1` inclusive, where ``n`` is the number of bits that 
+   variant uses. 
+   
+   * So an ``i8`` can store numbers from :math:`-(2^7)` to :math:`2^7 - 1`,
+     
+     * which equals -128 to 127
 
 .. compound:: [5]_
    :class: light-gray-bg
@@ -217,6 +227,142 @@ Integers
          we refer to those shared values as the size of the type and the alignment 
          of the type respectively.
 
+Float 
+------
+
+* to represent floating-point number (number with decimal)
+* have limited precision.
+* Rust only support 2 primitive types for floating-point number: [4]_
+  
+  1. ``f32`` - 32 bits in size 
+  #. ``f64`` - 64 bits in size (default type)
+
+  .. note:: * all floating-point are signed 
+     
+     * Floating-point numbers are represented according to the IEEE-754 standard.
+
+Boolean 
+--------
+
+* keyword ``bool``
+* represent logical value: ``true`` or ``false``
+
+Char 
+----
+
+``char``
+
+* use to store singe character (letters, digits, symbols (emojis), etc)
+* the char  value is single quoted ``'A'``
+* Rust use 4 bytes `Unicode Scalar Values`_ for character encoding.
+  
+  * Unicode Scalar Values range from ``U+0000`` to ``U+D7FF`` 
+    and ``U+E000`` to ``U+10FFFF`` inclusive.
+
+Exercise 
+**********
+
+1. Make the following changes to tut-002_var-datatype-ops/src/main.rs 
+   
+   :base tag: ``RS-001.0_v0.0.5``
+
+   .. code-block:: diff 
+      :caption: src/main.rs 
+
+      --- a/_resources/Examples/tut-002_var-datatype-ops/src/main.rs
+      +++ b/_resources/Examples/tut-002_var-datatype-ops/src/main.rs
+      @@ -1,7 +1,9 @@
+       // constant variables demo code:
+
+       fn main() {
+      -    const ONE_MIL: u32 = 1_000_000;
+      +    println!("-------------------------------------------------------------------");
+      +
+      +    const ONE_MIL: u32 = 1_000_000; // need explicit type annotation
+           const PI : f32 = 3.141592;
+           let age = "47"; // a string, implicitly typed. defined with double quotes
+           let mut age: u32 = age.trim().parse() // LEGAL in rust to re-use the same variable name. Shadowing
+      @@ -11,4 +13,41 @@ fn main() {
+           age = age + 1; // increment by 1.
+
+           println!("I'm {} and I want ${} so I can buy some {}", age, ONE_MIL, PI);
+      +
+      +    println!("-------------------------------------------------------------------");
+      +    
+      +    // Integer Datatypes and their maximum value:
+      +    println!("Max i8: {}", i8::MAX);
+      +    println!("Max u8: {}", u8::MAX);
+      +    println!("Max i16: {}", i16::MAX);
+      +    println!("Max u16: {}", u16::MAX);
+      +    println!("Max i32: {}", i32::MAX);
+      +    println!("Max u32: {}", u32::MAX);
+      +    println!("Max i64: {}", i64::MAX);
+      +    println!("Max u64: {}", u64::MAX);
+      +    println!("Max i128: {}", i128::MAX);
+      +    println!("Max u128: {}", u128::MAX);
+      +    println!("Max isize: {}", isize::MAX);
+      +    println!("Max usize: {}", usize::MAX);
+      +
+      +    // Some float datatype and their max
+      +    println!("-------------------------------------------------------------------");
+      +    println!("Max f32: {}", f32::MAX);
+      +    println!("Max f64: {}", f64::MAX);
+      +    println!("-------------------------------------------------------------------");
+      +
+      +    // Booleans can have for value: true or false 
+      +    let _unused_bool_as_place_holder = true; // start with _ so compiler ignore
+      +    let _another_bool: bool = false; // explicit type annotation 
+      +    
+      +    
+      +    // characters are defined using single quote ''
+      +    let _my_grade = 'A'; // implicitly infer by compiler to be char type
+      +    let _min_grade: char = 'F'; // with explicit type annotation
+      +    let mut unassigned_char: char; // var definition, need explicit type
+      +    unassigned_char = '🫂'; // character is 4 bytes in Rust, encoded in Unicode Scalar Value.
+      +    println!("people hugging emoji: {}", unassigned_char);
+      +    unassigned_char = '🍎';
+      +    println!("red apple emoji: {}", unassigned_char);
+      +    
+       }
+
+#. Run the code to test 
+   
+   .. code-block:: console 
+      :caption: example of output 
+
+      Wiki_RustTutorialDerek/_resources/Examples/tut-002_var-datatype-ops (main)
+      $ cargo run -p tut-002_var-datatype-ops
+         Compiling tut-002_var-datatype-ops v0.1.0 (tut-002_var-datatype-ops)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.79s
+           Running `target\debug\tut-002_var-datatype-ops.exe`
+      -------------------------------------------------------------------
+      I'm 48 and I want $1000000 so I can buy some 3.141592
+      -------------------------------------------------------------------
+      Max i8: 127
+      Max u8: 255
+      Max i16: 32767
+      Max u16: 65535
+      Max i32: 2147483647
+      Max u32: 4294967295
+      Max i64: 9223372036854775807
+      Max u64: 18446744073709551615
+      Max i128: 170141183460469231731687303715884105727
+      Max u128: 340282366920938463463374607431768211455
+      Max isize: 9223372036854775807
+      Max usize: 18446744073709551615
+      -------------------------------------------------------------------
+      Max f32: 340282350000000000000000000000000000000
+      Max f64: 17976931348623157000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000
+      -------------------------------------------------------------------
+      people hugging emoji: 🫂
+      red apple emoji: 🍎
+
+#. Commit the changes 
+
 References 
 ************
 
@@ -226,8 +372,10 @@ References
 .. [4] `Data Types (Rust prog lang book)`_
 .. [5] `Type Layout (Rust Reference book)`_
 
+
 .. include:: ../../relevant_urls.rst
 .. include:: ./relevant_urls.rst
 
 .. _Sized: https://doc.rust-lang.org/core/marker/trait.Sized.html
 .. _dynamically sized types: https://doc.rust-lang.org/reference/dynamically-sized-types.html
+.. _Unicode Scalar Values: https://developer.apple.com/documentation/swift/string/unicodescalarview
