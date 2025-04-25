@@ -15,5 +15,21 @@ fn main() {
     } else {
         println!("{} is Not an Important Birthday", age);
     }
+    println!("-------------------------------------------------------------------");
+    
+    // ternary operator 
+    let my_age = age;
+
+    let can_vote = if my_age >=18 {
+        true // no semi-colon here as the statement has not ended
+    } else {
+        false // no semi-colon
+    }; // semi-colon here to mark end of statement
+    
+    let can_vote_str = if can_vote {String::from("can VOTE!")} else {String::from("cannot VOTE!")};
+
+    println!("You are {} years young and {}", my_age, can_vote_str);
+
+    println!("-------------------------------------------------------------------");
 
 }

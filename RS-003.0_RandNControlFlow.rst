@@ -141,4 +141,64 @@ If/else if/ else in Rust
       70 is Important Birthday
          *  Terminal will be reused by tasks, press any key to close it. 
 
+#. Commit the change and tag
+
+Ternary operator 
+==================
+
+1. Let add some more code to explain ternary operator
+   
+   .. code-block:: diff 
+
+      index 7a887f8..01ea0ac 100644
+      --- a/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      +++ b/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      @@ -15,5 +15,21 @@ fn main() {
+           } else {
+               println!("{} is Not an Important Birthday", age);
+           }
+      +    println!("-------------------------------------------------------------------");   
+      +    
+      +    // ternary operator 
+      +    let my_age = age;
+      +
+      +    let can_vote = if my_age >=18 {
+      +        true // no semi-colon here as the statement has not ended
+      +    } else {
+      +        false // no semi-colon
+      +    }; // semi-colon here to mark end of statement
+      +    
+      +    let can_vote_str = if can_vote {String::from("can VOTE!")} else {String::from("cannot VOTE!")};
+      +
+      +    println!("You are {} years young and {}", my_age, can_vote_str);
+      +
+      +    println!("-------------------------------------------------------------------");   
+
+       }
+   
+   * we don't need the semi-colon if it just going to return a value. 
+
+#. Save and Run the code and capture the result.
+   
+   .. code-block:: console
+
+         Compiling tut-003_Rand-and-flowctrl v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-003_Rand-and-flowctrl)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.83s
+           Running `target\debug\tut-003_Rand-and-flowctrl.exe`
+      Random age: 50
+      -------------------------------------------------------------------
+      50 is Important Birthday
+      -------------------------------------------------------------------
+      You are 50 years young and can VOTE!
+      -------------------------------------------------------------------
+       *  Terminal will be reused by tasks, press any key to close it. 
+
 #. Commit the change 
+
+match 
+=====
+
+match is another useful conditional.
+
+* match is going to run different code depending upon conditions.
+* You can use it for error handling and such
