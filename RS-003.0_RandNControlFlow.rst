@@ -1,2 +1,64 @@
 Random Number Generator and Control Flow 
 ##########################################
+
+
+
+1. Create a new project with ``cargo new <path-as-proj-name>``
+2. Modify the project with the changes 
+   
+   .. code-block:: diff 
+      :caption: src/main.rs
+
+      diff --git a/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs b/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      index e7a11a9..1cd5b20 100644
+      --- a/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      +++ b/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      @@ -1,3 +1,7 @@
+      +use rand::Rng;
+      +
+       fn main() {
+      -    println!("Hello, world!");
+      +    // generate a random int between 1 and 100 (inclusive)
+      +    let random_num = rand::thread_rng().gen_range(1..101);
+      +    println!("Random num: {}", random_num);
+       }
+   
+   .. code-block:: diff 
+      :caption: Cargo.toml 
+
+      diff --git a/_resources/Examples/tut-003_Rand-and-flowctrl/Cargo.toml b/_resources/Examples/tut-003_Rand-and-flowctrl/Cargo.toml
+      index faa9a02..3cd2c38 100644
+      --- a/_resources/Examples/tut-003_Rand-and-flowctrl/Cargo.toml
+      +++ b/_resources/Examples/tut-003_Rand-and-flowctrl/Cargo.toml
+      @@ -4,3 +4,4 @@ version = "0.1.0"
+       edition = "2024"
+
+       [dependencies]
+      +rand = "0.9.1"
+      \ No newline at end of file
+
+#. Build the code 
+   
+   .. code-block:: console 
+
+      Examples\tut-003_Rand-and-flowctrl)
+      warning: use of deprecated function `rand::thread_rng`: Renamed to `rng`
+       --> src\main.rs:5:28
+        |
+      5 |     let random_num = rand::thread_rng().gen_range(1..101);
+        |                            ^^^^^^^^^^
+        |
+        = note: `#[warn(deprecated)]` on by default
+
+      warning: use of deprecated method `rand::Rng::gen_range`: Renamed to `random_range`
+       --> src\main.rs:5:41
+        |
+      5 |     let random_num = rand::thread_rng().gen_range(1..101);
+        |                                         ^^^^^^^^^
+
+      warning: `tut-003_Rand-and-flowctrl` (bin "tut-003_Rand-and-flowctrl") generated 2 warnings
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.92s
+           Running `target\debug\tut-003_Rand-and-flowctrl.exe`
+      Random num: 100
+       *  Terminal will be reused by tasks, press any key to close it. 
+

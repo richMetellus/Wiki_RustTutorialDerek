@@ -1,3 +1,7 @@
+use rand::Rng;
+
 fn main() {
-    println!("Hello, world!");
+    // generate a random int between 1 and 100 (inclusive)
+    let random_num = rand::thread_rng().gen_range(1..101);
+    println!("Random num: {}", random_num);
 }
