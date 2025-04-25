@@ -32,4 +32,14 @@ fn main() {
 
     println!("-------------------------------------------------------------------");
 
+    // match as conditional 
+    match age {
+        1..=18 => println!("{} match case 1: Important Birthday", age), // 1 through 18
+        21 | 50 => println!("{} match case 2: Important Birthday", age), // 21 or 50
+        65..=i32::MAX => println!("{} match case 3: Important Birthday", age), // > 65
+        _ => println!("Not an Important Birthday"), // Default
+    };
+
+    println!("-------------------------------------------------------------------");
+
 }

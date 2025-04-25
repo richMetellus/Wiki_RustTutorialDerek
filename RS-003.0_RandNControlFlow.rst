@@ -202,3 +202,55 @@ match is another useful conditional.
 
 * match is going to run different code depending upon conditions.
 * You can use it for error handling and such
+
+1. Let write some code 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      +++ b/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      @@ -32,4 +32,14 @@ fn main() {
+
+           println!("-------------------------------------------------------------------");
+
+      +    // match as conditional 
+      +    match age {
+      +        1..=18 => println!("{} match case 1: Important Birthday", age), // 1 through 18
+      +        21 | 50 => println!("{} match case 2: Important Birthday", age), // 21 or 50
+      +        65..=i32::MAX => println!("{} match case 3: Important Birthday", age), // > 65
+      +        _ => println!("Not an Important Birthday"), // Default
+      +    };
+      +
+      +    println!("-------------------------------------------------------------------");
+      +
+       }
+
+
+   .. card:: Code Explanation:
+      
+      * with ``1..=18`` is says we want range 1 to 18, including 18, so [1, 18]
+      * if it age match 21 or 50, so ``21 | 50``
+      * we use a comma to separate the difference case, conditionals
+      * we use ``_`` to match any anything else. the default behavior if no match 
+        based on the conditions is found.
+
+         .. note:: it's important when using match, you are able to cover every 
+            possible value for age.
+
+2. Run and capture result 
+   
+   .. code-block:: console 
+
+       Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+           Running `target\debug\tut-003_Rand-and-flowctrl.exe`
+      Random age: 77
+      -------------------------------------------------------------------
+      77 is Important Birthday
+      -------------------------------------------------------------------
+      You are 77 years young and can VOTE!
+      -------------------------------------------------------------------
+      77 match case 3: Important Birthday
+      -------------------------------------------------------------------
+       *  Terminal will be reused by tasks, press any key to close it. 
+
+#. Commit the change.
