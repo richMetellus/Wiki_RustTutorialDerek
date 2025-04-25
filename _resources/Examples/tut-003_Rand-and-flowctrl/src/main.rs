@@ -1,4 +1,6 @@
 use rand::Rng;
+use std::cmp::Ordering;
+
 
 fn main() {
     // generate a random int between 1 and 100 (inclusive)
@@ -18,7 +20,7 @@ fn main() {
     println!("-------------------------------------------------------------------");
     
     // ternary operator 
-    let my_age = age;
+    let mut my_age = age;
 
     let can_vote = if my_age >=18 {
         true // no semi-colon here as the statement has not ended
@@ -40,6 +42,19 @@ fn main() {
         _ => println!("Not an Important Birthday"), // Default
     };
 
+    println!("-------------------------------------------------------------------\n\n");
+
+
+    // Compares age to valid age and cmp returns an Ordering which
+    // has either the value Less, Greater, or Equal
+    my_age = 18;
+    println!("You are {} years young", my_age);
+    let voting_age = 18;
+    match my_age.cmp(&voting_age) {
+        Ordering::Less => println!("Can't Vote"),
+        Ordering::Greater => println!("Can Vote"),
+        Ordering::Equal => println!("You just gained the right to vote!"),
+    };
     println!("-------------------------------------------------------------------");
 
 }
