@@ -3,6 +3,9 @@ Random Number Generator and Control Flow
 
 
 
+Random Number Generator
+*************************
+
 1. Create a new project with ``cargo new <path-as-proj-name>``
 2. Modify the project with the changes 
    
@@ -93,3 +96,49 @@ Random Number Generator and Control Flow
 
 #. Commit the change.
 
+
+If/else if/ else in Rust 
+**************************
+
+1. Let modify our source code to be like the following 
+   
+   .. code-block:: diff 
+
+      index 84dfb76..7a887f8 100644
+      --- a/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      +++ b/_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+      @@ -2,6 +2,18 @@ use rand::Rng;
+
+       fn main() {
+           // generate a random int between 1 and 100 (inclusive)
+      -    let random_num = rand::rng().random_range(1..101);
+      -    println!("Random num: {}", random_num);
+      +    let age = rand::rng().random_range(1..101);
+      +    println!("Random age: {}", age);
+      +    println!("-------------------------------------------------------------------");
+      +
+      +    if (age >= 1) && (age <= 18){
+      +        println!("Important Birthday");
+      +    } else if (age == 21) || (age == 50){
+      +        println!("{} is Important Birthday", age);
+      +    } else if age >= 65 {
+      +        println!("{} is Important Birthday", age);
+      +    } else {
+      +        println!("{} is Not an Important Birthday", age);
+      +    }
+      +
+       }
+
+#. Run the code and capture the result:
+   
+   .. code-block:: console 
+
+      Compiling tut-003_Rand-and-flowctrl v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-003_Rand-and-flowctrl)
+            Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
+            Running `target\debug\tut-003_Rand-and-flowctrl.exe`
+      Random age: 70
+      -------------------------------------------------------------------
+      70 is Important Birthday
+         *  Terminal will be reused by tasks, press any key to close it. 
+
+#. Commit the change 
