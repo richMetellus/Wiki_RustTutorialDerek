@@ -20,5 +20,23 @@ fn main() {
     println!("total size of memory occupied by ARR_1 using arr1_ref: {} bytes", mem::size_of_val(arr1_ref));
     println!("-------------------------------------------------------------------");
 
+     // ----- LOOP -----
+    // Create an infinite loop that ends when break is called
+    let arr_2 = [1,2,3,4,5,6,7,8,9];
+    let mut loop_idx = 0;
+    loop {
+        // check if number is even
+        if arr_2[loop_idx] % 2 == 0 {
+            loop_idx += 1;
+            continue; // Goes to next iteration of loop i.e skip
+        }
+
+        if arr_2[loop_idx] == 9 {
+            break; // Breaks out of loop
+        }
+
+        println!("Val : {}", arr_2[loop_idx]);
+        loop_idx += 1;
+    }
 
 }

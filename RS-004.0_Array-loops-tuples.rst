@@ -87,8 +87,85 @@ An Array
            -------------------------------------------------------------------
 
 #. Commit the changes so far to create a new snapshot/starting point.
+   
+   .. code-block:: console
+
+      commit b83c81c6a188a1eb6bfa0394a378d617ec365710 
+      (HEAD -> main, tag: RS-004.0_v0.0.1)
 
 .. seealso:: * `Arrays and Slices (Rust By Example book)`_
+
+Looping 
+********
+
+Let's look how to loop through an array.
+
+``loop`` Keyword
+==================
+
+``loop`` keyword 
+
+* can be used to indicate infinite loop ((tbr.)like arduino)
+
+Let's write a simple program that will loop through an array and that will 
+only print the odd value and skip if encounter the value 9.
+
+1. Using the same project let's add the following change.
+   
+   .. code-block:: diff 
+
+      index 917efe8..c2b8019 100644
+      --- a/_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+      +++ b/_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+      @@ -20,5 +20,23 @@ fn main() {
+           println!("total size of memory occupied by ARR_1 using arr1_ref: {} bytes", mem::size_of_val(arr1_ref));
+           println!("-------------------------------------------------------------------");
+
+      +     // ----- LOOP -----
+      +    // Create an infinite loop that ends when break is called
+      +    let arr_2 = [1,2,3,4,5,6,7,8,9];
+      +    let mut loop_idx = 0;
+      +    loop {
+      +        // check if number is even
+      +        if arr_2[loop_idx] % 2 == 0 {
+      +            loop_idx += 1;
+      +            continue; // Goes to next iteration of loop i.e skip
+      +        }
+      +
+      +        if arr_2[loop_idx] == 9 {
+      +            break; // Breaks out of loop
+      +        }
+      +
+      +        println!("Val : {}", arr_2[loop_idx]);
+      +        loop_idx += 1;
+      +    }
+
+
+#. Run and capture 
+   
+   .. code-block:: console
+      :linenos:
+
+      $ cargo run
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+           Running `target\debug\tut-004_arrays-loops-tuples.exe`
+      1st : 1
+      2nd element : 2
+      Length : 4
+      total size of memory occupied by 1 i32 : 4 bytes
+      total size of memory occupied by ARR_1 : 16 bytes
+      total size of memory occupied by ARR_1 using arr1_ref: 16 bytes
+      -------------------------------------------------------------------
+      Val : 1
+      Val : 3
+      Val : 5
+      Val : 7
+   
+   .. note:: see the number 9, although is odd is not printed. ``break`` skip 
+      the rest of the loop body, since there is no more statement to be executed
+      the program exit.
+
+#. Commit the change and tag 
 
 Dynamic Size Array and Rust 
 ***************************
