@@ -296,6 +296,11 @@ Let use a ``for`` loop to iterate through all the elements in the array
 
 #. Commit the change and tag 
 
+   .. code-block:: console 
+
+      commit f9e32b695bf0208698960e2e0dbdb8b1c72c848f 
+      (HEAD -> main, tag: RS-004.0_v0.0.4)
+
 Dynamic Size Array and Rust 
 ***************************
 
@@ -312,6 +317,9 @@ Dynamic Size Array and Rust
       
       * `Dynamic size array and rust (reddit)`_
       * `Arrays and Slices (Rust By Example book)`_
+
+Tuples
+*******
 
 References and Further Reading 
 ********************************

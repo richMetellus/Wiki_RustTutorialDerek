@@ -349,7 +349,7 @@ Add Tutorial Project Dependencies
            Compiling ppv-lite86 v0.2.21
            Compiling rand_chacha v0.9.0
            Compiling rand v0.9.1
-           Compiling tut-001_basic-hello v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-001_basic-hello)
+           Compiling tut-001_basic-hello v0.1.0 (Examples\tut-001_basic-hello)
             Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.33s
              Running `target\debug\tut-001_basic-hello.exe`
         Hello, world!

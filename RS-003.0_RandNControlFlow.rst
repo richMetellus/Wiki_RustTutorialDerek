@@ -96,7 +96,7 @@ Random Number Generator
 
        *  Executing task: C:\Users\ricky\.cargo\bin\cargo.EXE run --package tut-003_Rand-and-flowctrl --bin tut-003_Rand-and-flowctrl 
 
-         Compiling tut-003_Rand-and-flowctrl v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-003_Rand-and-flowctrl)
+         Compiling tut-003_Rand-and-flowctrl v0.1.0 (Examples\tut-003_Rand-and-flowctrl)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.79s
            Running `target\debug\tut-003_Rand-and-flowctrl.exe`
       Random num: 45
@@ -141,7 +141,7 @@ If/else if/ else in Rust
    
    .. code-block:: console 
 
-      Compiling tut-003_Rand-and-flowctrl v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-003_Rand-and-flowctrl)
+      Compiling tut-003_Rand-and-flowctrl v0.1.0 (Examples\tut-003_Rand-and-flowctrl)
             Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
             Running `target\debug\tut-003_Rand-and-flowctrl.exe`
       Random age: 70
@@ -190,7 +190,7 @@ Ternary operator
    
    .. code-block:: console
 
-         Compiling tut-003_Rand-and-flowctrl v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-003_Rand-and-flowctrl)
+         Compiling tut-003_Rand-and-flowctrl v0.1.0 (Examples\tut-003_Rand-and-flowctrl)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.83s
            Running `target\debug\tut-003_Rand-and-flowctrl.exe`
       Random age: 50
@@ -313,7 +313,7 @@ match compare
    
    .. code-block:: console 
 
-       Compiling tut-003_Rand-and-flowctrl v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-003_Rand-and-flowctrl)
+       Compiling tut-003_Rand-and-flowctrl v0.1.0 (Examples\tut-003_Rand-and-flowctrl)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.94s
            Running `target\debug\tut-003_Rand-and-flowctrl.exe`
       Random age: 60
