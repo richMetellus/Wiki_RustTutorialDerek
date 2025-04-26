@@ -231,10 +231,70 @@ While loop
 
 
 #. Commit the change and tag
+   
+   .. code-block:: console 
+
+      commit 2af87eb52b554aefcd55b16106306bbddb9cafd9 
+      (HEAD -> main, tag: RS-004.0_v0.0.3)
 
 For Loop 
 ==========
 
+Let use a ``for`` loop to iterate through all the elements in the array 
+
+1. Add the following changes to the project 
+   
+   .. code-block:: diff 
+      
+      +    println!("------------------------------- for loop----------------------------");
+      +
+      +    // ``for`` loops works better for cycling through collections
+      +    for val in arr_2.iter() {
+      +        println!("Val : {}", val);
+      +    }
+      +
+       }
+
+#. Run
+   
+   .. code-block:: console 
+
+      $ cargo run
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+           Running `target\debug\tut-004_arrays-loops-tuples.exe`
+      1st : 1
+      2nd element : 2
+      Length : 4
+      total size of memory occupied by 1 i32 : 4 bytes
+      total size of memory occupied by ARR_1 : 16 bytes
+      total size of memory occupied by ARR_1 using arr1_ref: 16 bytes
+      -------------------------------------------------------------------
+      Val : 1
+      Val : 3
+      Val : 5
+      Val : 7
+      ------------------------------- while loop-------------------------
+      Arr[0] : 1
+      Arr[1] : 2
+      Arr[2] : 3
+      Arr[3] : 4
+      Arr[4] : 5
+      Arr[5] : 6
+      Arr[6] : 7
+      Arr[7] : 8
+      Arr[8] : 9
+      ------------------------------- for loop----------------------------
+      Val : 1
+      Val : 2
+      Val : 3
+      Val : 4
+      Val : 5
+      Val : 6
+      Val : 7
+      Val : 8
+      Val : 9
+
+#. Commit the change and tag 
 
 Dynamic Size Array and Rust 
 ***************************

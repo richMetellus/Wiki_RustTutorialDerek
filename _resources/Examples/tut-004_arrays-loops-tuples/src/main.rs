@@ -49,4 +49,11 @@ fn main() {
         loop_idx += 1;
     }
 
+    println!("------------------------------- for loop----------------------------");
+
+    // ``for`` loops works better for cycling through collections
+    for val in arr_2.iter() {
+        println!("Val : {}", val);
+    }
+
 }
