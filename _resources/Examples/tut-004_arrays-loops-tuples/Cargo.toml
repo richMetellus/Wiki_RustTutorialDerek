@@ -1,0 +1,6 @@
+[package]
+name = "tut-004_arrays-loops-tuples"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

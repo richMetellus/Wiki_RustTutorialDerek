@@ -1,7 +1,15 @@
 Random Number Generator and Control Flow 
 ##########################################
 
+**Objectives**
 
+#. Learn how to generate random number in rust.
+#. Learn about control flow using if/else if/else statements.
+   
+   * Learn about ternary operator using if-else shorthand. 
+
+#. Learn about switch case in rust using the ``match`` keyword
+#. Learn about ``Ordering`` enum type in rust, which usually is used for comparison.
 
 Random Number Generator
 *************************
@@ -234,8 +242,8 @@ match is another useful conditional.
       * we use ``_`` to match any anything else. the default behavior if no match 
         based on the conditions is found.
 
-         .. note:: it's important when using match, you are able to cover every 
-            possible value for age.
+        .. note:: it's important when using match, you are able to cover every 
+           possible value for age.
 
 2. Run and capture result 
    
@@ -324,3 +332,49 @@ match compare
        *  Terminal will be reused by tasks, press any key to close it. 
 
 #. Commit the change
+
+Wrap up and Summary 
+*********************
+
+#. Wrap up and tag the last lesson
+
+**The final code**:
+
+.. tabs::
+
+   .. tab:: src/main.rs
+
+      .. literalinclude:: ./_resources/Examples/tut-003_Rand-and-flowctrl/src/main.rs
+         :linenos:
+         :language: Rust
+   
+   .. tab:: Cargo.toml
+
+      .. literalinclude:: ./_resources/Examples/tut-003_Rand-and-flowctrl/Cargo.toml
+         :linenos:
+         :language: Rust
+
+
+**Example of Output**
+
+.. code-block:: console 
+
+       Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running `target\debug\tut-003_Rand-and-flowctrl.exe`
+     Random age: 73
+     -------------------------------------------------------------------
+     73 is Important Birthday
+     -------------------------------------------------------------------
+     You are 73 years young and can VOTE!
+     -------------------------------------------------------------------
+     73 match case 3: Important Birthday
+     -------------------------------------------------------------------
+     
+     
+     You are 18 years young
+     You just gained the right to vote!
+     -------------------------------------------------------------------
+      *  Terminal will be reused by tasks, press any key to close it. 
+     
+     
+
