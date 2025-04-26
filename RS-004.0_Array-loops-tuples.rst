@@ -1,2 +1,116 @@
 Arrays, Loops, and Tuples in Rust
 ####################################
+
+Arrays
+********
+
+An Array
+
+* contains multiple different values 
+  
+  * the elements in the array must be of the same type
+
+* have a **fixed** size.
+  
+  * elements in the array must have fixed size too.
+
+1. create a new project 
+   
+   .. code-block:: console 
+
+      $ cargo new tut-004_arrays-loops-tuples
+          Creating binary (application) `tut-004_arrays-loops-tuples` package
+      note: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+2. Commit the change to mark the beginning project creation as the starting point 
+#. Make the following changes to the basic hello world program that was created.
+   
+   .. code-block:: diff
+      :caption: src/main.rs
+
+      --- a/_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+      +++ b/_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+      @@ -1,3 +1,24 @@
+      +use std::mem; 
+      +
+       fn main() {
+      -    println!("Hello, world!");
+      +    
+      +    // ----- ARRAYS -----
+      +    // Elements in an array must be of the same type
+      +    // and have a fixed size
+      +    const ARR_1: [i32; 4] = [1,2,3,4];
+      +    let arr1_ref: &[i32] = &ARR_1;
+      +    // Get value by index starting at 0
+      +    println!("1st : {}", ARR_1[0]);
+      +    println!("2nd element : {}", ARR_1[1]);
+      +
+      +    // Get array length
+      +    println!("Length : {}", ARR_1.len());
+      +    
+      +    // Get the size (bytes) of the array.. arrays are continuous block of memory
+      +    println!("total size of memory occupied by 1 i32 : {} bytes", mem::size_of::<i32>());
+      +    println!("total size of memory occupied by ARR_1 : {} bytes", mem::size_of_val(&ARR_1));
+      +    println!("total size of memory occupied by ARR_1 using arr1_ref: {} bytes", mem::size_of_val(arr1_ref));
+      +    println!("-------------------------------------------------------------------");
+      +
+      +
+       }
+
+   
+   .. card:: code Explanation
+
+      * we import the ``std::mem`` so we can use the ``size_of`` and ``size_of_value``
+      * the array syntax is : ``let`` ``var_name`` ``:`` ``[<type>, <size>]`` ``=``
+        ``[element1, element2, ...]`` ``;``
+        
+        * ``[<type>, <size>]`` is optional as the compiler can infer the type unless 
+          it's a constant type.
+      
+      * array use indices to access the elements, index start at 0.
+
+#. Run and capture the result 
+   
+   .. code-block:: console 
+
+      tut-004_arrays-loops-tuples (main)
+      $ cargo run
+         Compiling tut-004_arrays-loops-tuples v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-004_arrays-loops-tuples)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
+           Running `target\debug\tut-004_arrays-loops-tuples.exe`
+           1st : 1
+           2nd element : 2
+           Length : 4
+           total size of memory occupied by 1 i32 : 4 bytes
+           total size of memory occupied by ARR_1 : 16 bytes
+           total size of memory occupied by ARR_1 using arr1_ref: 16 bytes
+           -------------------------------------------------------------------
+
+#. Commit the changes so far to create a new snapshot/starting point.
+
+.. seealso:: * `Arrays and Slices (Rust By Example book)`_
+
+Dynamic Size Array and Rust 
+***************************
+
+.. note:: (tbr.) If I want to use dynamically sized arrays, then checkout 
+   the following links:
+
+   It seems in rust arrays always have a **fixed** size. The size must be known 
+   at compile time. 
+
+   * allowing user to pass the size of the arrays at run-time from a terminal 
+     can be unsafe in C.
+   
+   .. seealso:: * `Array Size Pass by Macro (forum)`_
+      
+      * `Dynamic size array and rust (reddit)`_
+      * `Arrays and Slices (Rust By Example book)`_
+
+References and Further Reading 
+********************************
+
+* `Arrays and Slices (Rust By Example book)`_ 
+
+.. include:: ./relevant_urls.rst 
+.. include:: ../../relevant_urls.rst
