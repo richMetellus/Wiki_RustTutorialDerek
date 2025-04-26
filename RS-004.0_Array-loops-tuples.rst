@@ -146,7 +146,7 @@ Let's look how to loop through an array.
 #. Run and capture 
    
    .. code-block:: console
-      :linenos:
+      :emphasize-lines: 10-
 
       $ cargo run
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
@@ -201,7 +201,8 @@ While loop
 
 #. Run  
    
-   .. code-block:: console 
+   .. code-block:: console
+      :emphasize-lines: 16-
 
       $ cargo run
          Compiling tut-004_arrays-loops-tuples v0.1.0 (Examples\tut-004_arrays-loops-tuples)
@@ -257,7 +258,8 @@ Let use a ``for`` loop to iterate through all the elements in the array
 
 #. Run
    
-   .. code-block:: console 
+   .. code-block:: console
+      :emphasize-lines: 25-
 
       $ cargo run
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
@@ -320,6 +322,127 @@ Dynamic Size Array and Rust
 
 Tuples
 *******
+
+**Tuples**
+
+* can contain multiple data types in a list of **fixed** size.
+
+
+1. Add the following changes into the project
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+      +++ b/_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+      @@ -56,4 +56,31 @@ fn main() {
+               println!("Val : {}", val);
+           }
+
+      +    println!("------------------------------- Tuples ----------------------------");
+      +
+      +    // ----- TUPLES -----
+      +    // Tuples can contain multiple data types in a list of fixed size
+      +    // We convert to strings with to_string()
+      +    let my_tuple: (u8, String, f64, f32) = (25, "Ricky".to_string(), 280_000.14, 2.00);
+      +
+      +    // You can get values by index starting at 0
+      +    println!("2nd element in tuple: Name = {}", my_tuple.1);
+      +
+      +    // You can assign values to multiple variables
+      +    //unused variables are prefixed with _
+      +    let (v1, v2, v3, _v4) = my_tuple;
+      +    println!("Age : {},\nName: {},\nnet worth: {}", v1, v2, v3);
+      +    
+      +    /* The below code won't compile because of the string that is part of the 
+      +    tuple. Uncomment it to see more:
+      +
+      +    Compiler message: "due to the 
+      +    move occurs because `my_tuple.1` has type `String`, which does not implement the `Copy` trait"  
+      +
+      +    More on strings later
+      +    */
+      +
+      +    // let (age,  name, _net_worth, _mult) = my_tuple;
+      +    // println!("Name: {}, {}", name, age);
+      +
+       }
+
+
+#. Run 
+   
+   .. code-block:: console
+      :emphasize-lines: 36-
+
+      $ cargo run
+         Compiling tut-004_arrays-loops-tuples v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-004_arrays-loops-tuples)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
+           Running `target\debug\tut-004_arrays-loops-tuples.exe`
+      1st : 1
+      2nd element : 2
+      Length : 4
+      total size of memory occupied by 1 i32 : 4 bytes
+      total size of memory occupied by ARR_1 : 16 bytes
+      total size of memory occupied by ARR_1 using arr1_ref: 16 bytes
+      -------------------------------------------------------------------
+      Val : 1
+      Val : 3
+      Val : 5
+      Val : 7
+      ------------------------------- while loop-------------------------
+      Arr[0] : 1
+      Arr[1] : 2
+      Arr[2] : 3
+      Arr[3] : 4
+      Arr[4] : 5
+      Arr[5] : 6
+      Arr[6] : 7
+      Arr[7] : 8
+      Arr[8] : 9
+      ------------------------------- for loop----------------------------
+      Val : 1
+      Val : 2
+      Val : 3
+      Val : 4
+      Val : 5
+      Val : 6
+      Val : 7
+      Val : 8
+      Val : 9
+      ------------------------------- Tuples ----------------------------
+      2nd element in tuple: Name = Ricky
+      Age : 25,
+      Name: Ricky,
+      net worth: 280000.14
+
+
+#. Commit the change 
+
+.. card:: code-explanation 
+
+   * to get an element member of the tuple we just reference the tuple name 
+     followed by a dot, plus the element index. ``my_tuple.1``
+   
+   * you can assign value to multiple different variables using a tuple.
+
+
+Wrap up and Summary 
+********************
+
+**The final code**
+
+.. tabs::
+
+   .. tab:: src/main.rs
+
+      .. literalinclude:: ./_resources/Examples/tut-004_arrays-loops-tuples/src/main.rs
+         :linenos:
+         :language: Rust
+   
+   .. tab:: Cargo.toml
+
+      .. literalinclude:: ./_resources/Examples/tut-004_arrays-loops-tuples/Cargo.toml
+         :linenos:
+         :language: Rust
 
 References and Further Reading 
 ********************************

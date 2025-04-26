@@ -56,4 +56,31 @@ fn main() {
         println!("Val : {}", val);
     }
 
+    println!("------------------------------- Tuples ----------------------------");
+
+    // ----- TUPLES -----
+    // Tuples can contain multiple data types in a list of fixed size
+    // We convert to strings with to_string()
+    let my_tuple: (u8, String, f64, f32) = (25, "Ricky".to_string(), 280_000.14, 2.00);
+
+    // You can get values by index starting at 0
+    println!("2nd element in tuple: Name = {}", my_tuple.1);
+
+    // You can assign values to multiple variables
+    //unused variables are prefixed with _
+    let (v1, v2, v3, _v4) = my_tuple;
+    println!("Age : {},\nName: {},\nnet worth: {}", v1, v2, v3);
+    
+    /* The below code won't compile because of the string that is part of the 
+    tuple. Uncomment it to see more:
+
+    Compiler message: "due to the 
+    move occurs because `my_tuple.1` has type `String`, which does not implement the `Copy` trait"  
+
+    More on strings later
+    */
+
+    // let (age,  name, _net_worth, _mult) = my_tuple;
+    // println!("Name: {}, {}", name, age);
+
 }
