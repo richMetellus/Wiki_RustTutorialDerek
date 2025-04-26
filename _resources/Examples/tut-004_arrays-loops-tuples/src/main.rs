@@ -38,5 +38,15 @@ fn main() {
         println!("Val : {}", arr_2[loop_idx]);
         loop_idx += 1;
     }
+    
+    println!("------------------------------- while loop-------------------------");
+
+    // ----- WHILE LOOP -----
+    // Looping based on a condition
+    loop_idx = 0; // reset our index
+    while loop_idx < arr_2.len(){
+        println!("Arr[{}] : {}", loop_idx, arr_2[loop_idx]);
+        loop_idx += 1;
+    }
 
 }

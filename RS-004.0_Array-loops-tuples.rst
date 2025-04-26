@@ -75,7 +75,7 @@ An Array
 
       tut-004_arrays-loops-tuples (main)
       $ cargo run
-         Compiling tut-004_arrays-loops-tuples v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-004_arrays-loops-tuples)
+         Compiling tut-004_arrays-loops-tuples v0.1.0 (Examples\tut-004_arrays-loops-tuples)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
            Running `target\debug\tut-004_arrays-loops-tuples.exe`
            1st : 1
@@ -100,15 +100,17 @@ Looping
 
 Let's look how to loop through an array.
 
-``loop`` Keyword
-==================
+``loop`` Keyword: infinite Loop
+================================
 
 ``loop`` keyword 
 
 * can be used to indicate infinite loop ((tbr.)like arduino)
 
-Let's write a simple program that will loop through an array and that will 
-only print the odd value and skip if encounter the value 9.
+.. _exercise1:
+.. card:: Exercise 1: 
+   Let's write a simple program that will loop through an array and that will 
+   only print the odd value and skip if encounter the value 9.
 
 1. Using the same project let's add the following change.
    
@@ -166,6 +168,73 @@ only print the odd value and skip if encounter the value 9.
       the program exit.
 
 #. Commit the change and tag 
+   
+   .. code-block:: console 
+
+      commit 3aad1fb68ce5ca6aef9ea0b58ac5c894ab0d95e6 
+      (HEAD -> main, tag: RS-004.0_v0.0.2)
+
+While loop 
+===========
+
+``while`` loop
+
+* is a type of loop based on condition.
+
+1. Let's do some exercise that will print everything in the array with a while loop by 
+   adding the following change 
+
+   .. code-block:: diff
+
+      +    
+      +    println!("------------------------------- while loop-------------------------");
+      +
+      +    // ----- WHILE LOOP -----
+      +    // Looping based on a condition
+      +    loop_idx = 0; // reset our index
+      +    while loop_idx < arr_2.len(){
+      +        println!("Arr[{}] : {}", loop_idx, arr_2[loop_idx]);
+      +        loop_idx += 1;
+      +    }
+
+       }
+
+#. Run  
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-004_arrays-loops-tuples v0.1.0 (Examples\tut-004_arrays-loops-tuples)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.35s
+           Running `target\debug\tut-004_arrays-loops-tuples.exe`
+      1st : 1
+      2nd element : 2
+      Length : 4
+      total size of memory occupied by 1 i32 : 4 bytes
+      total size of memory occupied by ARR_1 : 16 bytes
+      total size of memory occupied by ARR_1 using arr1_ref: 16 bytes
+      -------------------------------------------------------------------
+      Val : 1
+      Val : 3
+      Val : 5
+      Val : 7
+      ------------------------------- while loop-------------------------
+      Arr[0] : 1
+      Arr[1] : 2
+      Arr[2] : 3
+      Arr[3] : 4
+      Arr[4] : 5
+      Arr[5] : 6
+      Arr[6] : 7
+      Arr[7] : 8
+      Arr[8] : 9
+
+
+#. Commit the change and tag
+
+For Loop 
+==========
+
 
 Dynamic Size Array and Rust 
 ***************************
