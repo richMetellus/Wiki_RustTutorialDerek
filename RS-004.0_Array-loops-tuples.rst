@@ -1,6 +1,17 @@
 Arrays, Loops, and Tuples in Rust
 ####################################
 
+**Objectives**
+
+1. Cover what an array is in Rust and its constraints.
+2. Learn about various control of flow, branching techniques
+   
+   I. Infinite loop
+   #. While loop
+   #. For loop 
+
+#. Understand what a tuple is and how to initialize one.
+
 Arrays
 ********
 
@@ -416,6 +427,9 @@ Tuples
 
 
 #. Commit the change 
+         
+   :commit: d19f379f693dd304ddd169bfd909259bfed0f14a
+   :tag: RS-004.0_v0.0.5
 
 .. card:: code-explanation 
 
@@ -429,6 +443,9 @@ Wrap up and Summary
 ********************
 
 **The final code**
+
+:commit: d19f379f693dd304ddd169bfd909259bfed0f14a
+:tag: RS-004.0_v0.0.5
 
 .. tabs::
 

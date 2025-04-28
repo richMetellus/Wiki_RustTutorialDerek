@@ -1,0 +1,81 @@
+Strings 
+########
+
+There are 3 types of strings: 
+
+1. string literals:
+   
+   .. code-block:: Rust 
+
+      let s = "hello";
+   
+   * ``s`` is a string literal, where the value of the string is hardcoded directly 
+     into the final executable, more specifically into the ``.text`` section of 
+     our program.
+
+   * string literal is immutable. 
+     
+     * notice there is no need for the  ``mut`` keyword during the definition 
+       of the string literal variable.
+     
+     .. code-block:: Rust 
+
+        fn main() {
+            let mut s = "Hello";
+            let s1 = s;
+            println!("s = {s}, s1= {s1}");
+        }
+     
+     * this code will compile with warnings, and it will run 
+     
+     .. code-block:: console 
+        :caption: example of output from Rust playground 
+
+        Standard Error
+           Compiling playground v0.0.1 (/playground)
+        warning: variable does not need to be mutable
+         --> src/main.rs:3:9
+          |
+        3 |     let mut s = "Hello";
+          |         ----^
+          |         |
+          |         help: remove this `mut`
+          |
+          = note: `#[warn(unused_mut)]` on by default
+        
+        warning: `playground` (bin "playground") generated 1 warning (run `cargo fix --bin "playground"` to apply 1 suggestion)
+            Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
+             Running `target/debug/playground`
+        Standard Output
+        s = Hello, s1= Hello
+        
+
+        
+        
+#. ``String`` - which is a vector of bytes that can be changed. 
+    
+    * You can create a ``String`` from a *string literal* using the ``from`` 
+      function, like so::
+
+         let s = String::from("hello");
+
+2. ``&str`` - reference and string type, which point to a string and 
+   allow for viewing of said string.
+
+   * (tbr.) This is known as the "string slice" type in rust.
+
+
+``String`` Type 
+****************
+
+1. Create a new project
+
+Further Reading and References 
+*********************************
+
+* `String (MIT Rust Prog book)`_
+* `The Slice Type (Rust pro lang book)`_
+* `What and where are the stack and heap?`_
+
+.. include:: ./relevant_urls.rst 
+.. include:: ../../relevant_urls.rst
