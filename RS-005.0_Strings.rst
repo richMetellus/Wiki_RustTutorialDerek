@@ -1,77 +1,43 @@
 Strings 
 ########
 
-There are 3 types of strings: 
+There are 2 types of strings: 
 
-1. string literals:
-   
-   .. code-block:: Rust 
-
-      let s = "hello";
-   
-   * ``s`` is a string literal, where the value of the string is hardcoded directly 
-     into the final executable, more specifically into the ``.text`` section of 
-     our program.
-
-   * string literal is immutable. 
-     
-     * notice there is no need for the  ``mut`` keyword during the definition 
-       of the string literal variable.
-     
-     .. code-block:: Rust 
-
-        fn main() {
-            let mut s = "Hello";
-            let s1 = s;
-            println!("s = {s}, s1= {s1}");
-        }
-     
-     * this code will compile with warnings, and it will run 
-     
-     .. code-block:: console 
-        :caption: example of output from Rust playground 
-
-        Standard Error
-           Compiling playground v0.0.1 (/playground)
-        warning: variable does not need to be mutable
-         --> src/main.rs:3:9
-          |
-        3 |     let mut s = "Hello";
-          |         ----^
-          |         |
-          |         help: remove this `mut`
-          |
-          = note: `#[warn(unused_mut)]` on by default
-        
-        warning: `playground` (bin "playground") generated 1 warning (run `cargo fix --bin "playground"` to apply 1 suggestion)
-            Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
-             Running `target/debug/playground`
-        Standard Output
-        s = Hello, s1= Hello
-        
-
-        
-        
 #. ``String`` - which is a vector of bytes that can be changed. 
     
-    * You can create a ``String`` from a *string literal* using the ``from`` 
-      function, like so::
+   * You can create a ``String`` from a *string literal* using the ``from`` 
+     function, like so::
 
-         let s = String::from("hello");
+        let s = String::from("hello");
+   
+   * (tbr.) since variables of type ``String`` can contain growable UTF-8 
+     encoded value, the size of a string might not be known at compile time, 
+     thus strings are normally allocated to the heap. 
 
-2. ``&str`` - reference and string type, which point to a string and 
+
+#. ``&str`` - reference and string type, which point to a string and 
    allow for viewing of said string.
 
    * (tbr.) This is known as the "string slice" type in rust.
 
+.. note:: The instructor did not go into much details then jump to coding. 
+   I added some additional notes and resources as well. I think understand the 
+   concept of Ownership and Borrowing should be researched as well to understand
+   how rust is different and handle strings differently.
+
+   .. seealso:: Some good reading. Derek did not go into details of how Rust 
+      string is different than C string. 
+
+      * `String (MIT Rust Prog book)`_
+      * `What is UTF-8 (Twillio Docs)`_
+      * `The Slice Type (Rust pro lang book)`_
+      * `What and where are the stack and heap?`_
+      * `string vs string slice (medium)`_
 
 ``String`` Type 
 ****************
 
-.. seealso:: Some good reading. Derek did not go into details of how Rust 
-   string is different than C string. 
 
-   * `String (MIT Rust Prog book)`_
 
 ``String`` [1]_
 
@@ -82,8 +48,150 @@ There are 3 types of strings:
 * is s a sequence of Unicode scalar values encoded as a stream of 
   UTF-8 bytes [1]_
 
-* unlike some systems languages like C/C++, strings are not NUL-terminated and 
-  can contain NUL bytes (ASCII code 0, Unicode U+0000)
+  * UTF-8 (Unicode Transformation Format - 8 bit) is a type of encoding standardized 
+    by the International organization for Standardization (ISO) in 
+    `ISO 10646 <https://en.wikipedia.org/wiki/Universal_Coded_Character_Set>`_
+  
+  * UTF-8 is a "variable width" encoding standard.
+    
+    * i.e it can encode the data (`code points`_ (character, emoji, etc)) using 
+      a different number of bytes.
+
+      * `code points` are the atomic unit of storage of information in an encoding
+        scheme.
+               
+        * in UTF-8, code points are sequence of 1 to four bytes long that has been 
+          assigned a meaning in a table.
+        * (tbr) they are a more abstract term instead of using character since a code point 
+          can be used to encode more than just letters & numbers.
+
+    * As a space-saving measure, commonly used code points are represented with 
+      fewer bytes than infrequently appearing code points.
+     
+    * some encoding can use 1 byte, 2 bytes, 3 bytes or 4 bytes. 
+
+  * UTF-8 can represent up to :math:`2^{21} = 2,097,152` code points, more than 
+    enough to cover the current :math:`1,112,064` unicode code points.
+
+
+* unlike some systems languages like C/C++, in Rust strings are not NUL-terminated and 
+  can contain NUL bytes (ASCII code 0, Unicode U+0000) [1]_
+
+**String type**
+
+* The ``String`` type in Rust is a growable, heap-allocated, 
+   UTF-8 encoded string.
+
+* *Use when*:
+   
+  * when you need a mutable and dynamic string that can be modified and 
+    resized at runtime.
+
+* *creation* : You can create a new ``String`` by calling its associated 
+   function ``String::new()`` or by converting from a string slice using the 
+   ``to_string()`` method.
+
+String Slice type ``&str``
+***************************
+
+**string slice** type 
+
+.. note:: there is no built-in data type name ``str`` but rather ``&str``,
+   to indicate a string slice. 
+
+2. ``&str`` - reference and string type, which point to a string and 
+   allow for viewing of said string.
+
+   * (tbr.) This is known as the "string slice" type in rust.
+   
+   * Slices let you reference a contiguous sequence of elements in a collection 
+     rather than the whole collection. A slice is a kind of reference, so it does 
+     **not have ownership**. (Rust Book, ch 4.3)
+   
+   * A string slice is a reference to part of a ``String``, and it looks like this:
+
+   .. code-block:: Rust 
+
+      let s = String::from("hello world"); // String type
+
+      let hello = &s[0..5]; // string slice
+      let world = &s[6..11]; // another string slice
+
+   
+   |
+   
+   I. **string literals**: a type of string slice stored in the binary
+
+      .. code-block:: Rust 
+
+         let s = "hello";
+
+      * ``s`` is a string literal, where the value of the string is hardcoded directly 
+        into the final executable, more specifically into the ``.text`` section of 
+        our program. (Rust book)
+
+      * string literal is a type of string slice and be viewed 
+        as type annotated as ``&'static str`` 
+
+        * i.e string literal type is ``&'static str`` (MIT Rust book)
+      
+      * A string literal is a string slice that is statically allocated, meaning 
+        that it’s saved inside our compiled program, and exists for the entire 
+        duration it runs. (MIT Rust book)
+
+        .. code-block:: rust 
+           
+           #![allow(unused_variables)]
+           fn main() {
+           let greeting = "Hello there."; // greeting: &'static str
+           }
+                   
+        * The ``greeting`` binding is a reference to this statically allocated 
+          string. 
+      
+      * Any function expecting a string slice will also accept a string 
+        literal.
+      
+      * ``s``, string literal is immutable but it can be mutable.
+
+        * notice there is no need for the  ``mut`` keyword during the definition 
+          of the string literal variable.
+
+        .. code-block:: Rust 
+
+           fn main() {
+               let mut s = "Hello";
+               let s1 = s;
+               println!("s = {s}, s1= {s1}");
+           }
+
+        * this code will compile with warnings, and it will run 
+
+        .. code-block:: console 
+           :caption: example of output from Rust playground 
+
+           Standard Error
+              Compiling playground v0.0.1 (/playground)
+           warning: variable does not need to be mutable
+            --> src/main.rs:3:9
+             |
+           3 |     let mut s = "Hello";
+             |         ----^
+             |         |
+             |         help: remove this `mut`
+             |
+             = note: `#[warn(unused_mut)]` on by default
+
+           warning: `playground` (bin "playground") generated 1 warning (run `cargo fix --bin "playground"` to apply 1 suggestion)
+               Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
+                Running `target/debug/playground`
+           Standard Output
+           s = Hello, s1= Hello
+
+      
+
+Exercise 1
+***********
 
 1. Create a new project
 #. Add the following code 
@@ -137,15 +245,166 @@ There are 3 types of strings:
       st2 = "Another word"
       is st1 still in scope? Yes; st1 =A word
 
+Exercise 2: Strings, String slices and  operation
+****************************************************
+
+1. Write the following code
+   
+   .. code-block:: diff 
+
+      index 03c6368..f4f812f 100644
+      --- a/_resources/Examples/tut-005_strings/src/main.rs
+      +++ b/_resources/Examples/tut-005_strings/src/main.rs
+      @@ -1,7 +1,14 @@
+       fn main() {
+           println!("-------------------------------------------------------------------");
+      +
+      +    // ----- STRINGS -----
+      +    // There are 2 types of strings
+      +    // 1. String : Vector of bytes that can be changed
+      +    // 2. &str : string slice, reference that Points to the string and allows for viewing     
+      +
+      +
+           // Create an empty growable string
+      -    let mut st1 = String::new();
+      +    let mut st1 = String::new(); // String type
+
+           // Insert a character at the end of a string
+           st1.push('A');
+      @@ -20,4 +27,82 @@ fn main() {
+           let st2 = st1.replace("A", "Another");
+           println!("st2 = \"{}\"", st2);
+           println!("is st1 still in scope? Yes; st1 ={st1}");
+      +    println!("-------------------------------------------------------------------");
+      +    
+      +    // Create string of characters
+      +    let st3 = String::from("x r t b h k k a m c"); // just throw random char separated by space
+      +    
+      +    println!("string to start with: st3={}", st3);
+      +
+      +    // Convert to a vector (Vector are covered in a different chapter)
+      +    println!("Converting st3 to vector");
+      +    let mut v1: Vec<char> = st3.chars().collect();
+      +
+      +    // Sort characters
+      +    println!("Sorting the vector collection");
+      +    v1.sort();
+      +
+      +    // TODO: Uncomment this to see compiler error:
+      +    // for x in v1 {
+      +    //     println!("{}", x);
+      +    // }
+      +
+      +    // Remove duplicates (so no K K)
+      +    print!("\n--------\n");
+      +    println!("Remove the duplicates in the  vector collection");
+      +    v1.dedup();
+      +
+      +    // Cycle through vector
+      +    for char in v1 {
+      +        print!("{},", char);
+      +    }
+      +
+      +    print!("\n--------\n");
+      +
+      +    // Create a string literal
+      +    let st4: &str = "Random string";
+      +
+      +    // Convert to heap allocated String
+      +    let mut st5: String = st4.to_string();
+      +    println!("st5={}", st5);
+      +
+      +    // Convert string into an array of bytes
+      +    let _byte_arr1 = st5.as_bytes();
+      +
+      +    // Get a slice of a string from index 0 to 5
+      +    let st6: &str = &st5[0..6];
+      +    println!("st6 as string slice: &st5[0..6]={}", st6);
+      +
+      +    // Get length of string
+      +    println!("st6 String Length : {}", st6.len());
+      +
+      +    // Delete values in a string if mutable
+      +    st5.clear();
+      +
+      +    // Combine strings
+      +    let st6 = String::from("Just some");
+      +    let st7 = String::from("words");
+      + 
+      +    // st6 can no longer be used
+      +    // You can only add a reference to a string to another
+      +    let st8 = st6 + &st7; // st7 still exist and not dropped
+      +    // println!("st6 as string: {st6}"); // Illegal borrow of moved value 
+      +
+      +    println!("st8 as String st8={st8}\nst8 len={}", st8.len());
+      +
+      +    // Cycle through letters in a string and print unicode
+      +    println!("Dumping st8 as bytes (unicode)");
+      +    for char in st8.bytes() {
+      +        print!("{},", char);
+      +    }
+      +    
+      +    println!("\n--------");
+      +    // Cycle through letters in a string and print characters
+      +    println!("Dumping st8 as chars");
+      +    for char in st8.chars() {
+      +        print!("{},", char);
+      +    }
+      +
+      +    println!("\n-------------------------------------------------------------------");        
+      +
+       }
+
+#. Run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+           Running `target\debug\tut-005_strings.exe`
+      -------------------------------------------------------------------
+      Splitting st1 = "A word" - using whitespace delimiter
+      A
+      word
+      String substitution:  Replacing 'A' with "Another" in st1 = "A word"
+      st2 = "Another word"
+      is st1 still in scope? Yes; st1 =A word
+      -------------------------------------------------------------------
+      string to start with: st3=x r t b h k k a m c
+      Converting st3 to vector
+      Sorting the vector collection
+
+      --------
+      Remove the duplicates in the  vector collection
+       ,a,b,c,h,k,m,r,t,x,
+      --------
+      st5=Random string
+      st6 as string slice: &st5[0..6]=Random
+      st6 String Length : 6
+      st8 as String st8=Just somewords
+      st8 len=14
+      Dumping st8 as bytes (unicode)
+      74,117,115,116,32,115,111,109,101,119,111,114,100,115,
+      --------
+      Dumping st8 as chars
+      J,u,s,t, ,s,o,m,e,w,o,r,d,s,
+      -------------------------------------------------------------------
+
+Other Exercise that raise some questions 
+******************************************
+
 
 Further Reading and References 
 *********************************
 
 .. [1] `String (MIT Rust Prog book)`_
+.. [2] `string vs string slice (medium)`_
 
 * `What is UTF-8 (Twillio Docs)`_
 * `The Slice Type (Rust pro lang book)`_
 * `What and where are the stack and heap?`_
+
+.. _code points: https://en.wikipedia.org/wiki/Code_point
 
 .. include:: ./relevant_urls.rst 
 .. include:: ../../relevant_urls.rst
