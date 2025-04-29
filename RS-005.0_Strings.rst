@@ -68,12 +68,82 @@ There are 3 types of strings:
 ``String`` Type 
 ****************
 
+.. seealso:: Some good reading. Derek did not go into details of how Rust 
+   string is different than C string. 
+
+   * `String (MIT Rust Prog book)`_
+
+``String`` [1]_
+
+* is a re-sizable data structure. 
+  
+  * unlike a string literal, the size is not known at compile time. 
+
+* is s a sequence of Unicode scalar values encoded as a stream of 
+  UTF-8 bytes [1]_
+
+* unlike some systems languages like C/C++, strings are not NUL-terminated and 
+  can contain NUL bytes (ASCII code 0, Unicode U+0000)
+
 1. Create a new project
+#. Add the following code 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-005_strings/src/main.rs
+      +++ b/_resources/Examples/tut-005_strings/src/main.rs
+      @@ -1,3 +1,23 @@
+       fn main() {
+      -    println!("Hello, world!");
+      +    println!("-------------------------------------------------------------------");
+      +    // Create an empty growable string
+      +    let mut st1 = String::new();
+      +
+      +    // Insert a character at the end of a string
+      +    st1.push('A');
+      +
+      +    // Insert a string at the end
+      +    st1.push_str(" word"); // notice the space
+      +
+      +    // Iterate through words by splitting at whitespace
+      +    println!("Splitting st1 = \"{st1}\" - using whitespace delimiter");
+      +    for word in st1.split_whitespace() {
+      +        println!("{}", word);
+      +    }
+      +
+      +    // Replace "A" from st1 to Another and bind the value to st2.
+      +    println!("String substitution:  Replacing 'A' with \"Another\" in st1 = \"{st1}\" ");
+      +    let st2 = st1.replace("A", "Another");
+      +    println!("st2 = \"{}\"", st2);
+      +    println!("is st1 still in scope? Yes; st1 ={st1}");
+       }
+      
+#. Run 
+   
+   .. code-block:: console 
+      :caption: example of output 
+
+      05_strings (main)
+      $ cargo clean; cargo run
+           Removed 57 files, 5.1MiB total
+         Compiling tut-005_strings v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-005_strings)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
+           Running `target\debug\tut-005_strings.exe`
+      -------------------------------------------------------------------
+      Splitting st1 = "A word" - using whitespace delimiter
+      A
+      word
+      String substitution:  Replacing 'A' with "Another" in st1 = "A word"
+      st2 = "Another word"
+      is st1 still in scope? Yes; st1 =A word
+
 
 Further Reading and References 
 *********************************
 
-* `String (MIT Rust Prog book)`_
+.. [1] `String (MIT Rust Prog book)`_
+
+* `What is UTF-8 (Twillio Docs)`_
 * `The Slice Type (Rust pro lang book)`_
 * `What and where are the stack and heap?`_
 
