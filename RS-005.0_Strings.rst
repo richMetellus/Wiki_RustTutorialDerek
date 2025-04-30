@@ -35,7 +35,7 @@ There are 2 types of strings:
       * `string vs string slice (medium)`_
 
 ``String`` Type 
-****************
+*******************
 
 
 
@@ -77,6 +77,11 @@ There are 2 types of strings:
 * unlike some systems languages like C/C++, in Rust strings are not NUL-terminated and 
   can contain NUL bytes (ASCII code 0, Unicode U+0000) [1]_
 
+* A ``String`` is stored as a vector of bytes (``Vec<u8>``), but guaranteed to 
+  always be a valid UTF-8 sequence. [4]_
+  
+  * ``String`` is heap allocated, growable and not null terminated. [4]_
+
 **String type**
 
 * The ``String`` type in Rust is a growable, heap-allocated, 
@@ -103,6 +108,10 @@ String Slice type ``&str``
    allow for viewing of said string.
 
    * (tbr.) This is known as the "string slice" type in rust.
+   * ``&str`` is a slice (``&[u8]``) that always points to a valid UTF-8 sequence, 
+     and can be used to view into a ``String``, just like ``&[T]`` is a view into 
+     ``Vec<T>`` [4]_ (i.e just like a "reference to generic array is a view into a 
+     generic vector")
    
    * Slices let you reference a contiguous sequence of elements in a collection 
      rather than the whole collection. A slice is a kind of reference, so it does 
@@ -152,43 +161,18 @@ String Slice type ``&str``
       * Any function expecting a string slice will also accept a string 
         literal.
       
-      * ``s``, string literal is immutable but it can be mutable.
-
-        * notice there is no need for the  ``mut`` keyword during the definition 
-          of the string literal variable.
-
-        .. code-block:: Rust 
-
-           fn main() {
-               let mut s = "Hello";
-               let s1 = s;
-               println!("s = {s}, s1= {s1}");
-           }
-
-        * this code will compile with warnings, and it will run 
-
-        .. code-block:: console 
-           :caption: example of output from Rust playground 
-
-           Standard Error
-              Compiling playground v0.0.1 (/playground)
-           warning: variable does not need to be mutable
-            --> src/main.rs:3:9
-             |
-           3 |     let mut s = "Hello";
-             |         ----^
-             |         |
-             |         help: remove this `mut`
-             |
-             = note: `#[warn(unused_mut)]` on by default
-
-           warning: `playground` (bin "playground") generated 1 warning (run `cargo fix --bin "playground"` to apply 1 suggestion)
-               Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
-                Running `target/debug/playground`
-           Standard Output
-           s = Hello, s1= Hello
-
-      
+      .. note:: Notice in all the example of string literals, they don't use 
+         the keyword ``mut`` during the definition of the variable.
+         
+         .. code-block:: console
+            
+            let s = "Hello, world!";
+         
+         * The type of ``s`` here is ``&str``: it’s a slice pointing to that 
+           specific point of the binary. This is also why string literals are 
+           **immutable**; ``&str`` is an immutable reference. (Rust Book ch 4.3)
+        
+        .. seealso:: :ref:`My question on string and mut keyword <mutAndSlice>`
 
 Exercise 1
 ***********
@@ -234,7 +218,7 @@ Exercise 1
       05_strings (main)
       $ cargo clean; cargo run
            Removed 57 files, 5.1MiB total
-         Compiling tut-005_strings v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-005_strings)
+         Compiling tut-005_strings v0.1.0 (Examples\tut-005_strings)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
            Running `target\debug\tut-005_strings.exe`
       -------------------------------------------------------------------
@@ -390,8 +374,132 @@ Exercise 2: Strings, String slices and  operation
       J,u,s,t, ,s,o,m,e,w,o,r,d,s,
       -------------------------------------------------------------------
 
+#. Commit the change and tag 
+   
+   .. code-block:: console 
+
+      commit 8d48ab952dc5caddefd7bfdc2c28b4ce6b8b9503 
+      (HEAD -> main, tag: RS-005.0_v0.0.2)
+
 Other Exercise that raise some questions 
 ******************************************
+
+Knowing what I know now about strings, string slice and string literal;
+
+.. code-block:: Rust 
+
+   let s = "hello";
+
+* ``s`` is a string literal, where the value of the string is hardcoded directly 
+  into the final executable, more specifically into the ``.text`` section of 
+  our program. (Rust book)
+
+* A string literal is a string slice that is statically allocated, meaning 
+  that it’s saved inside our compiled program, and exists for the entire 
+  duration it runs. (MIT Rust book)
+
+.. card:: Question 1: Is a string literal always immutable? What happen if 
+   the keyword ``mut`` is used with the syntax of a string literal?      
+   
+   * ``s`` is a binder/variable
+
+     * notice there is no need for the  ``mut`` keyword during the definition 
+       of the string literal variable.
+
+     .. code-block:: Rust 
+
+        fn main() {
+            let mut s = "Hello";
+            let s1 = s;
+            println!("s = {s}, s1= {s1}");
+        }
+
+     * this code will compile with warnings, and it will run 
+
+     .. code-block:: console 
+        :caption: example of output from Rust playground 
+
+        Standard Error
+           Compiling playground v0.0.1 (/playground)
+        warning: variable does not need to be mutable
+         --> src/main.rs:3:9
+          |
+        3 |     let mut s = "Hello";
+          |         ----^
+          |         |
+          |         help: remove this `mut`
+          |
+          = note: `#[warn(unused_mut)]` on by default
+
+        warning: `playground` (bin "playground") generated 1 warning (run `cargo fix --bin "playground"` to apply 1 suggestion)
+            Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
+             Running `target/debug/playground`
+        Standard Output
+        s = Hello, s1= Hello
+   
+   1. Imagine you have this code 
+      
+      .. code-block:: rust 
+         :caption: src/main.rs 
+         :linenos:
+
+         fn main() {
+             let greeting: &'static str = "Hello there";  // string literal
+             println!("{greeting}");
+             println!("address of greeting {:p}", &greeting);
+             // greeting = "Hello there, earthlings"; // ILLEGAL since it's immutable 
+
+             // is it still a string literal when it is mutable?
+             let mut s: &'static str  = "hello"; // type is `&'static str`
+             println!("s = {s}");
+             println!("address of s {:p}", &s);
+             // does the compiler coerce the type be &str or String?
+             s = "Salut le monde!"; // is this heap-allocated or not? there is no `let` so not shadowing
+             println!("s after updating its value: {s}"); // Compiler will not complain
+             println!("address of s {:p}", &s);
+             // Why does the code above work? since a string literal is a reference. 
+             // A string literal is a string slice that is statically allocated, meaning 
+             // that it’s saved inside our compiled program, and exists for the entire 
+            // duration it runs. (MIT Rust book)
+
+            let mut s1: &str = "mutable string slice";
+            println!("string slice s1 ={s1}");
+            s1 = "s1 value is updated here";
+            println!("string slice after update s1 ={s1}");
+         }
+
+   
+   #. Run the code 
+      
+      .. code-block:: console
+         :caption: windows 11, x86
+
+         $ cargo run
+            Compiling tut-005_strings_2 v0.1.0 (Examples\tut-005_strings_2)
+             Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.42s
+              Running `target\debug\tut-005_strings_2.exe`
+         Hello there
+         address of greeting 0xc39b52f410
+         s = hello
+         address of s 0xc39b52f4c8
+         s after updating its value: Salut le monde!
+         address of s 0xc39b52f4c8
+         string slice s1 =mutable string slice
+         string slice after update s1 =s1 value is updated here
+
+      .. admonition:: Questions 
+         
+         * Why does this code run without any compiler issue?
+         * is the variable ``s``, ``s1`` still consider a string literal in that example?
+           
+           * if ``s`` is a literal, how come at run time, the value in the address 
+             binded to ``s`` stay the same?
+         
+             * so ``&str`` is an immutable reference, is that's why the address 
+               stays the same? How about the value to that address? 
+               Why does the value/the data content in ``s`` or ``s1`` changed?
+
+         * How are values moved in Rust? 
 
 
 Further Reading and References 
@@ -399,10 +507,14 @@ Further Reading and References
 
 .. [1] `String (MIT Rust Prog book)`_
 .. [2] `string vs string slice (medium)`_
+.. [3] `The Slice Type (Rust pro lang book)`_
+.. [4] `strings and string slice (Rust by example)`_
+
+
 
 * `What is UTF-8 (Twillio Docs)`_
-* `The Slice Type (Rust pro lang book)`_
 * `What and where are the stack and heap?`_
+* `strings and string slice (Rust by example)`_
 
 .. _code points: https://en.wikipedia.org/wiki/Code_point
 
