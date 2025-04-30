@@ -1,0 +1,52 @@
+Type Casting, Enums, and Vector in Rust 
+########################################
+
+
+
+Casting 
+********
+
+Casting 
+
+* You are able to convert to different types in a whole bunch of 
+  different ways. 
+
+  * we've seen strings converted to vector in previous lecture
+
+* One of the way you can cast is using the ``as`` keyword
+
+1. Example on new project 
+   
+   .. code-block:: Rust 
+      :linenos:
+
+      fn main() {
+         
+          // ----- CASTING WITH AS -----
+          // You can convert to different types in multiple ways
+          let int_u8: u8 = 5;
+          let int2_u8: u8 = 4;
+          // Cast using as unsigned int 32
+          let int3_u32: u32 = (int_u8 as u32) + (int2_u8 as u32);
+          println!("int3_u32={}, size of {} bytes", int3_u32, mem::size_of_val(&int3_u32));
+      }
+
+2. Run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-006_casting-enums-vectors v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-006_casting-enums-vectors)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
+           Running `target\debug\tut-006_casting-enums-vectors.exe`
+      int3_u32=9, size of 4 bytes
+
+
+#. Commit the change 
+
+
+Enums 
+******
+
+* ``Enum`` or *Enumerated* allow you to create custom data type 
+  that have a limited number of potential values.

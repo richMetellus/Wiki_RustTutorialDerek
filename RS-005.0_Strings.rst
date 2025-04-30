@@ -515,6 +515,7 @@ Further Reading and References
 * `What is UTF-8 (Twillio Docs)`_
 * `What and where are the stack and heap?`_
 * `strings and string slice (Rust by example)`_
+* `Strings in Rust (Let's Get Rusty)`_
 
 .. _code points: https://en.wikipedia.org/wiki/Code_point
 
