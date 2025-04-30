@@ -12,10 +12,21 @@ Casting
   different ways. 
 
   * we've seen strings converted to vector in previous lecture
-
+  
 * One of the way you can cast is using the ``as`` keyword
 
-1. Example on new project 
+.. note:: (tbr) Do not confuse ``casting`` between primitive types and 
+   conversion between custom types. 
+
+   * Primitive types can be converted to each other through *casting*.
+   * Rust addresses conversion between custom types (i.e., ``struct`` and ``enum``) 
+     by the use of *traits*. 
+   
+   * The generic conversions will use the ``From`` and ``Into`` traits. However 
+     there are more specific ones for the more common cases, in particular when 
+     converting to and from ``String`` S.
+
+1. Example gave by Derek on YouTube 
    
    .. code-block:: Rust 
       :linenos:
@@ -44,9 +55,138 @@ Casting
 
 #. Commit the change 
 
+.. seealso:: * `Casting (Rust By Example)`_
+
+   * `Conversion (Rust By Example)`_
 
 Enums 
 ******
 
 * ``Enum`` or *Enumerated* allow you to create custom data type 
   that have a limited number of potential values.
+
+1. Let start writing some code.
+   
+   * we can create an enum for days of the week for example: ``enum Day``
+   
+   * you can define function for these enumerated type with ``impl Day``
+     
+     * function start ``fn function-name(param1, ..., paramN) -> return-type { Function Body}``
+   
+   .. code-block:: Diff
+
+      --- a/_resources/Examples/tut-006_casting-enums-vectors/src/main.rs
+      +++ b/_resources/Examples/tut-006_casting-enums-vectors/src/main.rs
+      @@ -1,7 +1,8 @@
+       use std::mem;
+
+       fn main() {
+      -
+      +    println!("-------------------------------------------------------------------");
+      +
+           // ----- CASTING WITH AS -----
+           // You can convert to different types in multiple ways
+           let int_u8: u8 = 5;
+      @@ -9,4 +10,51 @@ fn main() {
+           // Cast using as unsigned int 32
+           let int3_u32: u32 = (int_u8 as u32) + (int2_u8 as u32);
+           println!("int3_u32={}, size of {} bytes", int3_u32, mem::size_of_val(&int3_u32));
+      +    println!("-------------------------------------------------------------------");
+      +
+      +    // ----- ENUMS -----
+      +    // Enums allow for the definition of custom data types
+      +
+      +    // Create an Enum for days of week
+      +    enum Day {
+      +        Monday,
+      +        Tuesday,
+      +        Wednesday,
+      +        Thursday,
+      +        Friday,
+      +        Saturday,
+      +        Sunday
+      +    }
+      +
+      +    // Define function for Day enum
+      +    impl Day {
+      +        fn is_weekend(&self) -> bool {
+      +            match self {
+      +                Day::Saturday | Day::Sunday => true,
+      +                _ => false
+      +            } // <--- notice there is no `;` here
+      +        }
+      +    }
+      +
+      +    // Use enum to store todays day
+      +    let today: Day = Day::Monday;
+      +    let yesterday:Day = Day::Sunday;
+      +
+      +    // Perform different actions based on day
+      +    match today {
+      +        Day::Monday => println!("Everyone hates Monday"),
+      +        Day::Tuesday => println!("Donut day"),
+      +        Day::Wednesday => println!("Hump day"),
+      +        Day::Thursday => println!("Pay day"),
+      +        Day::Friday => println!("Almost Weekend"),
+      +        Day::Saturday => println!("Weekend!!!"),
+      +        Day::Sunday => println!("Weekend!!!"),
+      +    }
+      +
+      +    // Check if today is a weekend
+      +    println!("Is today, Monday, the weekend? {}", today.is_weekend());
+      +    println!("Is yesterday the weekend? {}", yesterday.is_weekend());
+      +    println!("-------------------------------------------------------------------");
+      +
+      +
+       }
+
+
+#. Save and Run the code 
+   
+   .. code-block:: console 
+
+      $ cargo clean; cargo run
+           Removed 47 files, 3.0MiB total
+         Compiling tut-006_casting-enums-vectors v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-006_casting-enums-vectors)
+      warning: variants `Tuesday`, `Wednesday`, `Thursday`, `Friday`, and `Saturday` are never constructed
+        --> src\main.rs:21:9
+         |
+      19 |     enum Day {
+         |          --- variants in this enum
+      20 |         Monday,
+      21 |         Tuesday,
+         |         ^^^^^^^
+      22 |         Wednesday,
+         |         ^^^^^^^^^
+      23 |         Thursday,
+         |         ^^^^^^^^
+      24 |         Friday,
+         |         ^^^^^^
+      25 |         Saturday,
+         |         ^^^^^^^^
+         |
+         = note: `#[warn(dead_code)]` on by default
+
+      warning: `tut-006_casting-enums-vectors` (bin "tut-006_casting-enums-vectors") generated 1 warning
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.63s
+           Running `target\debug\tut-006_casting-enums-vectors.exe`
+      -------------------------------------------------------------------
+      int3_u32=9, size of 4 bytes
+      -------------------------------------------------------------------
+      Everyone hates Monday
+      Is today, Monday, the weekend? false
+      Is yesterday the weekend? true
+      -------------------------------------------------------------------
+
+#. Commit the change 
+
+.. seealso:: * `Enums (Rust By Example)`_
+
+Further Reading and References 
+********************************
+
+* `Casting (Rust By Example)`_
+* `Conversion (Rust By Example)`_
+* `Enums (Rust By Example)`_
+
+.. include:: ../../relevant_urls.rst
