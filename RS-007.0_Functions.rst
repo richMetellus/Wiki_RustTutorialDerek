@@ -1,0 +1,4 @@
+Functions 
+##########
+
+You can define your function before or after ``main``

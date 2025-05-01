@@ -495,12 +495,334 @@ Knowing what I know now about strings, string slice and string literal;
            * if ``s`` is a literal, how come at run time, the value in the address 
              binded to ``s`` stay the same?
          
-             * so ``&str`` is an immutable reference, is that's why the address 
+             * maybe the variable of type ``&str`` i is an immutable reference, is that's why the address 
                stays the same? How about the value to that address? 
                Why does the value/the data content in ``s`` or ``s1`` changed?
+               Does that mean that this string is no longer statically "allocated" 
+               into the binary anymore?
 
          * How are values moved in Rust? 
 
+.. card:: Answer: I posted the questions in r/rust reddit and rust internal 
+   community and I was able to get some very insightful answer:
+
+   Let's clarify some confusion:
+
+   You have to distinguish the mutability of the variable (which is a reference) 
+   from the mutability of the data (the actual string slice).
+
+   * In Rust, it's best to think of ``variable`` or ``reference variable`` as both means an alias 
+     to a memory address, except a ``reference variable`` will hold for value an 
+     address. It refers to something.
+     
+     * Rust references are closer to C++ pointers (but with memory safety 
+       guarantees) than to C++ references.
+       
+       * in c++, a reference variable is a "reference" to an existing variable 
+         and is created with the ``&`` operator. It is like a nickname for 
+         a variable.
+
+         .. code-block:: C++
+            :caption: C++
+
+            string food = "Pizza";
+            string &meal = food;
+
+            cout << food << "\n";  // Outputs Pizza
+            cout << meal << "\n";  // Outputs Pizza
+       
+       * C++ references have this weird behaviour, where after initialization all 
+         attempts to operate on the reference, and in particular reassignment, 
+         actually operate on the target of the reference.
+
+         .. code-block:: C++
+            :caption: C++ 
+
+            #include <iostream>
+            #include <string>
+            using namespace std;
+
+            int main() {
+              string food = "Pizza";
+              string &meal = food;
+
+              cout << food << "\n";
+              cout << meal << "\n";
+
+              meal = "Change Pizza to Sandwich through meal";
+
+              cout << "food =" << food << "\n";
+              cout << "meal =" << meal << "\n";
+
+              return 0;
+            }
+         
+         .. code-block:: output
+
+            Pizza
+            Pizza
+            food =Change Pizza to Sandwich through meal
+            meal =Change Pizza to Sandwich through mea
+        
+     * Rust references are essentially pointers with lifetime checks. In particular 
+       reassigning a reference in rust changes what the reference points to, it 
+       does not operate on the target of the reference.
+
+   * you must also distinguish ``mutable variable`` or ``mutable reference``
+       
+     * "mutable variable" - means the **value** of the variable can be changed.
+     * "mutable reference" - means "reference through which the referred-to data can 
+        be mutated"
+        
+
+     .. code-block:: Rust 
+        
+        let num1 = 5; // `num1` is an immutable variable who data (5) 
+                      // is also immutable.
+        
+        let s: &str = "hello"; // the value "hello" is a string literal. This 
+                                  // data "hello" is immutable. 
+                               // best think of `s` as a reference variable. it 
+                               // is a variable of type reference (&) to a string 
+                               // slice (str), so &str. or short `s` is a string slice. and  
+                               // slices are more specifically means to be a 
+                               // "reference to a slice"
+
+   
+   * ``let s: &str = "hello";`` or ``let s1: &'static str  = "hello"`` -- immutable 
+     variable referring to immutable string slice.
+       
+     * ``"hello"`` is the string literal (since all string literals are string slice, 
+       "hello" is also a string slice).
+
+       * String literals are immutable. You can mutate "hello"
+
+     * ``s`` is not the string literal, it is a reference variable to a string 
+       literal.
+
+       * when the code do: ``println!("address of s {:p}", &s);`` , 
+
+         * ``&s`` is the address (or virtual address) of the variable ``s`` 
+           and not the address of the string slice (string data) referred to 
+           by ``s``.
+       
+       * to print the address of the string slice referred to by ``s``, 
+         the address of the string data, use ``s.as_ptr()`` method.
+     
+     * The only real difference between the ``s`` with `&str` and ``s1`` with 
+       ``&'static str`` in the code is that for ``s`` you specified a lifetime 
+       explicitly. For ``s1`` you allowed the compiler to infer the lifetime.
+     
+     .. note:: Rust references are essentially pointers with lifetime checks. In 
+        particular reassigning a reference in rust changes what the reference 
+        points to, it does not operate on the target of the reference.
+
+   * When the code ``s = "Salut le monde!";``, the local variable ``s`` (stored on 
+     the stack) is updated to refer to the string "salut le monde!" (stored in 
+     static memory, probably in the ``.rodata`` section of the program depends 
+     on the implementation of the language)
+
+     * this change ``s`` to point to *yet another* statically stored string 
+       literal. The string "hello" that it originally pointed to is intact. 
+       no heap allocation is involved.
+     
+     .. note:: As I understand it compiler take the immutable string literal data 
+        "hello" might assign an address say 0x1000. The other immutable string 
+        literal "Salut le monde!" might be put at address 0x2000.
+
+        .. code-block:: .text or .rodata
+           0x1000: hello
+           0x2000: Salut le monde!
+        
+        mutable variable ``s`` in the example output is a short name for 
+        memory address ``0xc39b52f4c8``
+
+        so when the code is 
+
+        .. code-block:: Rust
+           
+           let mut s: &'static str  = "hello"; // type is &'static str``
+        
+        The read/write ``.data`` section might be 
+        
+        .. code-block:: console 
+           
+           .data
+           0xc39b52f4c8: 0x1000 
+        
+        and when the re-assignment happen to the reference variable ``s``
+
+        .. code-block:: Rust
+           
+           s = "Salut le monde!";
+        
+        the local variable ``s`` (stored in stack (RAM), .data section of our program)
+        is updated to refer to the string literal "salut le monde!" which lives 
+        at an hypothetical address ``0x2000``.
+        
+        like folks on reddit says, it best to think of ``s`` as c++ pointer.
+
+        ``&s`` does not take the address of the slice it points to. Since 
+        ``s`` is already a pointer (``&str``), ``&s`` is a **pointer to pointer**
+        (``&&str``).
+
+        ``&s`` is the address of the variable ``s``
+   
+   1. make the following changes to my code:
+      
+      .. code-block:: diff
+
+         --- a/_resources/Examples/tut-005_strings_2/src/main.rs
+         +++ b/_resources/Examples/tut-005_strings_2/src/main.rs
+         @@ -2,23 +2,27 @@ fn main() {
+              let greeting: &'static str = "Hello there";  // string literal
+              println!("{greeting}");
+              println!("address of greeting {:p}", &greeting);
+         -    // greeting = "Hello there, earthlings"; // ILLEGAL since it's immutable
+         +    // greeting = "Hello there, earthlings"; // ILLEGAL since greeting is an 
+         +                                       // immutable reference that points to immutable data
+
+              // is it still a string literal when it is mutable?
+              let mut s: &'static str  = "hello"; // type is `&'static str`
+              println!("s = {s}");
+              println!("address of s {:p}", &s);
+         +    println!("s refer to {:p}", s.as_ptr());
+              // does the compiler coerce the type be &str or String?
+              s = "Salut le monde!"; // is this heap-allocated or not? there is no `let` so not shadowing
+              println!("s after updating its value: {s}"); // Compiler will not complain
+              println!("address of s {:p}", &s);
+         +    println!("s refer to {:p}", s.as_ptr());
+              // Why does the code above work? since a string literal is a reference.
+              // A string literal is a string slice that is statically allocated, meaning
+              // that it’s saved inside our compiled program, and exists for the entire
+             // duration it runs. (MIT Rust book)
+
+         -   let mut s1: &str = "mutable string slice";
+         +   let mut s1: &str = " s1 is a mutable variable referring to an immutable string slice";
+             println!("string slice s1 ={s1}");
+         -   s1 = "s1 value is updated here";
+         +   s1 = "s1 value is updated here. This data is still immutable. s1 is mutable";
+             println!("string slice after update s1 ={s1}");
+         +
+          }
+
+   2. Run the code: 
+      
+      .. code-block:: console 
+
+         $ cargo run
+            Compiling tut-005_strings_2 v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-005_strings_2)
+             Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.57s
+              Running `target\debug\tut-005_strings_2.exe`
+         Hello there
+         address of greeting 0xecab5df770
+         s = hello
+         address of s 0xecab5df828
+         s refer to 0x7ff77f65a3c8
+         s after updating its value: Salut le monde!
+         address of s 0xecab5df828
+         s refer to 0x7ff77f65a458
+         string slice s1 = s1 is a mutable variable referring to an immutable string slice
+         string slice after update s1 =s1 value is updated here. This data is still immutable. s1 is mutable
+
+      .. note:: Notice the whenever we reassign ``s`` it points to a different 
+         memory location.
+
+   * We can make these distinctions by looking at position you place the ``mut`` 
+     keyword
+
+     * ``let s: &str =`` -- immutable variable referring to immutable string slice
+     * ``let mut s: &str =`` -- mutable variable referring to immutable string slice
+     * ``let s: &mut str =`` -- immutable variable referring to mutable string slice
+     * ``let mut s: &mut str =`` -- mutable variable referring to mutable string slice
+   
+
+   .. important:: 
+      
+      [quote="jdahlstrom, post:2, topic:22841"]
+      String literals are intrinsically immutable and must not be touched, and 
+      Rust guarantees this by making it impossible to get your hands on a non-`mut` 
+      reference to a string literal.
+      [/quote]
+
+      if you try to make an actual reference-to-mutable that points to a string 
+      literal: 
+
+      .. code-block:: Rust
+         :linenos:
+
+         fn main() {
+    
+             let bar: &'static mut str = "Hello there, earthlings";
+             //                ^^^--------- note the position of the `mut`}
+             println!("{}", bar);
+
+             let mut foo: &'static mut str = "Coucou";
+             println!("{}", foo);
+
+         }
+
+      
+      You'll find that the compiler will complain:
+
+      .. code-block:: console 
+
+         Exited with status 101
+
+         Standard Error
+
+            Compiling playground v0.0.1 (/playground)
+         error[E0308]: mismatched types
+          --> src/main.rs:3:33
+           |
+         3 |     let bar: &'static mut str = "Hello there, earthlings";
+           |              ----------------   ^^^^^^^^^^^^^^^^^^^^^^^^^ types differ in mutability
+           |              |
+           |              expected due to this
+           |
+           = note: expected mutable reference `&'static mut _`
+                              found reference `&'static _`
+
+         error[E0308]: mismatched types
+          --> src/main.rs:7:37
+           |
+         7 |     let mut foo: &'static mut str = "Coucou";
+           |                  ----------------   ^^^^^^^^ types differ in mutability
+           |                  |
+           |                  expected due to this
+           |
+           = note: expected mutable reference `&'static mut _`
+                              found reference `&'static _`
+
+         For more information about this error, try `rustc --explain E0308`.
+         error: could not compile `playground` (bin "playground") due to 2 previous errors
+
+         Standard Output
+   
+.. card:: is the string literal hardcode into the ``.text`` or ``.rodata`` section 
+   of a program?
+
+   .. compound:: cg909 interna.rust
+
+      [quote="cg909, post:4, topic:22841"]
+      It will probably be hardcoded into the .rodata section, but the details 
+      depend on the architecture-specific compiler backend (usually LLVM).
+
+      The literal *may* be placed into the .text section if that allows for 
+      shorter load instructions for the target architecture. If the string is 
+      all null bytes it may even be placed into the .bss section to save space 
+      in the executable. Or the compiler backend may for other reasons decide to 
+      place it into the .data section. You mostly don't need to think about where 
+      exactly it's placed. Only that it will be at some address in your 
+      program's memory and you're not allowed to modify the contents of the 
+      literal without invoking undefined behaviour.
+      [/quote]
+
+
+
+   .. note:: as you can see "the string literal will be at some address in your 
+      program's memory and you're not allowed to modify the contents of the 
+      literal without invoking undefined behaviour"
 
 Further Reading and References 
 *********************************
