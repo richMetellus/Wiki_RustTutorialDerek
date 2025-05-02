@@ -29,21 +29,26 @@ There are 2 types of strings:
       string is different than C string. 
 
       * `String (MIT Rust Prog book)`_
+      * `string vs string slice (medium)`_
       * `What is UTF-8 (Twillio Docs)`_
       * `The Slice Type (Rust pro lang book)`_
       * `What and where are the stack and heap?`_
-      * `string vs string slice (medium)`_
+      * `memory allocators`_
+      * `What is Ownership in Rust?`_
 
 ``String`` Type 
 *******************
 
-
-
 ``String`` [1]_
 
-* is a re-sizable data structure. 
+* is a **re-sizable** **data structure**. 
   
   * unlike a string literal, the size is not known at compile time. 
+
+* A ``String`` is stored as a vector of bytes (``Vec<u8>``), but guaranteed to 
+  always be a valid UTF-8 sequence. [4]_
+  
+  * ``String`` is heap allocated, growable and not null terminated. [4]_
 
 * is s a sequence of Unicode scalar values encoded as a stream of 
   UTF-8 bytes [1]_
@@ -73,14 +78,8 @@ There are 2 types of strings:
   * UTF-8 can represent up to :math:`2^{21} = 2,097,152` code points, more than 
     enough to cover the current :math:`1,112,064` unicode code points.
 
-
 * unlike some systems languages like C/C++, in Rust strings are not NUL-terminated and 
   can contain NUL bytes (ASCII code 0, Unicode U+0000) [1]_
-
-* A ``String`` is stored as a vector of bytes (``Vec<u8>``), but guaranteed to 
-  always be a valid UTF-8 sequence. [4]_
-  
-  * ``String`` is heap allocated, growable and not null terminated. [4]_
 
 **String type**
 
@@ -96,13 +95,21 @@ There are 2 types of strings:
    function ``String::new()`` or by converting from a string slice using the 
    ``to_string()`` method.
 
+.. admonition:: TODO: Include diagram of memory layout of ``String`` type in Rust.
+
+   * Distinguish what is stored in the heap and what is store on the stack or binary.
+
 String Slice type ``&str``
 ***************************
 
 **string slice** type 
 
-.. note:: there is no built-in data type name ``str`` but rather ``&str``,
+.. note:: You won't usually see a built-in data type name ``str`` but rather ``&str``,
    to indicate a string slice. 
+
+   .. seealso:: * `Dynamically sized types and Sized trait`_
+
+      * `rust str type (std lib)`_ the ``std::str`` type.
 
 2. ``&str`` - reference and string type, which point to a string and 
    allow for viewing of said string.
@@ -173,6 +180,11 @@ String Slice type ``&str``
            **immutable**; ``&str`` is an immutable reference. (Rust Book ch 4.3)
         
         .. seealso:: :ref:`My question on string and mut keyword <mutAndSlice>`
+
+.. admonition:: TODO: Include diagram representing memory layout of string slice and string 
+   literal in Rust.
+
+   * Distinguish what is stored in the heap and what is store on the stack or binary.
 
 Exercise 1
 ***********
@@ -546,24 +558,36 @@ Knowing what I know now about strings, string slice and string literal;
               string food = "Pizza";
               string &meal = food;
 
+              string drink = "Apple juice";
+              string drink_nonref = drink;
+
               cout << food << "\n";
               cout << meal << "\n";
+              cout << "drink=" << drink << "\n";
+              cout << "drink_nonref=" << drink_nonref << "\n";
 
               meal = "Change Pizza to Sandwich through meal";
+              drink_nonref = "Orange Juice";
 
               cout << "food =" << food << "\n";
               cout << "meal =" << meal << "\n";
-
+              cout << "drink=" << drink << "\n";
+              cout << "drink_nonref=" << drink_nonref << "\n";
               return 0;
             }
+
          
          .. code-block:: output
 
             Pizza
             Pizza
+            drink=Apple juice
+            drink_nonref=Apple juice
             food =Change Pizza to Sandwich through meal
-            meal =Change Pizza to Sandwich through mea
-        
+            meal =Change Pizza to Sandwich through meal
+            drink=Apple juice
+            drink_nonref=Orange Juice
+                    
      * Rust references are essentially pointers with lifetime checks. In particular 
        reassigning a reference in rust changes what the reference points to, it 
        does not operate on the target of the reference.
@@ -709,6 +733,7 @@ Knowing what I know now about strings, string slice and string literal;
    2. Run the code: 
       
       .. code-block:: console 
+         :emphasize-lines: 7, 9, 12
 
          $ cargo run
             Compiling tut-005_strings_2 v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-005_strings_2)
@@ -725,8 +750,14 @@ Knowing what I know now about strings, string slice and string literal;
          string slice s1 = s1 is a mutable variable referring to an immutable string slice
          string slice after update s1 =s1 value is updated here. This data is still immutable. s1 is mutable
 
-      .. note:: Notice the whenever we reassign ``s`` it points to a different 
-         memory location.
+      .. note:: Notice that whenever we reassign ``s`` it points to a different 
+         memory location, i.e the value (a memory address, ``0x7ff77f65a3c8``, 
+         then ``0x7ff77f65a458``) binded to ``s`` is different but the location 
+         of memory represented or aliased by ``s`` (``0x7ff77f65a458``) is still 
+         the same.
+
+         * so ``let mut s: &str =`` , ``s`` is a c++ pointer in my view to 
+           a string literal.
 
    * We can make these distinctions by looking at position you place the ``mut`` 
      keyword
@@ -818,11 +849,10 @@ Knowing what I know now about strings, string slice and string literal;
       literal without invoking undefined behaviour.
       [/quote]
 
-
-
    .. note:: as you can see "the string literal will be at some address in your 
       program's memory and you're not allowed to modify the contents of the 
       literal without invoking undefined behaviour"
+
 
 Further Reading and References 
 *********************************
@@ -836,10 +866,17 @@ Further Reading and References
 
 * `What is UTF-8 (Twillio Docs)`_
 * `What and where are the stack and heap?`_
+* `memory allocators`_
+* `What is Ownership in Rust?`_
 * `strings and string slice (Rust by example)`_
 * `Strings in Rust (Let's Get Rusty)`_
+* `String slice (string literal) and mut keyword (reddit)`_
+* `String slice (string literal) and mut keyword (rust internal)`_
+
 
 .. _code points: https://en.wikipedia.org/wiki/Code_point
+.. _String slice (string literal) and mut keyword (reddit): https://www.reddit.com/r/rust/comments/1kcerpo/string_slice_string_literal_and_mut_keyword/
+.. _String slice (string literal) and mut keyword (rust internal): https://internals.rust-lang.org/t/string-slice-string-literal-and-mut-keyword/22841
 
 .. include:: ./relevant_urls.rst 
 .. include:: ../../relevant_urls.rst
