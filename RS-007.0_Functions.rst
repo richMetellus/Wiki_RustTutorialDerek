@@ -86,7 +86,7 @@ Let's create a few function
       Sum of list = 15
       
 
-Function definition
+**Function** definition
 
 * start with ``fn``
 * functions can take 1 or more parameters or none. 
@@ -114,7 +114,7 @@ Function definition
   * using an iterator we can sum it up.
 
 
-Generics 
+**Generics** 
 
 * We can specify the data type to be used at a later time with generics
 * Generics are mainly used when we want to create functions that can work with 
@@ -124,4 +124,71 @@ Generics
   
   * struct, enum, traits, etc..
 
-* 
+
+1. Create a function that will add 2 values of unspecified data type.
+   ``get_sum_gen``, the generic for of get sum.
+
+2. Suppose we add the following code 
+   
+   .. code-block:: diff 
+      :caption: main.rs 
+
+      --- a/_resources/Examples/tut-007_functions-generics/src/main.rs
+      +++ b/_resources/Examples/tut-007_functions-generics/src/main.rs
+      @@ -37,6 +37,11 @@ fn sum_list(list: &[i32]) -> i32 {
+           sum
+       }
+
+      +// We get 2 generic types of the same type and return that same type
+      +fn get_sum_gen<T>(x: T, y: T) -> T {
+      +    return x + y;
+      +}
+      +
+       fn main() {
+           // ----- FUNCTIONS calls -----
+           say_hello();
+      @@ -51,4 +56,12 @@ fn main() {
+
+           let num_list = vec![1,2,3,4,5];
+           println!("Given a list [1,2,3,4,5] \nSum of list = {}", sum_list(&num_list));
+      +
+      +    // ----- GENERIC TYPES -----
+      +    // We can specify the data type to be used at a later time with generics
+      +    // It is mainly used when we want to create functions that can work with
+      +    // multiple data types. It is used with structs, enums, traits, etc.
+      +    // which we'll talk about later
+      +    println!("5 + 4 = {}", get_sum_gen(5,4));
+      +    println!("5.2 + 4.6 = {}", get_sum_gen(5.2,4.6));
+       }
+
+   .. code-block:: Rust 
+      :caption: bad code
+
+      fn get_sum_gen<T>(x: T, y: T) -> T {
+          return x + y;
+      }
+
+   
+   * In Rust, we cannot define generic that way.
+   * We end up with this error if we run 
+     
+     .. code-block:: console 
+        
+        $ cargo run
+            Compiling tut-007_functions-generics v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-007_functions-generics)
+         error[E0369]: cannot add `T` to `T`
+           --> src\main.rs:42:14
+            |
+         42 |     return x + y;
+            |            - ^ - T
+            |            |
+            |            T
+            |
+         help: consider restricting type parameter `T` with trait `Add`
+            |
+         41 | fn get_sum_gen<T: std::ops::Add<Output = T>>(x: T, y: T) -> T {
+            |                 +++++++++++++++++++++++++++
+         
+         For more information about this error, try `rustc --explain E0369`.
+         error: could not compile `tut-007_functions-generics` (bin "tut-007_functions-generics") due to 1 previous error
+         
