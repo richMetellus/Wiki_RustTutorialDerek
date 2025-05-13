@@ -160,6 +160,11 @@ Let's create a few function
       +    println!("5 + 4 = {}", get_sum_gen(5,4));
       +    println!("5.2 + 4.6 = {}", get_sum_gen(5.2,4.6));
        }
+   
+   .. note:: the generic type is ``T`` in that case but it can be any letter of 
+      your chosen.
+
+#. Commit the change and run the code 
 
    .. code-block:: Rust 
       :caption: bad code
@@ -188,7 +193,65 @@ Let's create a few function
             |
          41 | fn get_sum_gen<T: std::ops::Add<Output = T>>(x: T, y: T) -> T {
             |                 +++++++++++++++++++++++++++
-         
+
          For more information about this error, try `rustc --explain E0369`.
          error: could not compile `tut-007_functions-generics` (bin "tut-007_functions-generics") due to 1 previous error
-         
+    
+    * You cannot use the addition operator ``+`` on generics in the form that we 
+      are working with. We will need a **Add** trait. Traits will be covered later.
+
+      * The add trait specifies the functionality of the addition operator for 
+        different data types. we need to import ``std::ops::Add;`` for that trait.
+        
+        * this will allow us to perform addition with our generics.
+
+#. Let's correct the code. 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-007_functions-generics/src/main.rs
+      +++ b/_resources/Examples/tut-007_functions-generics/src/main.rs
+      @@ -1,3 +1,5 @@
+      +use std::ops::Add;
+      +
+       // ----- FUNCTIONS -----
+       // You can define functions before or after main
+       // function definition
+      @@ -38,7 +40,7 @@ fn sum_list(list: &[i32]) -> i32 {
+       }
+
+       // We get 2 generic types of the same type and return that same type
+      -fn get_sum_gen<T>(x: T, y: T) -> T {
+      +fn get_sum_gen<T:Add<Output = T>>(x: T, y: T) -> T {
+           return x + y;
+       }
+
+      @@ -62,6 +64,7 @@ fn main() {
+           // It is mainly used when we want to create functions that can work with
+           // multiple data types. It is used with structs, enums, traits, etc.
+           // which we'll talk about later
+      +    println!("--Using Generics--");
+           println!("5 + 4 = {}", get_sum_gen(5,4));
+           println!("5.2 + 4.6 = {}", get_sum_gen(5.2,4.6));
+       }
+
+#. Commit and Run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-007_functions-generics v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-007_functions-generics)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s
+           Running `target\debug\tut-007_functions-generics.exe`
+      Hello
+      --function performing simple addition--
+      4 + 5 = 9
+      5 + 3 = 8
+      7 + 8 = 15
+      get_2: Function returns tuple; f(x)= (x+1, x+2), where x=3 (4, 5)
+      Given a list [1,2,3,4,5]
+      Sum of list = 15
+      --Using Generics--
+      5 + 4 = 9
+      5.2 + 4.6 = 9.8
+      

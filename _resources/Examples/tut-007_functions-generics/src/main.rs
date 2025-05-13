@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 // ----- FUNCTIONS -----
 // You can define functions before or after main
 // function definition
@@ -38,7 +40,7 @@ fn sum_list(list: &[i32]) -> i32 {
 }
 
 // We get 2 generic types of the same type and return that same type
-fn get_sum_gen<T>(x: T, y: T) -> T {
+fn get_sum_gen<T:Add<Output = T>>(x: T, y: T) -> T {
     return x + y;
 }
 
@@ -62,6 +64,7 @@ fn main() {
     // It is mainly used when we want to create functions that can work with
     // multiple data types. It is used with structs, enums, traits, etc.
     // which we'll talk about later
+    println!("--Using Generics--");
     println!("5 + 4 = {}", get_sum_gen(5,4));
     println!("5.2 + 4.6 = {}", get_sum_gen(5.2,4.6));
 }
