@@ -197,13 +197,13 @@ Let's create a few function
          For more information about this error, try `rustc --explain E0369`.
          error: could not compile `tut-007_functions-generics` (bin "tut-007_functions-generics") due to 1 previous error
     
-    * You cannot use the addition operator ``+`` on generics in the form that we 
-      are working with. We will need a **Add** trait. Traits will be covered later.
+   * You cannot use the addition operator ``+`` on generics in the form that we 
+     are working with. We will need a **Add** trait. Traits will be covered later.
 
-      * The add trait specifies the functionality of the addition operator for 
-        different data types. we need to import ``std::ops::Add;`` for that trait.
-        
-        * this will allow us to perform addition with our generics.
+     * The add trait specifies the functionality of the addition operator for 
+       different data types. we need to import ``std::ops::Add;`` for that trait.
+       
+       * this will allow us to perform addition with our generics.
 
 #. Let's correct the code. 
    

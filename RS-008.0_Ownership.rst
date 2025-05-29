@@ -1,0 +1,190 @@
+Ownership in Rust 
+###################
+
+In Rust, memory is going to be managed through a system of ownership with rules 
+that are checked at compile time.
+
+To understand this, you must understand the difference between 2 parts of memory 
+which would be Stack and Heap.
+
+**Stack**
+
+* **Stack**: stores values in a last in first out (LIFO) format.
+  
+  * Data on the stack must have a defined fixed size.
+
+* (tbr.) Stack is just a region of a program memory.
+  
+  * (tbr.) In environment with a Memory Management Unit (MMU), a non-microcontroller environment,
+    like Linux, an Operating system will assign a program with memory address 
+    space known as **virtual memory** 
+
+    * Virtual memory consist of providing an address space as large as the 
+      capacity of the external memory (disks) (Goodrich, Memory Management PPT, 2014)
+    
+    * (tbr) a chunk of that virtual memory will the stack. 
+      
+      * that chunk of virtual memory will be mapped to physical address in RAM, 
+        thus a program stack is stored in RAM.
+
+* (tbr.) Stack is stored in RAM, regardless of the platform we run the code in. (Microcontroller 
+  without MMU (bare metal programming) or Linux Platform with MMU).
+
+* In a multi-threaded application, each thread will have its own stack. 
+  But, all the different threads will share the heap (ProgramInterview.com)
+
+* Local variables are put on the stack.
+* reference variables are also put on the stack
+
+**Heap**
+
+* (tbr) is a [shared] region of a progam memory set aside for dynamic allocation.
+* the chunk of memory is in RAM.
+* When putting data on the heap, you request a certain amount of space. The 
+  memory allocator (OS in most case) finds space available and returns an address 
+  for that space and that reference to that space in memory is called a pointer. 
+
+* class instances are put on the heap. 
+  
+  .. note:: Reference variables (object name) and class instances (Object = a block representing 
+     a single class instance) are distinct from each other.
+
+.. seealso::
+   
+   * `Goodrich_6e_Ch15_MemoryManagement.pptx`_
+   * `What and where are the stack and heap?`_
+   * `Stack and Heap in C# .NET (YouTube)`_
+   * `memory allocators | Nic Barker`_
+   * `What is a memory allocator anyway | Benjamin Feng`_
+   * :ref:`MCU - Embedded Memory Organization <EmbeddedMemOrg>`
+   * `memory arenas | Nic Barker`_
+
+.. seealso::
+
+   * `What is Ownership in Rust?`_
+
+.. card:: Ownership Rule 
+
+   1. Each value has a variable that's called its owner
+   2. There is only one owner at a time.
+   3. When the owner goes out of scope the value disappears.
+      
+   
+   Basically whenevr the compiler says we're no longer going to be using this, 
+   then it just deleted and that memory is free.
+
+   .. note:: while automatic deallocation of resource is great, there are problems 
+      that can occur. 
+
+      Imagine if you copied a string (heap allocated). The string just stores 
+      a pointer (ptr) to the index and the memory required for each character and then
+      the number of characters you would have.
+
+      * What would happen if we would delete one of these strings? well the information 
+        would then be deallocated for both strings.
+      
+      The great thing about rust, the compiler will alert of eventual problem 
+      almost always.
+
+Let's verify Rust ownership rule with an example:
+
+1. Create a new project 
+   
+   .. code-block:: console 
+
+      $ cargo new tut-008_ownership
+          Creating binary (application) `tut-008_ownership` package
+      note: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+#. Open the main.rs in your code editor and type the following code
+   
+   .. code-block:: rust 
+      :caption: main.rs
+      :linenos: 
+
+      fn main() {
+          // create 2 strings
+          let str1: String = String::from("World");
+          let str2: String = str1;
+
+          println!("Hello {}", str2);
+
+          //Uncomment this and try to print str1 after assignment (move)
+          // println!("Hello {}", str1);
+
+      }
+
+
+#. Compile and run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-008_ownership v0.1.0 (Examples\tut-008_ownership)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.08s
+           Running `target\debug\tut-008_ownership.exe`
+      Hello World
+
+#. Uncomment line 9 and try to compile
+
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-008_ownership v0.1.0 (Examples\tut-008_ownership)
+      error[E0382]: borrow of moved value: `str1`
+       --> src\main.rs:9:26
+        |
+      3 |     let str1: String = String::from("World");
+        |         ---- move occurs because `str1` has type `String`, which does not implement the `Copy` trait
+      4 |     let str2: String = str1;
+        |                        ---- value moved here
+      ...
+      9 |     println!("Hello {}", str1);
+        |                          ^^^^ value borrowed here after move
+        |
+        = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+      help: consider cloning the value if the performance cost is acceptable
+        |
+      4 |     let str2: String = str1.clone();
+        |                            ++++++++
+
+      For more information about this error, try `rustc --explain E0382`.
+      error: could not compile `tut-008_ownership` (bin "tut-008_ownership") due to 1 previous error
+
+   
+   * Rust-analyzer show us this error 
+     
+     .. image:: ./_images/RS-008.0_Ownership_1.0_BorrowAfterMoveIssue.png
+        :width: 400px
+     
+     * *borrow of moved value:* ```str1```
+
+     * This means you took the value that was origanally assigned in line 3, str1, 
+       then assigned in line 4 to str2. str1 can no longer be the owner of the 
+       value ``"World"``
+
+       * This would have violated rust ownership rule 2. 
+         
+         "2. There is only one owner at a time."
+       
+       * The value "World" is owned by str2 now.
+
+       * (tbr) By default, for heap allocated elements rust does not do a deep 
+         copy, the data on the heap will not be copied, but rather a shallow 
+         copy. The pointer str2 (stack element) will point to the same heap object 
+         that str1 (a stack element) points to. 
+
+       * after line 4 ``let str2 = str1;`` Rust consider ``str1`` as no longer 
+         valid but does not free that heap data i.e Rust does not automatically 
+         call ``drop`` function on the heap allocated memory for the variable 
+         str1 and str2. If Rust did not do this, when ``str1`` and ``str2`` goes 
+         out of scope, they will both try to free the same memory location 
+         and this would have lead to double free error as that would try to free t
+         he same heap memory location which could lead to memory corruption.
+   
+   .. seealso::
+
+      * `What is Ownership in Rust?`_
+         
+
+.. include:: ../../relevant_urls.rst
