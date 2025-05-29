@@ -73,18 +73,21 @@ which would be Stack and Heap.
    Basically whenevr the compiler says we're no longer going to be using this, 
    then it just deleted and that memory is free.
 
-   .. note:: while automatic deallocation of resource is great, there are problems 
-      that can occur. 
+Borrow after Move 
+******************
 
-      Imagine if you copied a string (heap allocated). The string just stores 
-      a pointer (ptr) to the index and the memory required for each character and then
-      the number of characters you would have.
+.. note:: while automatic deallocation of resource is great, there are problems 
+   that can occur. 
 
-      * What would happen if we would delete one of these strings? well the information 
-        would then be deallocated for both strings.
-      
-      The great thing about rust, the compiler will alert of eventual problem 
-      almost always.
+   Imagine if you copied a string (heap allocated). The string just stores 
+   a pointer (ptr) to the index and the memory required for each character and then
+   the number of characters you would have.
+
+   * What would happen if we would delete one of these strings? well the information 
+     would then be deallocated for both strings.
+   
+   The great thing about rust, the compiler will alert of eventual problem 
+   almost always.
 
 Let's verify Rust ownership rule with an example:
 
@@ -170,21 +173,64 @@ Let's verify Rust ownership rule with an example:
        * The value "World" is owned by str2 now.
 
        * (tbr) By default, for heap allocated elements rust does not do a deep 
-         copy, the data on the heap will not be copied, but rather a shallow 
-         copy. The pointer str2 (stack element) will point to the same heap object 
-         that str1 (a stack element) points to. 
+         copy, the data on the heap will not be copied, but rather fo kinda like a shallow 
+         copy, except Rust call it a *move* since the original variable ``str1`` 
+         is considered invalid by Rust. The pointer str2 (stack element) points to 
+         the same heap object that str1 (a stack element) points to. 
 
        * after line 4 ``let str2 = str1;`` Rust consider ``str1`` as no longer 
          valid but does not free that heap data i.e Rust does not automatically 
          call ``drop`` function on the heap allocated memory for the variable 
-         str1 and str2. If Rust did not do this, when ``str1`` and ``str2`` goes 
+         str1 and str2. If Rust would drop both, when ``str1`` and ``str2`` goes 
          out of scope, they will both try to free the same memory location 
-         and this would have lead to double free error as that would try to free t
-         he same heap memory location which could lead to memory corruption.
+         and this would have lead to double free error as that would try to free
+         the same heap memory location which could lead to memory corruption.
    
    .. seealso::
 
       * `What is Ownership in Rust?`_
-         
+
+
+To solve the *Borrow after move* error, we can call the ``clone()`` method 
+on ``str1``.
+
+* This will make a deep copy of str1. So str2 will point to a separate heap 
+  object. 
+
+1. Apply the following patch to the code 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-008_ownership/src/main.rs
+      +++ b/_resources/Examples/tut-008_ownership/src/main.rs
+      @@ -1,11 +1,11 @@
+       fn main() {
+           // create 2 strings
+           let str1: String = String::from("World");
+      -    let str2: String = str1;
+      +    let str2: String = str1.clone();
+
+           println!("Hello {}", str2);
+
+           //Uncomment this and try to print str1 after assignment (move)
+      -    // println!("Hello {}", str1);
+      +    println!("Hello {}", str1);
+
+       }
+
+#. Run the code  
+
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-008_ownership v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-008_ownership)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.70s
+           Running `target\debug\tut-008_ownership.exe`
+      Hello World
+      Hello World
+
+.. note:: This lesson and error type does not apply to fixed sized type like 
+   Integers, Booleans, characters, floats, tuples but will apply to strings, 
+   vectors, arrays.
 
 .. include:: ../../relevant_urls.rst
