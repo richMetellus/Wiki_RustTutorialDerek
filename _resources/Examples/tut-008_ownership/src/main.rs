@@ -28,7 +28,7 @@ fn main() {
     { // string slice slc is not valid here, it is not yet declared.
         let slc = "hello"; // slc is valid from this point forward.
         //  "hello" is NOT data allocated on the heap. It is saved with 
-        // the binary, most likely in .rodata section 
+        // the binary, most likely in .rodata section. slc is  pointer to static memory
 
         // -- do stuff with slc. --
 
@@ -82,7 +82,7 @@ fn main() {
     println!("--------------- Strings and Ownership -------------------------");
     // create 2 strings. If you want 2 copies use clone
     let str1: String = String::from("World"); // "World" is allocated on the heap. str1 points to 
-                                              // first character in "World"
+                                              // first character in "World". str1 is // Heap pointer
     // cannot do this. thus it is commented
     // let str2: String = str1;
     // but can do this
@@ -107,6 +107,6 @@ fn main() {
     // let str3 = print_return_str(str1); // uncomment this line to see error
 
     // str2 is no longer the owner of the value "World" since it was moved into another scope.
-    // println!("printing str2 will cause error {}", str2); // uncomment this line to see error
+    println!("printing str2 will cause error {}", str2); // uncomment this line to see error
 
 }

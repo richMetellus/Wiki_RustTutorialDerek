@@ -70,7 +70,7 @@ which would be Stack and Heap.
    3. When the owner goes out of scope the value disappears.
       
    
-   Basically whenevr the compiler says we're no longer going to be using this, 
+   Basically whenever the compiler says we're no longer going to be using this, 
    then it just deleted and that memory is free.
 
 Borrow after Move 
@@ -223,7 +223,7 @@ on ``str1``.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-008_ownership v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-008_ownership)
+         Compiling tut-008_ownership v0.1.0 (Examples\tut-008_ownership)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.70s
            Running `target\debug\tut-008_ownership.exe`
       Hello World
@@ -321,7 +321,7 @@ Let's create another example to see more what is going on.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-008_ownership v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-008_ownership)
+         Compiling tut-008_ownership v0.1.0 (Examples\tut-008_ownership)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.63s
            Running `target\debug\tut-008_ownership.exe`
       Hello World
@@ -360,7 +360,7 @@ Let's create another example to see more what is going on.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-008_ownership v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-008_ownership)
+         Compiling tut-008_ownership v0.1.0 (Examples\tut-008_ownership)
       error[E0382]: use of moved value: `str1`
         --> src\main.rs:31:33
          |
@@ -391,16 +391,110 @@ Let's create another example to see more what is going on.
 
 #. Commit the change to mark that section
 
-Derrick did not give details or explanation, Let's uncomment the line and 
-make some changes and add some description on what we've learn from the compiler message. 
+Derrick did not give details or explanation. What is the compiler teaching us? 
 
 * Need to understand Move & Copy in Rust 
-* Need to understand difference between reference and raw pointer in Rust
 * Needs to understand Ownership and Borrowing in Rust. 
 
    * Borrowing is a way to give temporary access to a value without transferring 
      ownership.
 
+*  Need to understand difference between reference and raw pointer in Rust
+
+   .. card:: Note: 
+
+      There is some difference in rust semantic about references and raw pointer. 
+      
+      * `What's the difference between references and pointers in Rust?`_
+
+      **References**
+
+      * References have some rules enforced by the compiler. 
+        
+        1. They cannot outlive what they refer to (the "referent")
+        2. mutable references cannot be aliased. 
+      
+      * References behave a lot like the variables they point to. 
+        
+        * They have a type 
+        * you can interact with that type to read it or (with mutable reference)
+          modify it
+      
+      **Pointers** in Rust.
+
+      * pointers are semantically more about the address. This means that when 
+        we interact with them, we'll be modifying the address (things like add 
+        will do pointer offsets instead of adding to the underlying value). 
+      
+        * When we print them, we don't print the underlying value—in fact, we 
+          cannot get to the underlying value at all without the ``unsafe`` keyword. 
+          Instead, we print out the address.
+
+      We can see this with a simple program.
+
+      .. code-block:: Rust 
+
+         fn main() {
+             let x: u32 = 10;
+             let ref_x: &u32 = &x;
+             let pointer_x: *const u32 = &x;
+
+             println!("x: {x}");
+             println!("ref_x: {}", ref_x);
+             println!("pointer_x: {:?}", pointer_x);
+         }
+      
+      run this code and we get an output similar to that one
+
+      .. code-block:: console
+
+         x: 10
+         ref_x: 10
+         pointer_x: 0x7ffff1832524
+      
+      When we interact with the variable directly or the reference, we get the 
+      underlying value. But with the pointer, we get the address!
+
+      You can still access the underlying values with pointers, but you have to use 
+      ``unsafe`` to do so. To see why, we can just try to dereference a raw pointer 
+      without unsafe and get an error message:
+
+      .. code-block:: console 
+
+         Compiling playground v0.0.1 (/playground)
+         error[E0133]: dereference of raw pointer is unsafe and requires unsafe block
+          --> src/main.rs:8:34
+           |
+         8 |     println!("*pointer_x: {:?}", *pointer_x);
+           |                                  ^^^^^^^^^^ dereference of raw pointer
+           |
+           = note: raw pointers may be null, dangling or unaligned; they can violate aliasing rules and cause data races: all of these are undefined behavior
+
+         For more information about this error, try `rustc --explain E0133`.
+         error: could not compile `playground` (bin "playground") due to 1 previous error
+
+      .. important:: So that's the difference between references and pointers in Rust: 
+         Using references is safe. 
+         
+         * The compiler will check that you don't alias 
+           the same mutable variable multiple times, ensuring you don't have data 
+           races. 
+         * It will ensure that any references do not outlive the memory they refer to.
+
+         With raw pointer 
+
+         * You have to verify all those things yourself with raw pointers, so it's unsafe.
+         
+         The difference between reference in pointer in Rust:
+         
+         **they have the same underlying data, but different constraints and 
+         semantics with the compiler.**
+
+
+   .. seealso:: 
+      
+      * `Why I Think Rust's Ownership Mechanism is Awesome | Zachary Lee`_
+      * `Borrowing Rules in Rust | Zachary Lee`_ 
 
 #. I added the following code with explanation 
 
@@ -540,9 +634,58 @@ make some changes and add some description on what we've learn from the compiler
       printing str2 again no problem World
       String passed: World
       String passed: World
-      
-
-
+  
 #. Commit the change 
-#. Uncomment line 
+#. Uncomment line 110.
+#. Run the code and observe the following error 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-008_ownership v0.1.0 (Examples\tut-008_ownership)
+      error[E0382]: borrow of moved value: `str2`
+         --> src\main.rs:110:51
+          |
+      89  |     let str2: String = str1.clone();
+          |         ---- move occurs because `str2` has type `String`, which does not implement the `Copy` trait
+      ...
+      100 |     print_str(str2); // value (heap data) is moved into the print_str function. str2 no longer the owner.     
+          |               ---- value moved here
+      ...
+      110 |     println!("printing str2 will cause error {}", str2); // uncomment this line to see error
+          |                                                   ^^^^ value borrowed here after move
+          |
+      note: consider changing this parameter type in function `print_str` to borrow instead if owning the value isn't necessary
+         --> src\main.rs:3:17
+          |
+      3   | fn print_str(x: String){
+          |    ---------    ^^^^^^ this parameter takes ownership of the value
+          |    |
+          |    in this function
+          = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+      help: consider cloning the value if the performance cost is acceptable
+          |
+      100 |     print_str(str2.clone()); // value (heap data) is moved into the print_str function. str2 no longer the owner.
+          |                   ++++++++
+
+      For more information about this error, try `rustc --explain E0382`.
+      error: could not compile `tut-008_ownership` (bin "tut-008_ownership") due to 1 previous error
+
+#. Commit the change. tag ``RS-008.0_v0.0.6``
+
+References/Further Reading 
+****************************
+
+* `Goodrich_6e_Ch15_MemoryManagement.pptx`_
+* `What and where are the stack and heap?`_
+* `Stack and Heap in C# .NET (YouTube)`_
+* `memory allocators | Nic Barker`_
+* `What is a memory allocator anyway | Benjamin Feng`_
+* :ref:`MCU - Embedded Memory Organization <EmbeddedMemOrg>`
+* `What is Ownership in Rust?`_
+* `memory arenas | Nic Barker`_
+* `What's the difference between references and pointers in Rust?`_
+* `Why I Think Rust's Ownership Mechanism is Awesome | Zachary Lee`_
+* `Borrowing Rules in Rust | Zachary Lee`_ 
+
 ..    include:: ../../relevant_urls.rst   
