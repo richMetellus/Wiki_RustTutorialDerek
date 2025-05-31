@@ -335,7 +335,60 @@ Let's create another example to see more what is going on.
 #. Let's make one more modification that will allow us to return back the same 
    string that was pass
 
-   * ``print_return_str`` print the string and returns the same string that was pass.
-     
+   .. code-block:: diff
 
+      $ git diff .
+      warning: in the working copy of '_resources/Examples/tut-008_ownership/src/main.rs', LF will be replaced by CRLF the next time Git touches it
+      diff --git a/_resources/Examples/tut-008_ownership/src/main.rs b/_resources/Examples/tut-008_ownership/src/main.rs
+      index aae48f9..bad3ae7 100644
+      --- a/_resources/Examples/tut-008_ownership/src/main.rs
+      +++ b/_resources/Examples/tut-008_ownership/src/main.rs
+      @@ -27,4 +27,7 @@ fn main() {
+           print_str(str1);
+           print_str(str2);
+
+      +    // whether we pass str1 or str2 code won't compile
+      +    let str3 = print_return_str(str1);
+      +
+       }
+
+
+   * ``print_return_str`` print the string and returns the same string that was pass.
+
+#. Run the code 
+
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-008_ownership v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-008_ownership)
+      error[E0382]: use of moved value: `str1`
+        --> src\main.rs:31:33
+         |
+      19 |     let str1: String = String::from("World");
+         |         ---- move occurs because `str1` has type `String`, which does not implement the `Copy` trait
+      ...
+      27 |     print_str(str1);
+         |               ---- value moved here
+      ...
+      31 |     let str3 = print_return_str(str1);
+         |                                 ^^^^ value used here after move
+         |
+      note: consider changing this parameter type in function `print_str` to borrow instead if owning the value isn't necessary
+        --> src\main.rs:3:17
+         |
+      3  | fn print_str(x: String){
+         |    ---------    ^^^^^^ this parameter takes ownership of the value
+         |    |
+         |    in this function
+      help: consider cloning the value if the performance cost is acceptable
+         |
+      27 |     print_str(str1.clone());
+         |                   ++++++++
+
+      For more information about this error, try `rustc --explain E0382`.
+      error: could not compile `tut-008_ownership` (bin "tut-008_ownership") due to 1 previous error
+
+
+#. Commit the change to mark that section
+#. Let's uncomment the line and make another change 
 .. include:: ../../relevant_urls.rst

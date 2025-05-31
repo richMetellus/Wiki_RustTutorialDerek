@@ -20,11 +20,14 @@ fn main() {
     let str2: String = str1.clone();
     
     println!("Hello {}", str2);
-    // can do this if  we had clone str1 into str2.
+    // can do this if  we had cloned str1 into str2.
     println!("Hello {}", str1);
     
     // can pass str1 and str2 to function, no problem. they are still in scope 
     print_str(str1);
     print_str(str2);
+
+    // whether we pass str1 or str2 code won't compile
+    let str3 = print_return_str(str1);
 
 }
