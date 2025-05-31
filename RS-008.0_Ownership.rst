@@ -229,8 +229,113 @@ on ``str1``.
       Hello World
       Hello World
 
-.. note:: This lesson and error type does not apply to fixed sized type like 
+#. Tag the commit ``git tag RS-008.0_v0.0.2``
+
+.. note:: "This lesson and error type does not apply to fixed sized type like 
    Integers, Booleans, characters, floats, tuples but will apply to strings, 
-   vectors, arrays.
+   vectors, arrays". (Derrick, 1:15:22)
+
+   .. admonition:: Q: Does the rule of ownership apply to array in rust?
+
+      After a quick google of that question, you can visit the following links:
+
+      * Rust track of the ownership of arrays in a coarse granularity (per the whole 
+        array) because the borrow checker runs at compile time and you "borrow and move 
+        the ownership of the array as a whole entity" 
+        (`reddit <https://www.reddit.com/r/rust/comments/zazfe0/why_coarsegrain_ownership_for_arrays/>`_)
+      
+      .. seealso::
+
+         * `Ownership differences between tuples and arrays in Rust`_ 
+            
+            * Tuples are like anonymous structs, and accessing an element in a tuple
+              behaves like accessing a **struct field**.
+
+              ...
+
+              While a.0 just accesses a field, a[0] calls a function! Functions 
+              can't partially borrow something, so the indexing operator must 
+              borrow the entire array.
+            
+            * the compiler is, unfortunately is not that smart (indexing is generally 
+              performed by a runtime calculated value).
+
+         * `Why coarse-grain ownership for arrays | reddit`_ 
+         * `Static array ownership and move`_ 
+   
+
+Let's create another example to see more what is going on.
+
+
+1. Using the project, make the following modification onto the code 
+
+   .. code-block:: diff 
+      
+      --- a/_resources/Examples/tut-008_ownership/src/main.rs
+      +++ b/_resources/Examples/tut-008_ownership/src/main.rs
+      @@ -1,11 +1,30 @@
+      +#![allow(unused)]
+      +
+      +fn print_str(x: String){
+      +    println!("String passed: {}", x);
+      +}
+      +
+      +fn print_return_str(x: String) -> String{
+      +    println!("String To return: {}", x);
+      +    x
+      +}
+      +
+      +fn change_string(name: &mut String){
+      +    name.push_str(" is Happy");
+      +    println!("Message : {}", name);
+      +}
+      +
+       fn main() {
+      -    // create 2 strings
+      +    // create 2 strings. If you want 2 copies use clone
+           let str1: String = String::from("World");
+           let str2: String = str1.clone();
+
+           println!("Hello {}", str2);
+      -
+      -    //Uncomment this and try to print str1 after assignment (move)
+      +    // can do this if  we had clone str1 into str2.
+           println!("Hello {}", str1);
+      +    
+      +    // can pass str1 and str2 to function, no problem. they are still in scope 
+      +    print_str(str1);
+      +    print_str(str2);
+
+       }
+
+   * with ``print_str`` we first create a function that take in a string, and 
+     print that string. It just a wrapper function. 
+   
+   * ``change_print`` will changed the pass string. 
+     
+     * to do that we need to make it mutable ``mut`` and say it's a reference 
+       to our string.
+
+#. Run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-008_ownership v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-008_ownership)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.63s
+           Running `target\debug\tut-008_ownership.exe`
+      Hello World
+      Hello World
+      String passed: World
+      String passed: World
+   
+   * The code run no problem.
+
+#. Commit the change ``git tag RS-008.0_v0.0.3``
+#. Let's make one more modification that will allow us to return back the same 
+   string that was pass
+
+   * ``print_return_str`` print the string and returns the same string that was pass.
+     
 
 .. include:: ../../relevant_urls.rst
