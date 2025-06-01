@@ -473,7 +473,31 @@ Derrick did not give details or explanation. What is the compiler teaching us?
          For more information about this error, try `rustc --explain E0133`.
          error: could not compile `playground` (bin "playground") due to 1 previous error
 
+      1. Fix the code to user raw pointer 
+
+         .. code-block:: 
+            :caption: fix the code
+
+            fn main() {
+                let x: u32 = 10;
+                let ref_x: &u32 = &x;
+                let pointer_x: *const u32 = &x;
+
+                println!("x: {x}");
+                println!("ref_x: {}", ref_x);
+                println!("*pointer_x: {:?}", unsafe {*pointer_x});
+            }
+
+      2. Run the code to print the underlying value using dereference on raw pointer 
+         
+         .. code-block:: console 
+
+            x: 10
+            ref_x: 10
+            *pointer_x: 10
+            
       .. important:: So that's the difference between references and pointers in Rust: 
+         
          Using references is safe. 
          
          * The compiler will check that you don't alias 
@@ -673,6 +697,103 @@ Derrick did not give details or explanation. What is the compiler teaching us?
 
 #. Commit the change. tag ``RS-008.0_v0.0.6``
 
+Another thing to know is 
+
+* if a function is going to borrow a reference it cannot change it unless we 
+  create a mutable version of it.
+*  You can only create one mutable version inside of a function
+
+Let's modify the code to see exactly what this means. 
+
+1. Add the following code:
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-008_ownership/src/main.rs
+      +++ b/_resources/Examples/tut-008_ownership/src/main.rs
+      @@ -11,7 +11,14 @@ fn print_return_str(x: String) -> String{
+
+       fn change_string(name: &mut String){
+           name.push_str(" is Happy");
+      -    println!("Message : {}", name);
+      +    println!("name is still valid {}", name);
+      +    name.push_str(" Happy");
+      +    println!("Final Mutated Message : {}", name);
+      +}
+      +
+      +fn change_string_2(mut name: String){
+      +    name.push_str(" is Happy");
+      +    println!("Mutated Message : {}", name);
+       }
+
+       fn main() {
+      @@ -107,6 +114,23 @@ fn main() {
+           // let str3 = print_return_str(str1); // uncomment this line to see error
+
+           // str2 is no longer the owner of the value "World" since it was moved into another scope.
+      -    println!("printing str2 will cause error {}", str2); // uncomment this line to see error
+      +    // println!("printing str2 will cause error {}", str2); // uncomment this line to see error
+      +
+      +    // if a function is going to borrow a reference it cannot change it unless we 
+      +    // create a mutable version of it. You can only create one mutable version 
+      +    // inside of a function
+      +    //  ^ mut keyword
+      +    let mut str4 = String::from("Ricky");
+      +    change_string(&mut str4); // looking at this function &mut we know str4 can be changed by the function
+      +                                    // this function will only work on mutable reference
+      +
+      +    // str4 is still valid 
+      +    println!("str4 is still valid but mutated: {str4}");
+      +
+      +    let mut str5 = String::from("Dopa");
+      +    change_string_2(str5); // LEGAL
+      +
+      +    // println!("str5 is no longer valid: {str5}"); // uncomment to see error
+      +
+
+       }
+
+#. Run the code 
+   
+   .. code-block:: console
+
+      $ cargo run
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+           Running `target\debug\tut-008_ownership.exe`
+      address of x: 0xdafd98f2c8
+      address of y: 0xdafd98f338
+      x refer to: 0x1ed5fce2810
+      y refer to: 0x1ed5fce2810
+      --the next 2 lines will print the same address--
+      x as raw pointer using p: 0x1ed5fce2810
+      y as raw pointer using p: 0x1ed5fce2810
+      --the next 2 lines will print the same address--
+      x as raw pointer using ?: 0x1ed5fce2810
+      y as raw pointer using ?: 0x1ed5fce2810
+      --the next 2 lines will NOT print the same address--
+      &x as raw pointer using p: 0xdafd98f6c8
+      &y as raw pointer using p: 0xdafd98f728
+      --the next 2 lines will print the same address--
+      &x as raw pointer using ?: 0x1ed5fce2810
+      &y as raw pointer using ?: 0x1ed5fce2810
+      --------------- Strings and Ownership -------------------------
+      Hello World
+      Hello World
+      printing str2 again no problem World
+      String passed: World
+      String passed: World
+      name is still valid Ricky is Happy
+      Final Mutated Message : Ricky is Happy Happy
+      str4 is still valid but mutated: Ricky is Happy Happy
+      Mutated Message : Dopa is Happy
+
+
+#. Commit the change 
+   
+   .. note:: After the call of ``change_string_2(str5); // LEGAL, str5 
+      is out of scoped, thus it is dropped. Feel free to uncomment line 133 
+      to see the error.
+
 References/Further Reading 
 ****************************
 
@@ -682,8 +803,9 @@ References/Further Reading
 * `memory allocators | Nic Barker`_
 * `What is a memory allocator anyway | Benjamin Feng`_
 * :ref:`MCU - Embedded Memory Organization <EmbeddedMemOrg>`
-* `What is Ownership in Rust?`_
 * `memory arenas | Nic Barker`_
+* `What is Ownership in Rust?`_
+* `Rust Survival Guide | Let's Get Rusty (YouTube)`_
 * `What's the difference between references and pointers in Rust?`_
 * `Why I Think Rust's Ownership Mechanism is Awesome | Zachary Lee`_
 * `Borrowing Rules in Rust | Zachary Lee`_ 

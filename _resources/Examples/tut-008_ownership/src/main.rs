@@ -11,7 +11,14 @@ fn print_return_str(x: String) -> String{
 
 fn change_string(name: &mut String){
     name.push_str(" is Happy");
-    println!("Message : {}", name);
+    println!("name is still valid {}", name);
+    name.push_str(" Happy");
+    println!("Final Mutated Message : {}", name);
+}
+
+fn change_string_2(mut name: String){
+    name.push_str(" is Happy");
+    println!("Mutated Message : {}", name);
 }
 
 fn main() {
@@ -107,6 +114,23 @@ fn main() {
     // let str3 = print_return_str(str1); // uncomment this line to see error
 
     // str2 is no longer the owner of the value "World" since it was moved into another scope.
-    println!("printing str2 will cause error {}", str2); // uncomment this line to see error
+    // println!("printing str2 will cause error {}", str2); // uncomment this line to see error
+
+    // if a function is going to borrow a reference it cannot change it unless we 
+    // create a mutable version of it. You can only create one mutable version 
+    // inside of a function
+    //  ^ mut keyword
+    let mut str4 = String::from("Ricky");
+    change_string(&mut str4); // looking at this function &mut we know str4 can be changed by the function
+                                    // this function will only work on mutable reference
+
+    // str4 is still valid 
+    println!("str4 is still valid but mutated: {str4}");
+
+    let mut str5 = String::from("Dopa");
+    change_string_2(str5); // LEGAL
+
+    // println!("str5 is no longer valid: {str5}"); // uncomment to see error
+
 
 }
