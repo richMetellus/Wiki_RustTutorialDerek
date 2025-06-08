@@ -1,0 +1,49 @@
+Hashmaps 
+#########
+
+Hashmaps 
+
+* are going to be used to store key-value pairs.
+* To use them you need to use the standard library
+  ``uses std::collections::HashMap``
+
+Let's create an example program that demonstrate HashMaps.
+
+1. Create a new project. 
+   
+   .. code-block:: console 
+
+      cd _resources/Examples 
+      cargo new tut-009_hashmaps
+
+2. Let's create a hashmap that will user for key the superhero codename and  for
+   value the super hero real name.
+   
+   .. literalinclude:: ./_resources/Examples/tut-009_hashmaps/src/main.rs
+      :language: Rust 
+      :linenos:
+
+   * often we need to be very safe about we are doing with Rust. Let's say we want 
+     to search for a specific key in a hashmap before we try to print out 
+     anything. In line 23-30, we verify that a key "Batman" exist in our heroes store. 
+     If there is a match, we print that "batman is a hero".
+
+#. Run the code 
+   
+   .. code-block:: console 
+
+      cd tut-009_hashmaps
+      cargo run
+   
+   .. code-block:: console 
+      :caption: example of output 
+
+      Superman = Clark Kent
+      Batman = Bruce Wayne
+      The Flash = Barry Allen
+      Length : 3
+      Batman is a hero
+
+#. Commit the changes and tag it RS-009.0_v0.0.1
+
+      

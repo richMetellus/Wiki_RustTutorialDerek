@@ -233,7 +233,7 @@ on ``str1``.
 
 .. note:: "This lesson and error type does not apply to fixed sized type like 
    Integers, Booleans, characters, floats, tuples but will apply to strings, 
-   vectors, arrays". (Derrick, 1:15:22)
+   vectors, arrays". (Derek, 1:15:22)
 
    .. admonition:: Q: Does the rule of ownership apply to array in rust?
 
@@ -248,17 +248,17 @@ on ``str1``.
 
          * `Ownership differences between tuples and arrays in Rust`_ 
             
-            * Tuples are like anonymous structs, and accessing an element in a tuple
-              behaves like accessing a **struct field**.
+           * Tuples are like anonymous structs, and accessing an element in a tuple
+             behaves like accessing a **struct field**.
 
-              ...
+             ...
 
-              While a.0 just accesses a field, a[0] calls a function! Functions 
-              can't partially borrow something, so the indexing operator must 
-              borrow the entire array.
-            
-            * the compiler is, unfortunately is not that smart (indexing is generally 
-              performed by a runtime calculated value).
+             While a.0 just accesses a field, a[0] calls a function! Functions 
+             can't partially borrow something, so the indexing operator must 
+             borrow the entire array.
+           
+           * the compiler is, unfortunately is not that smart (indexing is generally 
+             performed by a runtime calculated value).
 
          * `Why coarse-grain ownership for arrays | reddit`_ 
          * `Static array ownership and move`_ 
@@ -391,13 +391,13 @@ Let's create another example to see more what is going on.
 
 #. Commit the change to mark that section
 
-Derrick did not give details or explanation. What is the compiler teaching us? 
+Derek did not give details or explanation. What is the compiler teaching us? 
 
 * Need to understand Move & Copy in Rust 
 * Needs to understand Ownership and Borrowing in Rust. 
 
-   * Borrowing is a way to give temporary access to a value without transferring 
-     ownership.
+  * Borrowing is a way to give temporary access to a value without transferring 
+    ownership.
 
 *  Need to understand difference between reference and raw pointer in Rust
 
@@ -790,7 +790,7 @@ Let's modify the code to see exactly what this means.
 
 #. Commit the change 
    
-   .. note:: After the call of ``change_string_2(str5); // LEGAL, str5 
+   .. note:: After the call of ``change_string_2(str5); // LEGAL``, str5 
       is out of scoped, thus it is dropped. Feel free to uncomment line 133 
       to see the error.
 
@@ -809,5 +809,6 @@ References/Further Reading
 * `What's the difference between references and pointers in Rust?`_
 * `Why I Think Rust's Ownership Mechanism is Awesome | Zachary Lee`_
 * `Borrowing Rules in Rust | Zachary Lee`_ 
+* `.as_prt() Method - When can You use it in Rust | reddit`_
 
 ..    include:: ../../relevant_urls.rst   
