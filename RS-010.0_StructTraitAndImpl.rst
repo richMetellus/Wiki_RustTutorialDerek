@@ -211,7 +211,147 @@ Let's say we have a rectangle:
       Address : 505 Main St
       GenericRectangle length : 4, height: 10.5
 
-#. Commit and tag the change 
+#. Commit and tag the change ``git tag RS-010.0_v0.0.2``
+
+Traits 
+*******
+
+we can tie struct *fields*/*properties* to functions using **traits**. A trait 
+is created using the ``trait`` keyword. 
+
+Let's create a trait called *Shape* which will have a few functions. Any structs 
+that implement ``impl`` such *Shape* trait can use the functions defined in that 
+trait.
+
+A trait 
+
+* is sort of like an interface in object-oriented programming. 
+* It is defining the things anyone who implements our interface must do.
+
+Let show some example 
+
+1. Add the following line into the our code 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-010_structs-traits/src/main.rs
+      +++ b/_resources/Examples/tut-010_structs-traits/src/main.rs
+      @@ -1,6 +1,8 @@
+       #![allow(unused_variables)]
+       fn main() {
+
+      +    const PI: f32 = 3.141592;
+      +
+           // ----- STRUCTS -----
+           // A struct is a custom data type that stores multiple
+           // types of data
+      @@ -32,8 +34,63 @@ fn main() {
+           }
+
+           // define a struct
+      -    let rec = GenericRectangle { length: 4, height: 10.5} ;
+      -    println!("GenericRectangle length : {}, height: {}", rec.length, rec.height);
+      +    let generic_rec = GenericRectangle { length: 4, height: 10.5} ;
+      +    println!("GenericRectangle length : {}, height: {}", generic_rec.length, generic_rec.height);
+      +
+      +     // We can tie struct properties to functions using Traits
+      +    // You can create functions that can be used by any structs
+      +    // that implement the right traits. This is defining sort of like an interface 
+      +    // in object-oriented programming. It is defining the things anyone who 
+      +    // implements our shape must do.
+      +    trait Shape {
+      +        // This is a constructor which returns itself i.e a Shape
+      +        fn new(length: f32, width: f32) -> Self;
+      +
+      +        // An area function that belongs to this trait. It take something that is 
+      +        // a shape type of trait and is going to return a float.
+      +        fn area(&self) -> f32;
+      +    }
+      +
+      +    // Define rectangle and circle struct
+      +    struct Rectangle {length: f32, width: f32}
+      +    struct Circle {length: f32, width: f32}
+      +
+      +    // Implement the trait for rectangle
+      +    impl Shape for Rectangle{
+      +        // Constructor
+      +        fn new(length: f32, width: f32) -> Rectangle {
+      +            return Rectangle{length, width};
+      +        }
+      +
+      +        // self allows us to refer to parameters for this struct
+      +        fn area(&self) -> f32{
+      +            return self.length * self.width;
+      +        }
+      +    }
+      +
+      +    // Implement the trait for circle
+      +    impl Shape for Circle{
+      +        // Constructor
+      +        fn new(length: f32, width: f32) -> Circle {
+      +            return Circle{length, width};
+      +        }
+      +
+      +        fn area(&self) -> f32{
+      +            return (self.length / 2.0).powf(2.0) * PI;
+      +        }
+      +    }
+      +
+      +    // Create circle and rectangle with Shape
+      +    let rec: Rectangle = Shape::new(10.0, 10.0);
+      +    let circ: Circle = Shape::new(10.0, 10.0);
+      +
+      +    println!("non generic Rectangle length : {}, width: {}", rec.length, rec.width);
+      +    println!("Rectangle Area : {}", rec.area());
+      +    println!("non generic circle length (i.e diameter) : {}, width (not used): {}", rec.length, rec.width);
+      +    println!("Circle Area : {}", circ.area());
+      +
+      +    // We can implement methods on structs using generics
+      +    // impl<T, U>Shape<T, U> ...
+
+
+       }
+
+#. Save and run the code 
+   
+   .. collapse:: show/hide output 
+      :open:
+
+      .. code-block:: console
+
+         $ cargo run
+         warning: fields `name` and `balance` are never read
+           --> src\main.rs:11:9
+            |
+         10 |     struct Customer{
+            |            -------- fields in this struct
+         11 |         name: String,
+            |         ^^^^
+         12 |         address: String,
+         13 |         balance: f32,
+            |         ^^^^^^^
+            |
+            = note: `#[warn(dead_code)]` on by default
+
+         warning: field `width` is never read
+           --> src\main.rs:56:33
+            |
+         56 |     struct Circle {length: f32, width: f32}
+            |            ------               ^^^^^
+            |            |
+            |            field in this struct
+
+         warning: `tut-010_structs-traits` (bin "tut-010_structs-traits") generated 2 warnings
+             Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+              Running `target\debug\tut-010_structs-traits.exe`
+         Address : 505 Main St
+         GenericRectangle length : 4, height: 10.5
+         non generic Rectangle length : 10, width: 10
+         Rectangle Area : 100
+         non generic circle length (i.e diameter) : 10, width (not used): 10
+         Circle Area : 78.5398
+
+#. Commit the change ``git tag RS-010.0_v0.0.3``
 
 References/Further Reading 
 ******************************
