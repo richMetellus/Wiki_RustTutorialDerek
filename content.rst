@@ -26,7 +26,7 @@ examples ready to be compiled.
 
 .. raw:: html
 
-   <iframe width="560" height="315" 
+   <iframe width="760" height="415" 
    src="https://www.youtube.com/embed/ygL_xcavzQ4?si=q30H_YRhpYFjd6sF" 
    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
    clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 

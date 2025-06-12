@@ -1,0 +1,144 @@
+Struct, Trait and Impl 
+#########################
+
+A struct
+
+* is a custom data type that can store multiple types of data
+* example:
+  
+  .. code-block:: Rust
+
+     struct Customer{
+         name: String, 
+         address: String,
+         balance: f32,
+     }
+
+To demonstrate struct in action
+
+1. Create a new rust project 
+#. Type the following in main.rs
+   
+   .. code-block:: Rust 
+      :linenos:
+      
+      fn main() {
+
+          // ----- STRUCTS -----
+          // A struct is a custom data type that stores multiple
+          // types of data
+
+          struct Customer{ 
+              name: String, 
+              address: String,
+              balance: f32,
+          }
+
+          // Structs are primarily stored on the stack when used as local variables.
+          // Create struct bob
+          let mut bob = Customer { // locally defined inside of main, so it is part of stack data
+              name: String::from("Bob Smith"),
+              address: String::from("555 Main St"),
+              balance: 234.50
+          };
+
+          // say Bob moves and you want to update his address
+          bob.address = String::from("505 Main St"); // since Bob is mutable we can update the struct fields.
+          println!("Address : {}", bob.address);
+
+
+      }
+
+#. Run the code 
+   
+   .. collapse:: show/hide terminal Output
+      :open: 
+
+      .. code-block:: console 
+
+         tut-010_structs-traits (main)
+         $ cargo run
+            Compiling tut-010_structs-traits v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-010_structs-traits)
+         warning: fields `name` and `balance` are never read
+           --> src\main.rs:8:9
+            |
+         7  |     struct Customer{ 
+            |            -------- fields in this struct
+         8  |         name: String, 
+            |         ^^^^
+         9  |         address: String,
+         10 |         balance: f32,
+            |         ^^^^^^^
+         9  |         address: String,
+         9  |         address: String,
+         10 |         balance: f32,
+            |         ^^^^^^^
+            |
+            = note: `#[warn(dead_code)]` on by default
+
+         warning: `tut-010_structs-traits` (bin "tut-010_structs-traits") generated 1 warning
+             Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s
+              Running `target\debug\tut-010_structs-traits.exe`
+         Address : 505 Main St
+
+         ricky@Rich-LenovExtX1 MINGW64 ~/Workspace-loc/Repos/Pers/docs_allTest/source/topics/Prog/Lang/Wiki_Rust-lang/Courses/Wiki_RustTutorialDerek/_resources/Examples/9  |         address: String,
+         10 |         balance: f32,
+            |         ^^^^^^^
+            |
+            = note: `#[warn(dead_code)]` on by default
+
+         warning: `tut-010_structs-traits` (bin "tut-010_structs-traits") generated 1 warning
+             Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s
+              Running `target\debug\tut-010_structs-traits.exe`
+         9  |         address: String,
+         10 |         balance: f32,
+            |         ^^^^^^^
+            |
+            = note: `#[warn(dead_code)]` on by default
+
+         warning: `tut-010_structs-traits` (bin "tut-010_structs-traits") generated 1 warning
+         9  |         address: String,
+         10 |         balance: f32,
+            |         ^^^^^^^
+            |
+            = note: `#[warn(dead_code)]` on by default
+         9  |         address: String,
+         10 |         balance: f32,
+         9  |         address: String,
+         9  |         address: String,
+         10 |         balance: f32,
+            |         ^^^^^^^
+            |
+            = note: `#[warn(dead_code)]` on by default
+
+         warning: `tut-010_structs-traits` (bin "tut-010_structs-traits") generated 1 warning
+             Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s
+              Running `target\debug\tut-010_structs-traits.exe`
+         Address : 505 Main St
+
+
+#. Commit the change then ``git tag RS-010.0_v0.0.1``
+
+.. admonition:: Questions to ask oneself 
+
+   * Where does Rust save a struct? is it save on the stack or heap?
+     What if the struct contains heap-allocated data like String, string slice?
+     what if the struct contains array as part of the struct *fields*
+     How does ownership apply to struct with strings, with struct containing 
+     slice, with struct containing vectors?
+   
+   .. seealso:: 
+      
+      * `Storage of structs in memory (Rust users)`_ 
+
+      * `How does Rust move structs (Rust users)`_
+
+
+References/Further Reading 
+******************************
+
+* `Ch05 Struct (Rust book)`_
+* `Storage of structs in memory (Rust users)`_ 
+* `How does Rust move structs (Rust users)`_
+
+.. include:: ../../relevant_urls.rst
