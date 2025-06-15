@@ -1,2 +1,46 @@
 Error Handling and File IO
 ###########################
+
+**Objectives**
+
+* Learn how to read and write to file 
+* Practice error handling in Rust.
+
+Rust does not have exception like other languages.
+
+* It's going to handle recoverable errors with ``Result`` 
+* and the ``panic!`` macro for unrecoverable errors.
+
+   * When the ``panic!()`` macro executes, your program prints an error and 
+     memory is cleaned up and then the program quits itself.
+   
+   * we can trigger one by writing this code.
+     
+     1. create a new project 
+     2. write the following in main.rs
+        
+        .. code-block:: Rust
+           :linenos:
+           
+           fn main() {
+               panic!("An unrecoverable error has occurred");
+           }
+           
+     #. Save and run the code 
+        
+        .. code-block:: console 
+           
+           $ cargo run
+              Compiling tut-012_io-and-error-handling v0.1.0 (Examples\tut-012_io-and-error-handling)
+               Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.74s
+                Running `target\debug\tut-012_io-and-error-handling.exe`
+           
+           thread 'main' panicked at src\main.rs:2:5:
+           An unrecoverable error has occurred
+           note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+           error: process didn't exit successfully: `target\debug\tut-012_io-and-error-handling.exe` (exit code: 101)
+    
+    #. Obviously you can just add a panic macro anywhere. That's now how one will
+       usually throw an error. So delete that code.
+           
+           
