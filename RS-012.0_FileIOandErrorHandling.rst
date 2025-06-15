@@ -85,3 +85,98 @@ compile.
       error: could not compile `tut-012_io-and-error-handling` (bin "tut-012_io-and-error-handling") due to 1 previous error
 
 #. Comment the bad code and commit ``git tag RS-012.0_v0.0.2``
+
+Exercise 1
+***********
+
+Let show some real world scenario and a whole bunch of different ways to 
+handle errors.
+
+1. add the following in main.rs 
+   
+   .. code-block:: diff 
+      :caption: main.rs 
+
+      Examples/tut-012_io-and-error-handling/src/main.rs
+      index b19ce5e..dc4b053 100644
+      --- a/_resources/Examples/tut-012_io-and-error-handling/src/main.rs
+      +++ b/_resources/Examples/tut-012_io-and-error-handling/src/main.rs
+      @@ -1,3 +1,8 @@
+      +// Used for working with files
+      +// You could also use nested paths like this
+      +use std::io::{Write, BufReader, BufRead};
+      +use std::fs::File;
+      +
+       fn main() {
+           // ----- READING & WRITING TO FILES & ERROR HANDLING -----
+           // Rust doesn't have exceptions like other languages. It handles
+      @@ -12,4 +17,37 @@ fn main() {
+           // let lil_arr = [1,2];
+           // println!("{}", lil_arr[10]);
+
+      +    // File to create
+      +    let path = "lines.txt";
+      +
+      +    // Result has 2 variants Ok and Err
+      +    // enum Result<T, E> {
+      +    // Ok(T),
+      +    // Err(E), }
+      +    // Where T represents the data typeof the value returns and E
+      +    // the type of error
+      +
+      +    // Create file and handle errors with match
+      +    let output = File::create(path);
+      +    let mut output = match output {
+      +        Ok(file) => file,
+      +        Err(error) => {
+      +            panic!("Problem creating file : {:?}", error);
+      +        }
+      +    };
+      +
+      +    // Write to file and define the panic! error message with expect
+      +    write!(output, "Just some\nRandom Words").expect("Failed to write to file");    
+      +
+      +    // Open the file and if everything is ok unwrap returns the file
+      +    // and if not panic! triggers an error (You could replace unwrap with ?)
+      +    let input = File::open(path).unwrap();
+      +    // Read file using buffering
+      +    let buffered = BufReader::new(input);
+      +
+      +    // Cycle through and print the lines
+      +    for line in buffered.lines() {
+      +        println!("{}", line.unwrap());
+      +    }
+      +
+       }
+
+   
+   * we use the ``match`` pattern to evaluate the Result of ``File::create`` function. 
+     
+     * this is an enum  match have 2 enum; ``Ok`` or ``Err``
+   
+   * We write to the file some random text to the file, then use ``.expect`` to 
+     show the error if writing to the file failed.
+   
+   * next we want to open the file and if everything is okay we want to unwrap 
+     and return the file if there was no panic triggered. 
+
+     * ``unwrap()`` just ignore the result and gives us the output we want to 
+       receive from our file.
+   
+   * We then use a buffer to read our file one line at a time.
+
+#. Save in run
+   
+   * a new file ``lines.txt`` is created at the root of the project 
+
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-012_io-and-error-handling v0.1.0 (Examples\tut-012_io-and-error-handling)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.89s
+           Running `target\debug\tut-012_io-and-error-handling.exe`
+      Just some
+      Random Words
+
+#. commit the change ``RS-012.0_v0.0.3``
+      
