@@ -1,2 +1,133 @@
-Modules 
-#########
+Package, Crate, Modules 
+##########################
+
+**Objectives**
+
+* Cover packages, crates, and modules.
+
+
+**Intro**
+
+It is very important to keep your code organized.
+You can split your code into multiple files and packages can contain multiple 
+crates, which is just files with code in it. 
+You can define what code is public as well as what code is private.
+
+Restaurant Example 
+********************
+
+This exercise will simulate working on a restaurant, 
+simulate a restaurant experience.
+
+* *crates*: Modules that produce a library or executable.
+* *Modules*: organize and handle privacy
+* *Packages*: build, test and share crates.
+  
+  * can contain 0 or one library crate.
+    
+    * if you want to create a library crate, you'd create a bin folder and 
+      save it there. 
+
+  * can contain as many binary crates as you would want
+
+* *Paths*: a way of naming an item such as struct, function.
+
+1. Start a new rust project::
+   
+   cargo new tut-011_modules
+   cd tut-011_modules
+
+#. Under src/ create a new directory named ``restaurant``::
+
+   mkdir -p src/restaurant
+
+#. inside the restaurant folder, create a new file ``mod.rs``
+
+   * This is where we're going to create our module and it can contain other 
+     modules and it can hold functions, structs, enums, constants, traits that 
+     you can reference.
+   
+     * it provides a way for us to organize our code, make certain parts of 
+       our code private as well as public.
+     
+     * everything is going to be private by default.
+
+#. in mod.rs, add the following code.
+
+   .. literalinclude:: ./_resources/Examples/tut-011_modules/src/restaurant/mod.rs
+      :language: Rust 
+      :linenos:
+      :caption: mod.rs
+   
+   * we create a module ``mod pizza_order``
+     
+     * we create a struct inside of it call ``Pizza``
+       
+       * Our pizza contains the following public member: ``dough``, ``cheese``,
+         ``topic``. All of which are String type.
+    
+     * then create a trait that implement functionality for this Pizza struct which 
+       
+       * contains public function ``lunch`` which focus on just a lunch scenario.
+     
+     * we're simulating a customer experience here at a restaurant, we can create 
+       a public module ``pub mod help_customer`` which other functions can call 
+       this has the following function inside of it 
+       
+       * ``seat_at_table``, 
+       * ``take_order(topping)`` - public function which calls ``seat_at_table()``
+        
+         - making take_order public does not make the child function ``seat_at_table``
+           public
+       
+       * ``server_customer`` the pizza he/she order 
+   
+   * outside of ``mod pizza_order``, we need to provide a public function 
+     that is going to allow other files to use the function in pizza_order. 
+     To do that we create a public function ``order_food()`` which reference 
+     other code we want to work with. To do so we do 
+     ``crate::restaurant::pizza_order::help_customer::take_order()``.
+     
+     * crate: is our ``src`` directory. so we walk to src/restaurant.
+       
+       * inside this src/restaurant we have public module ``pizza_order``, which also 
+         have a nested public module ``help_customer`` from there we can access the 
+         public function ``take_order()``.
+     
+     * ``order_food()`` will be called in the main function.
+       
+       * In main we will need to declare the mod restaurant and specifically 
+         say to use the ``crate::restaurant::order_food;``
+
+#. in main.rs, add the following code
+   
+   .. literalinclude:: ./_resources/Examples/tut-011_modules/src/main.rs 
+      :language: Rust 
+      :linenos:
+      :caption: main.rs
+
+#. Save and Run the code
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-011_modules v0.1.0 (Examples\tut-011_modules)
+      warning: fields `dough` and `cheese` are never read
+        --> src\restaurant\mod.rs:13:13
+         |
+      12 |     pub struct Pizza {
+         |                ----- fields in this struct
+      13 |         pub dough: String,
+         |             ^^^^^
+      14 |         pub cheese: String,
+         |             ^^^^^^
+         |
+         = note: `#[warn(dead_code)]` on by default
+
+      warning: `tut-011_modules` (bin "tut-011_modules") generated 1 warning
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.34s
+           Running `target\debug\tut-011_modules.exe`
+      Customer seated at table
+      The customer is served a regular pizza with veggies
+
+#. Commit the changes and tag ``git tag RS-011.0_v0.0.1``
