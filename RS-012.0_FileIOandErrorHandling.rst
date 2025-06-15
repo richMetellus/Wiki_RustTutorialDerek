@@ -40,7 +40,48 @@ Rust does not have exception like other languages.
            note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
            error: process didn't exit successfully: `target\debug\tut-012_io-and-error-handling.exe` (exit code: 101)
     
+    #. Commit the change so i have a record of it. ``git tag RS-012.0_v0.0.1``
     #. Obviously you can just add a panic macro anywhere. That's now how one will
        usually throw an error. So delete that code.
-           
-           
+
+Rust compiler will prevents so bad error from happening. Some bad code won't 
+compile.
+
+1. Test the following code:
+   
+   .. code-block:: Rust 
+      :caption: main.rs 
+
+      fn main() {
+          // ----- READING & WRITING TO FILES & ERROR HANDLING -----
+          // Rust doesn't have exceptions like other languages. It handles
+          // recoverable errors with Result and the panic! macro for
+          // unrecoverable errors
+
+          // When the panic! macro executes your program prints an error
+          // memory is cleaned up and the program quits
+          // panic!("Terrible Error");
+
+          // Accessing an index that doesn't exist calls panic
+          let lil_arr = [1,2];
+          println!("{}", lil_arr[10]);
+
+      }
+
+#. Save and run
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-012_io-and-error-handling v0.1.0 (Examples\tut-012_io-and-error-handling)
+      error: this operation will panic at runtime
+        --> src\main.rs:13:20
+         |
+      13 |     println!("{}", lil_arr[10]);
+         |                    ^^^^^^^^^^^ index out of bounds: the length is 2 but the index is 10
+         |
+         = note: `#[deny(unconditional_panic)]` on by default
+
+      error: could not compile `tut-012_io-and-error-handling` (bin "tut-012_io-and-error-handling") due to 1 previous error
+
+#. Comment the bad code and commit ``git tag RS-012.0_v0.0.2``
