@@ -179,4 +179,66 @@ handle errors.
       Random Words
 
 #. commit the change ``RS-012.0_v0.0.3``
+
+
+Exercise 2 
+************
+
+We can use ``error.kind()`` to look for specific type of error.
+
+1. Let's add some new code that will create a rand.txt file 
+   
+   .. code-block:: diff
+
+      b/_resources/Examples/tut-012_io-and-error-handling/src/main.rs
+      @@ -1,6 +1,6 @@
+       // Used for working with files
+       // You could also use nested paths like this
+      -use std::io::{Write, BufReader, BufRead};
+      +use std::io::{Write, BufReader, BufRead, ErrorKind};
+       use std::fs::File;
+
+       fn main() {
+      @@ -50,4 +50,20 @@ fn main() {
+               println!("{}", line.unwrap());
+           }
+
+      +    // You can also catch specific errors
+      +    // Here I'll try to open a file and trigger an error if the file
+      +    // couldn't be created, or use a default
+      +    let output2 = File::create("rand.txt");
+      +    let output2 = match output2 {
+      +        Ok(file) => file,
+      +        Err(error) => match error.kind() {
+      +            ErrorKind::NotFound => match File::create("rand.txt") {
+      +                Ok(fc) => fc,
+      +                Err(e) => panic!("Can't create file: {:?}", e),
+      +            },
+      +            // catch all other kind of error
+      +            _other_error => panic!("Problem opening file : {:?}", error),
+      +        },
+      +    };
+      +
+       }
+
+
+#. Save, run and commit
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-012_io-and-error-handling v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-012_io-and-error-handling)
+      warning: unused variable: `output2`
+        --> src\main.rs:57:9
+         |
+      57 |     let output2 = match output2 {
+         |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_output2`
+         |
+         = note: `#[warn(unused_variables)]` on by default
+      
+      warning: `tut-012_io-and-error-handling` (bin "tut-012_io-and-error-handling") generated 1 warning
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.83s
+           Running `target\debug\tut-012_io-and-error-handling.exe`
+      Just some
+      Random Words
       

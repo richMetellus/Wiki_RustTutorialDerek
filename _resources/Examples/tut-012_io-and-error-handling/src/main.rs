@@ -1,6 +1,6 @@
 // Used for working with files
 // You could also use nested paths like this
-use std::io::{Write, BufReader, BufRead};
+use std::io::{Write, BufReader, BufRead, ErrorKind};
 use std::fs::File;
 
 fn main() {
@@ -49,5 +49,21 @@ fn main() {
     for line in buffered.lines() {
         println!("{}", line.unwrap());
     }
+
+    // You can also catch specific errors
+    // Here I'll try to open a file and trigger an error if the file
+    // couldn't be created, or use a default
+    let output2 = File::create("rand.txt");
+    let output2 = match output2 {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("rand.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Can't create file: {:?}", e),
+            },
+            // catch all other kind of error
+            _other_error => panic!("Problem opening file : {:?}", error),
+        },
+    };
 
 }
