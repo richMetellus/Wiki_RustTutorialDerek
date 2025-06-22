@@ -1,2 +1,48 @@
 Closures
 #########
+
+a closure is a function without a name and they are more likely 
+going to be stored in a variable and can be used to pass a function into another 
+function. 
+
+The basic layout for creating a closure::
+
+   let var_name = |parameter1, parameter2, ..., parameterN| -> return_type {Body}
+
+where each parameter is in the form ``variable_name: data_type``
+
+Let's create a couple different closures:
+
+* create a close that indicate somebody can vote.
+
+1. Create a new project
+2. Type the following code in main. 
+   
+   .. code-block:: Rust 
+
+      fn main() {
+          // ----- CLOSURES -----
+          // A closure is a function without a name and they are sometimes
+          // stored in a variable (They can be used to pass a function into
+          // another function)
+          // let var_name = |parameters| -> return_type {BODY}
+
+          // Create a closure that defines if someone can vote
+          let can_vote = |age: i32| {
+              age >= 18
+          };
+          println!("Can vote : {}", can_vote(8));
+      }
+
+
+#. Save and run the code
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-014_closures v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-014_closures)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.81s
+           Running `target\debug\tut-014_closures.exe`
+      Can vote : false
+
+#. Commit and tag the change ``git tag RS-014.0_v0.0.1``

@@ -35,5 +35,19 @@ Let's start the exercise.
           println!("1st : {:?}", iter1.next());
       }
 
+#. Save and run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+           Running `target\debug\tut-013_iterators.exe`
+      Iterate through all the value in the array 
+      [1,2,3,4,]
+      You can also create an iterator
+      And call for each value with next
+      1st : Some(1)
+
+#. Commit and tag the change ``RS-013.0_v0.0.1``
 
 Next, let's move on to ``Closures``.
