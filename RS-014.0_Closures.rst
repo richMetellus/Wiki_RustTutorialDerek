@@ -46,3 +46,49 @@ Let's create a couple different closures:
       Can vote : false
 
 #. Commit and tag the change ``git tag RS-014.0_v0.0.1``
+
+Closures can access variable outside of its body unlike functions whenever it 
+is borrowing.
+
+1. Add the following code to the project main
+   
+   .. code-block:: diff 
+      :caption: src/main.rs
+
+      index 8b36a6a..bf26f66 100644
+      --- a/_resources/Examples/tut-014_closures/src/main.rs
+      +++ b/_resources/Examples/tut-014_closures/src/main.rs
+      @@ -10,4 +10,9 @@ fn main() {
+               age >= 18
+           };
+           println!("Can vote : {}", can_vote(8));
+      +
+      +    // Closures can access variables outside of its body with borrowing
+      +    let mut samp1 = 5;
+      +    let print_var = || println!("samp1 = {}", samp1);
+      +    print_var();
+       }
+
+#. Save and run
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-014_closures v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-014_closures)
+      warning: variable does not need to be mutable
+        --> src\main.rs:15:9
+         |
+      15 |     let mut samp1 = 5;
+         |         ----^^^^^
+         |         |
+         |         help: remove this `mut`
+         |
+         = note: `#[warn(unused_mut)]` on by default
+
+      warning: `tut-014_closures` (bin "tut-014_closures") generated 1 warning (run `cargo fix --bin "tut-014_closures"` to apply 1 suggestion)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.76s
+           Running `target\debug\tut-014_closures.exe`
+      Can vote : false
+      samp1 = 5
+
+#. Commit the change.

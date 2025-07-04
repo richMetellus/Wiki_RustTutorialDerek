@@ -10,4 +10,9 @@ fn main() {
         age >= 18
     };
     println!("Can vote : {}", can_vote(8));
+
+    // Closures can access variables outside of its body with borrowing
+    let mut samp1 = 5;
+    let print_var = || println!("samp1 = {}", samp1);
+    print_var();
 }
