@@ -15,4 +15,15 @@ fn main() {
     let mut samp1 = 5;
     let print_var = || println!("samp1 = {}", samp1);
     print_var();
+
+    // change the value
+    samp1 = 10;
+    println!("samp1 initial value= {}", samp1);
+
+    // You can change values if you mark the closure mutable
+    let mut change_var = || samp1 += 1;
+    change_var();
+    println!("samp1 after change inside closure = {}", samp1);
+    samp1 = 10;
+    println!("samp1 after setting it back to original value = {}", samp1);
 }

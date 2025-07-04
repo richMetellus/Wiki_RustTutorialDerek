@@ -92,3 +92,44 @@ is borrowing.
       samp1 = 5
 
 #. Commit the change.
+
+Next exercise will show how you can change values using closures.
+
+1. Make the following modification to the code. 
+   
+   .. code-block:: diff 
+      
+      --- a/_resources/Examples/tut-014_closures/src/main.rs
+      +++ b/_resources/Examples/tut-014_closures/src/main.rs
+      @@ -15,4 +15,15 @@ fn main() {
+           let mut samp1 = 5;
+           let print_var = || println!("samp1 = {}", samp1);
+           print_var();
+      +
+      +    // change the value
+      +    samp1 = 10;
+      +    println!("samp1 initial value= {}", samp1);
+      +
+      +    // You can change values if you mark the closure mutable
+      +    let mut change_var = || samp1 += 1;
+      +    change_var();
+      +    println!("samp1 after change inside closure = {}", samp1);
+      +    samp1 = 10;
+      +    println!("samp1 after setting it back to original value = {}", samp1);
+       }
+
+#. Run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-014_closures v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-014_closures)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.86s
+           Running `target\debug\tut-014_closures.exe`
+      Can vote : false
+      samp1 = 5
+      samp1 initial value= 10
+      samp1 after change inside closure = 11
+      samp1 after setting it back to original value = 10
+
+#. Save and tag
