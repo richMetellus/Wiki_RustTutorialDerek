@@ -40,7 +40,7 @@ Let's create a couple different closures:
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-014_closures v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-014_closures)
+         Compiling tut-014_closures v0.1.0 (Examples\tut-014_closures)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.81s
            Running `target\debug\tut-014_closures.exe`
       Can vote : false
@@ -74,7 +74,7 @@ is borrowing.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-014_closures v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-014_closures)
+         Compiling tut-014_closures v0.1.0 (Examples\tut-014_closures)
       warning: variable does not need to be mutable
         --> src\main.rs:15:9
          |
@@ -123,7 +123,7 @@ Next exercise will show how you can change values using closures.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-014_closures v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-014_closures)
+         Compiling tut-014_closures v0.1.0 (Examples\tut-014_closures)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.86s
            Running `target\debug\tut-014_closures.exe`
       Can vote : false

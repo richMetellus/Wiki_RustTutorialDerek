@@ -73,7 +73,7 @@ Let's create a few function
 
       Examples/tut-007_functions-generics (main)
       $ cargo run
-         Compiling tut-007_functions-generics v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-007_functions-generics)
+         Compiling tut-007_functions-generics v0.1.0 (Examples\tut-007_functions-generics)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.63s
            Running `target\debug\tut-007_functions-generics.exe`
       Hello
@@ -180,7 +180,7 @@ Let's create a few function
      .. code-block:: console 
         
         $ cargo run
-            Compiling tut-007_functions-generics v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-007_functions-generics)
+            Compiling tut-007_functions-generics v0.1.0 (Examples\tut-007_functions-generics)
          error[E0369]: cannot add `T` to `T`
            --> src\main.rs:42:14
             |
@@ -240,7 +240,7 @@ Let's create a few function
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-007_functions-generics v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-007_functions-generics)
+         Compiling tut-007_functions-generics v0.1.0 (Examples\tut-007_functions-generics)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s
            Running `target\debug\tut-007_functions-generics.exe`
       Hello

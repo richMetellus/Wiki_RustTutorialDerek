@@ -736,7 +736,7 @@ Knowing what I know now about strings, string slice and string literal;
          :emphasize-lines: 7, 9, 12
 
          $ cargo run
-            Compiling tut-005_strings_2 v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-005_strings_2)
+            Compiling tut-005_strings_2 v0.1.0 (Examples\tut-005_strings_2)
              Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.57s
               Running `target\debug\tut-005_strings_2.exe`
          Hello there

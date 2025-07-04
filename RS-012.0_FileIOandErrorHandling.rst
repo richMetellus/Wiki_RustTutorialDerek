@@ -227,7 +227,7 @@ We can use ``error.kind()`` to look for specific type of error.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-012_io-and-error-handling v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-012_io-and-error-handling)
+         Compiling tut-012_io-and-error-handling v0.1.0 (Examples\tut-012_io-and-error-handling)
       warning: unused variable: `output2`
         --> src\main.rs:57:9
          |

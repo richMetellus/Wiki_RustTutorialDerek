@@ -36,7 +36,7 @@ Casting
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-006_casting-enums-vectors v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-006_casting-enums-vectors)
+         Compiling tut-006_casting-enums-vectors v0.1.0 (Examples\tut-006_casting-enums-vectors)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
            Running `target\debug\tut-006_casting-enums-vectors.exe`
       int3_u32=9, size of 4 bytes
@@ -147,7 +147,7 @@ Enums
 
       $ cargo clean; cargo run
            Removed 47 files, 3.0MiB total
-         Compiling tut-006_casting-enums-vectors v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-006_casting-enums-vectors)
+         Compiling tut-006_casting-enums-vectors v0.1.0 (Examples\tut-006_casting-enums-vectors)
       warning: variants `Tuesday`, `Wednesday`, `Thursday`, `Friday`, and `Saturday` are never constructed
         --> src\main.rs:21:9
          |
