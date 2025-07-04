@@ -133,3 +133,72 @@ Next exercise will show how you can change values using closures.
       samp1 after setting it back to original value = 10
 
 #. Save and tag
+
+You can pass closures to function. You can define a function inside of main.
+Normally you wouldn't do sort of thing, but rust just like python allow you to 
+define nested functions. (a function define inside another function body).
+
+We're going to crete a function that will take in for parameters 2 variables and 
+a generic closure. What we're going to do is is pass 1 function that is going to 
+add, and another function that is going to multiply the 2 variables.
+
+here we label ``func`` as generic because we want to accept multiple different types
+``fn use_func<T>(a: i32, b: i32, func: T) -> i32`` then we use ``where T:`` and 
+you're going to list the datatype or parameters that your functions going to have.
+
+let's show how this can be done.
+
+1. add the following modification to the project
+
+   .. code-block:: diff 
+
+      diff --git a/_resources/Examples/tut-014_closures/src/main.rs b/_resources/Examples/tut-014_closures/src/main.rs
+      index ae4f3d2..fd45815 100644
+      --- a/_resources/Examples/tut-014_closures/src/main.rs
+      +++ b/_resources/Examples/tut-014_closures/src/main.rs
+      @@ -26,4 +26,27 @@ fn main() {
+           println!("samp1 after change inside closure = {}", samp1);
+           samp1 = 10;
+           println!("samp1 after setting it back to original value = {}", samp1);
+      +
+      +    // --You can pass closures to functions--
+      +    // you can defined function inside another function just like python nested 
+      +    // functions are allowed.
+      +
+      +    // here we are passing 2 variables and a closure. You can define this function 
+      +    // outside of main if you'd like. It is defined here simply for convenience reason.
+      +    // here we label `func` as generic because we want to accept multiple different types
+      +    fn use_func<T>(a: i32, b: i32, func: T) -> i32 where T: Fn(i32, i32) -> i32 {
+      +        
+      +        // push those 2 value into the function, and the different functions (add, or multiply)
+      +        // can execute 
+      +        func(a, b)
+      +    }
+      +
+      +    // create a closure which add a and b together
+      +    let sum = |a, b| a + b;
+      +    // create another closure which multiply these 2 value.
+      +    let prod = |a, b| a * b;
+      +    println!("----------Closure passed to function Exercise ----------");
+      +
+      +    println!("5 + 4 = {}", use_func(5, 4, sum));
+      +    println!("5 * 4 = {}", use_func(5, 4, prod));
+       }
+
+#. Save and run the code
+   
+   .. code-block:: console 
+
+      $ cargo run
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+           Running `target\debug\tut-014_closures.exe`
+      Can vote : false
+      samp1 = 5
+      samp1 initial value= 10
+      samp1 after change inside closure = 11
+      samp1 after setting it back to original value = 10
+      ----------Closure passed to function Exercise ----------
+      5 + 4 = 9
+      5 * 4 = 20
+
+#. Commit and tag this lesson.

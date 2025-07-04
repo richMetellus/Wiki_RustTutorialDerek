@@ -26,4 +26,27 @@ fn main() {
     println!("samp1 after change inside closure = {}", samp1);
     samp1 = 10;
     println!("samp1 after setting it back to original value = {}", samp1);
+
+    // --You can pass closures to functions--
+    // you can defined function inside another function just like python nested 
+    // functions are allowed.
+
+    // here we are passing 2 variables and a closure. You can define this function 
+    // outside of main if you'd like. It is defined here simply for convenience reason.
+    // here we label `func` as generic because we want to accept multiple different types
+    fn use_func<T>(a: i32, b: i32, func: T) -> i32 where T: Fn(i32, i32) -> i32 {
+        
+        // push those 2 value into the function, and the different functions (add, or multiply)
+        // can execute 
+        func(a, b)
+    }
+
+    // create a closure which add a and b together
+    let sum = |a, b| a + b;
+    // create another closure which multiply these 2 value.
+    let prod = |a, b| a * b;
+    println!("----------Closure passed to function Exercise ----------");
+
+    println!("5 + 4 = {}", use_func(5, 4, sum));
+    println!("5 * 4 = {}", use_func(5, 4, prod));
 }
