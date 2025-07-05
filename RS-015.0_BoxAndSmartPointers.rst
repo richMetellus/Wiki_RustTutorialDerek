@@ -1,2 +1,134 @@
 Smart Pointers and Box 
 ########################
+
+**Objectives**
+
+* Explore the Box smart pointers, the reference pointer
+
+Basically a pointer is just an address to a location in memory. We've been using 
+them during the tutorial whenever we use the reference operator ``&`` to borrow 
+a value rather than taking it and having it cleaned out of memory.
+
+We've been using other smart pointers. Strings and vectors are also smart pointers.
+Why is that? they own the data and they also have functions for manipulating that 
+data. Basically smart pointers just provide functionality beyond referencing a 
+specific location in memory and they can also be used to track the ownership of 
+data.
+
+Box 
+****
+
+To talk about box, we're going to create a binary tree data structure utilizing 
+box. 
+
+A box smart pointer basically just store data on the heap instead of the stack.
+Box is normally is going to be used when you have a large amount of data that 
+is stored on the Heap and then you pass pointer to it on the stack.
+
+if you want to create a box using ``let variable-name: Box<data-type>  = Box::new(data-value)``;
+
+1. Create a project for this new tutorial ``cargo new tut-015_smart-pointers``
+#. Add the following code in src/main.rs
+   
+   .. code-block:: Rust 
+
+      fn main() {
+          // ----- SMART POINTERS -----
+          // A pointer is an address to a location in memory. We have been
+          // using them when we used the reference operator(&) to borrow
+          // a value.
+
+          // Strings and vectors are smart pointers. They own
+          // data and also have functions for manipulating that data.
+
+          // Smart pointers provide functionality beyond referencing locations
+          // in memory. They can be used to track who has ownership of data.
+          // Ownership is very important with Rust.
+
+          // ----- BOX -----
+
+          // The Box smart pointer stores data on the heap instead of the stack.
+          // All values are stored on the stack by default
+
+          // Stack : Stores values in a last in first out format
+          // Data on the stack must have a defined fixed size
+
+          // Heap : When putting data on the heap you request a certain
+          // amount of space. The OS finds space available and returns
+          // an address for that space called a pointer.
+
+          // A Box is normally used when you have a large amount of data stored
+          // on the heap and then you pass pointers to it on the stack.
+
+          // Create a Box with value 10
+          let b_int1 = Box::new(10);
+
+          // Get the value
+          println!("b_int1 = {}", b_int1);
+
+      }
+
+#. Save and run the code 
+
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-015_smart-pointers v0.1.0 (Examples\tut-015_smart-pointers)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.78s
+           Running `target\debug\tut-015_smart-pointers.exe`
+      b_int1 = 10
+
+Box Application: Binary Tree in Rust
+=======================================
+
+Let create a struct to try to create a binary tree. A binary tree is a type of 
+tree data structure in which
+
+1.  **each node have at most 2 children, referred to as left 
+    child and right child**. 
+
+    * exactly 2 for **proper** binary trees 
+
+2. The children of a node are an ordered pair. 
+   
+   * The value of the data in the left child should be smaller
+     than or equal to the value stored in the right child.
+
+Recursive definition of a Binary tree: 
+
+* A tree with a single node [is also a binary tree]. 
+* A tree whose root has an ordered pair of children, each of which is also a 
+  binary tree.
+
+.. grid:: 2 
+
+   .. grid-item:: example 1
+
+      .. code-block:: console 
+         :caption: src: Derek course
+
+                 50
+                /  \
+               35  40
+
+      .. code-block:: console
+         :caption: src: me 
+
+                 10
+                /  \
+               11  12
+              /    /\
+            13    8  9
+
+   .. grid-item:: more example
+   
+      .. code-block:: console
+         :caption: src: Tamassia CSCII NDSU course, Binary Search Tree presentation.
+
+                    6
+                   /  \
+                 2      9 
+                / \    / \
+               1   4   8  x (i.e null, no child)
+              /\  /\   /\
+              x x x x  x x
