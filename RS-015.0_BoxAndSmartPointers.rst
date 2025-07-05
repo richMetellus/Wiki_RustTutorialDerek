@@ -205,4 +205,140 @@ create a binary tree:
    siblings, no left node or right node, that is going to trigger other type of error.
 
 These would have cause all kind of memory problems if Rust allowed that type of 
-code. To fix that we need to add the
+code. To fix that we need to add the nested node inside of boxes.
+
+1. Make the following modification to the project 
+   
+   .. code-block:: diff 
+
+      diff --git a/_resources/Examples/tut-015_smart-pointers/src/main.rs b/_resources/Examples/tut-015_smart-pointers/src/main.rs 
+      index 2083b48..184b510 100644
+      --- a/_resources/Examples/tut-015_smart-pointers/src/main.rs
+      +++ b/_resources/Examples/tut-015_smart-pointers/src/main.rs
+      @@ -39,11 +39,11 @@ fn main() {
+           // This is saying we can't include nodes in a node because
+           // the size of node depends on the size of multiple nodes
+           // which confuses the compiler
+      -    struct TreeNode<T> {
+      -        pub left: TreeNode<T>,
+      -        pub right: TreeNode<T>,
+      -        pub key: T, // this caused error
+      -    }
+      +    // struct TreeNode<T> {
+      +    //     pub left: TreeNode<T>,
+      +    //     pub right: TreeNode<T>,
+      +    //     pub key: T, // this caused error
+      +    // }
+
+           // We have other problems in that Binary Trees eventually end
+           // and Rust doesn't like Null values so we have to use Option
+      @@ -51,4 +51,61 @@ fn main() {
+           // We can use a Box here because it has a pointer to data and
+           // a fixed size
+
+      +    struct TreeNode<T> {
+      +        pub left: Option<Box<TreeNode<T>>>,
+      +        pub right: Option<Box<TreeNode<T>>>,
+      +        pub key: T
+      +    }
+      +
+      +    // Create functions for creating nodes and adding left & right
+      +    impl<T> TreeNode<T> {
+      +        // the key is the value assigned to the node.
+      +        pub fn new(key: T) -> Self {
+      +            TreeNode {
+      +                left: None, // bring new node, so typically they have none.
+      +                right: None,
+      +                key,
+      +            }
+      +        }
+      +        // to assign a left tree node.
+      +        pub fn left(mut self, node: TreeNode<T>) -> Self {
+      +            self.left = Some(Box::new(node));
+      +            self
+      +        }
+      +        // to assign a right tree node.
+      +        pub fn right(mut self, node: TreeNode<T>) -> Self {
+      +            self.right = Some(Box::new(node));
+      +            self
+      +        }
+      +    }
+      +
+      +    // Used to test original, single node binary tree.
+      +    let mut boss = TreeNode {
+      +        left: None,
+      +        right: None,
+      +        key: 50,
+      +    };
+      +
+      +    // Create the root node with left and right
+      +
+      +    /*
+      +             1
+      +            / \
+      +           2    3
+      +          / \  / \
+      +          4 5  6  7
+      +     */
+      +
+      +    let node2 = TreeNode::new(2)
+      +    .left(TreeNode::new(4))
+      +    .right(TreeNode::new(5));
+      +    
+      +    let node3 = TreeNode::new(3)
+      +    .left(TreeNode::new(6))
+      +    .right(TreeNode::new(7));
+      +
+      +    let binary_tree1 = TreeNode::new(1)
+      +    .left(node2)
+      +    .right(node3);
+      +
+       }
+
+#. Save and run the code 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-015_smart-pointers v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-015_smart-pointers)
+      warning: unused variable: `boss`
+        --> src\main.rs:83:13
+         |
+      83 |     let mut boss = TreeNode {
+         |             ^^^^ help: if this is intentional, prefix it with an underscore: `_boss`
+         |
+         = note: `#[warn(unused_variables)]` on by default
+
+      warning: unused variable: `binary_tree1`
+         --> src\main.rs:107:9
+          |
+      107 |     let binary_tree1 = TreeNode::new(1)
+          |         ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_binary_tree1`
+
+      warning: variable does not need to be mutable
+        --> src\main.rs:83:9
+         |
+      83 |     let mut boss = TreeNode {
+         |         ----^^^^
+         |         |
+         |         help: remove this `mut`
+         |
+         = note: `#[warn(unused_mut)]` on by default
+
+      warning: field `key` is never read
+        --> src\main.rs:57:13
+         |
+      54 |     struct TreeNode<T> {
+         |            -------- field in this struct
+      ...
+      57 |         pub key: T
+         |             ^^^
+         |
+         = note: `#[warn(dead_code)]` on by default
+
+      warning: `tut-015_smart-pointers` (bin "tut-015_smart-pointers") generated 4 warnings (run `cargo fix --bin "tut-015_smart-pointers"` to apply 1 suggestion)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.85s
+           Running `target\debug\tut-015_smart-pointers.exe`
+      b_int1 = 10
+
+#. Save and commit the change 
