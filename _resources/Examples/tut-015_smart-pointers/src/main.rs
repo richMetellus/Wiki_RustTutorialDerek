@@ -32,4 +32,23 @@ fn main() {
     // Get the value
     println!("b_int1 = {}", b_int1);
 
+    // If we try to create a Binary tree we get the error
+    // the size for values of type `str` cannot be known at
+    // compilation time within `TreeNode<T>`
+
+    // This is saying we can't include nodes in a node because
+    // the size of node depends on the size of multiple nodes
+    // which confuses the compiler
+    struct TreeNode<T> {
+        pub left: TreeNode<T>,
+        pub right: TreeNode<T>,
+        pub key: T, // this caused error
+    }
+
+    // We have other problems in that Binary Trees eventually end
+    // and Rust doesn't like Null values so we have to use Option
+
+    // We can use a Box here because it has a pointer to data and
+    // a fixed size
+
 }

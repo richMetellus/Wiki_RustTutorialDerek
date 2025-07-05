@@ -78,6 +78,8 @@ if you want to create a box using ``let variable-name: Box<data-type>  = Box::ne
            Running `target\debug\tut-015_smart-pointers.exe`
       b_int1 = 10
 
+#. Commit the change and tag it RS-015.0_v0.0.1
+
 Box Application: Binary Tree in Rust
 =======================================
 
@@ -132,3 +134,75 @@ Recursive definition of a Binary tree:
                1   4   8  x (i.e null, no child)
               /\  /\   /\
               x x x x  x x
+
+If we defined a tree node, which can have a left child and a child like the following
+we will get an error ``recursive type TreeNode has infinite size``
+
+1. Add the following code to demonstrate this error 
+
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-015_smart-pointers/src/main.rs
+      +++ b/_resources/Examples/tut-015_smart-pointers/src/main.rs
+      @@ -32,4 +32,23 @@ fn main() {
+           // Get the value
+           println!("b_int1 = {}", b_int1);
+
+      +    // If we try to create a Binary tree we get the error
+      +    // the size for values of type `str` cannot be known at
+      +    // compilation time within `TreeNode<T>`
+      +
+      +    // This is saying we can't include nodes in a node because
+      +    // the size of node depends on the size of multiple nodes
+      +    // which confuses the compiler
+      +    struct TreeNode<T> {
+      +        pub left: TreeNode<T>,
+      +        pub right: TreeNode<T>,
+      +        pub key: T, // this caused error
+      +    }
+      +
+      +    // We have other problems in that Binary Trees eventually end
+      +    // and Rust doesn't like Null values so we have to use Option
+      +
+      +    // We can use a Box here because it has a pointer to data and
+      +    // a fixed size
+      +
+       }
+
+
+
+#. Save and Run the code 
+
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-015_smart-pointers v0.1.0 (Examples\tut-015_smart-pointers)
+      error[E0072]: recursive type `TreeNode` has infinite size
+        --> src\main.rs:42:5
+         |
+      42 |     struct TreeNode<T> {
+         |     ^^^^^^^^^^^^^^^^^^
+      43 |         pub left: TreeNode<T>,
+         |                   ----------- recursive without indirection
+         |
+      help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+         |
+      43 |         pub left: Box<TreeNode<T>>,
+         |                   ++++           +
+
+      For more information about this error, try `rustc --explain E0072`.
+      error: could not compile `tut-015_smart-pointers` (bin "tut-015_smart-pointers") due to 1 previous error
+
+#. Commit and tag the change RS-015.0_v0.0.2
+
+The reason we will get an error multiple type of errors is because if we try to 
+create a binary tree:
+
+1. Rust does not like the idea of a tree node inside of a tree node.
+2. if we store like a string inside as Key, the string size can't be known at 
+   compilation time.
+3. Rust does not like null values. If we have a tree and there is no additional 
+   siblings, no left node or right node, that is going to trigger other type of error.
+
+These would have cause all kind of memory problems if Rust allowed that type of 
+code. To fix that we need to add the
