@@ -186,7 +186,7 @@ To make sure all thread are guaranteed to complete, make the following modificat
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-016-concurrency v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-016-concurrency)
+         Compiling tut-016-concurrency v0.1.0 (Examples\tut-016-concurrency)
           Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.57s
            Running `target\debug\tut-016-concurrency.exe`
       Main thread : 1
@@ -235,4 +235,119 @@ To make sure all thread are guaranteed to complete, make the following modificat
 
    * as you can see both thread finish their execution.
 
-#. Commit and tag the changes
+#. Commit and tag the changes ``RS-016.0_v0.0.2``
+
+Now let's do the bank account example.
+
+Bank Simulator Example - Bad
+*****************************
+
+Let show a bad way to create a bank simulator in Rust.
+
+1. In this current project, make the following modification 
+   
+   .. code-block:: diff 
+
+      --- a/_resources/Examples/tut-016-concurrency/src/main.rs
+      +++ b/_resources/Examples/tut-016-concurrency/src/main.rs
+      @@ -16,6 +16,8 @@ fn main() {
+           // Create a thread with spawn which takes a closure.
+           // This thread will show how a thread does not necessarily to everything in
+           // time.
+      +    
+      +    /* Commented out for next exercise.
+           let thread1 = thread::spawn(|| {
+               for i in 1..25 {
+                   // this tread cycle through and share outputting information to the screen
+      @@ -35,5 +37,38 @@ fn main() {
+           // We call join here so that the main thread executes with thread1
+           // unwrap handles the option Result which is Ok or Err
+           thread1.join().unwrap();
+      +    */
+      +
+      +    // Bank struct just contains current balance
+      +    pub struct Bank {
+      +        balance: f32
+      +    }
+      +
+      +    // Allows for withdrawing money
+      +    // Pass a mutable reference so bank can be used elsewhere
+      +    fn withdraw(the_bank: &mut Bank, amt: f32) {
+      +            the_bank.balance -= amt;
+      +        }
+      +
+      +
+      +    // Create bank struct with $100 to start with
+      +    let mut bank = Bank{balance: 100.00};
+      +    withdraw(&mut bank, 5.00);
+      +    println!("Balance : {}", bank.balance);
+      +
+      +    // Create a customer thread that withdraws money
+      +    // THIS WON'T WORK
+      +    fn customer(the_bank: &mut Bank){
+      +        withdraw(the_bank, 5.00)
+      +    }
+      +
+      +    // Can't do this closure may outlive the current function,
+      +    // but it borrows `bank`, which is owned by the current function
+      +    // If a thread can outlive the main function and the main function
+      +    // has the bank which causes problems
+      +    thread::spawn(|| {
+      +        customer(&mut bank)
+      +    }).join().unwrap();
+      +
+
+       }
+
+#. Save and run
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-016-concurrency v0.1.0 (Examples\tut-016-concurrency)
+      warning: unused import: `std::time::Duration`
+       --> src\main.rs:2:5
+        |
+      2 | use std::time::Duration;
+        |     ^^^^^^^^^^^^^^^^^^^
+        |
+        = note: `#[warn(unused_imports)]` on by default
+      
+      error[E0373]: closure may outlive the current function, but it borrows `bank`, which is owned by the current function
+        --> src\main.rs:69:19
+         |
+      69 |     thread::spawn(|| {
+         |                   ^^ may outlive borrowed value `bank`
+      70 |         customer(&mut bank)
+         |                       ---- `bank` is borrowed here
+         |
+      note: function requires argument type to outlive `'static`
+        --> src\main.rs:69:5
+         |
+      69 | /     thread::spawn(|| {
+      70 | |         customer(&mut bank)
+      71 | |     }).join().unwrap();
+         | |______^
+      help: to force the closure to take ownership of `bank` (and any other referenced variables), use the `move` keyword
+         |
+      69 |     thread::spawn(move || {
+         |                   ++++
+      
+      For more information about this error, try `rustc --explain E0373`.
+      warning: `tut-016-concurrency` (bin "tut-016-concurrency") generated 1 warning
+      error: could not compile `tut-016-concurrency` (bin "tut-016-concurrency") due to 1 previous error; 1 warning emitted
+
+#. Commit and tag ``git tag RS-016.0_v0.0.3``
+
+The reason the compiler won't let this code compile is because you can have 
+a situation in which a closure may outlive the current ``main`` function specially because 
+it is borrowing ``bank`` which is owned by the current ``main`` function. 
+
+In any situation in which a thread can outlive the main function and the 
+main function owned data that the thread may need, this is going to cause all 
+sort of problems. One of the fixes for this, is a smart pointer. This smart 
+pointer will allow multiple owners and it's going to block access whenever 
+these different parts are needed.
+
+* we're looking for a smart pointer that is going to have a reference. We 
+  need a reference smart pointer.
