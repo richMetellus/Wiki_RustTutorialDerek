@@ -25,6 +25,9 @@ A box smart pointer basically just store data on the heap instead of the stack.
 Box is normally is going to be used when you have a large amount of data that 
 is stored on the Heap and then you pass pointer to it on the stack.
 
+.. seealso::  This sounds similar to .NET class and object representation in 
+   memory `Stack and Heap in C# .NET (YouTube)`_
+
 if you want to create a box using ``let variable-name: Box<data-type>  = Box::new(data-value)``;
 
 1. Create a project for this new tutorial ``cargo new tut-015_smart-pointers``
@@ -300,7 +303,7 @@ code. To fix that we need to add the nested node inside of boxes.
    .. code-block:: console 
 
       $ cargo run
-         Compiling tut-015_smart-pointers v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-015_smart-pointers)
+         Compiling tut-015_smart-pointers v0.1.0 (Examples\tut-015_smart-pointers)
       warning: unused variable: `boss`
         --> src\main.rs:83:13
          |
@@ -342,3 +345,5 @@ code. To fix that we need to add the nested node inside of boxes.
       b_int1 = 10
 
 #. Save and commit the change 
+
+.. include:: ../../relevant_urls.rst

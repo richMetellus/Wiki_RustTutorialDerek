@@ -1,2 +1,153 @@
 Concurrency and Thread in Rust
 ###############################
+
+**Objectives**
+
+* Simulate bank transaction while exploring threads in rust. 
+
+**Intro**
+
+"Concurrent programming going to involve executing different blocks of code  
+independently. What is commonly talked about is parallel programming and 
+it's different in that code executes at the same time and these different 
+blocks of code that execute are referred to as threads and basically a thread is 
+going to handle the scheduling as well as the execution of these blocks of code."
+(src: Derek)
+
+
+.. note:: In parallel programming, each thread execute at the same time simultaneously, 
+   (i.e in parallel), whereas in concurrent programming say in a 1 core CPU the 
+   OS scheduler switch on tasks/threads giving the impression they are running 
+   at the same time. Concurrent programming focuses on 
+   managing multiple tasks that may or may not be executing at the same time, while 
+   parallel programming specifically involves the simultaneous execution of multiple 
+   tasks on multiple processors (src: me + google search)
+
+   .. seealso:: `Concurrency vs Parallelism (Medium)`_
+
+      * `Concurrency vs Parallelism (Jakob Jenkov)`_
+
+**Common problems with concurrent programming**
+
+1. Thread are accessing data in the wrong order 
+2. Threads are blocked from executing because of confusion over requirements 
+   to proceed with execution. (deadlocks).
+
+Rust smart compiler will handle all these cases for us. 
+
+.. include:: ../../relevant_urls.rst
+
+1. Create a new project ``cargo new tut-016-concurrency``
+
+We wil demonstrate there is no guaranteed on when a thread will execute and that 
+they will complete execution.
+
+* we will create a thread with ``thread::spawn`` standard library function that 
+  count to 25. 
+
+* Then the main thread in main will count to 20.
+* then we will observe the output of the execution.
+
+2. Add the following code to main
+
+   .. code-block:: Rust
+      :linenos:
+
+      use std::thread;
+      use std::time::Duration;
+
+      fn main() {
+          // ----- CONCURRENCY -----
+          // Concurrent programming involves executing different blocks of code
+          // independently, while parallel programming is when different
+          // code executes at the same instant of time. A thread handles scheduling
+          // and execution of these blocks of code.
+
+          // Common problems with parallel programming involve :
+          // 1. Thread are accessing data in the wrong order
+          // 2. Threads are blocked from executing because of confusion
+          // over requirements to proceed with execution
+
+          // Create a thread with spawn which takes a closure.
+          // This thread will show how a thread does not necessarily to everything in
+          // time.
+          thread::spawn(|| {
+              for i in 1..25 {
+                  // this tread cycle through and share outputting information to the screen
+                  println!("Spawned thread : {}", i);
+                  // Forces thread to sleep and allow another thread like main thread to execute
+                  thread::sleep(Duration::from_millis(1));
+              }
+          });
+
+          // There are no guarantees on when the threads will execute and
+          // that they will complete execution
+          for count in 1..20 {
+              println!("Main thread : {}", count);
+              thread::sleep(Duration::from_millis(1));
+          }
+
+      }
+
+
+#. Save and run 
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-016-concurrency v0.1.0 (Examples\tut-016-concurrency)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.44s
+           Running `target\debug\tut-016-concurrency.exe`
+      Main thread : 1
+      Spawned thread : 1
+      Spawned thread : 2
+      Main thread : 2
+      Main thread : 3
+      Spawned thread : 3
+      Main thread : 4
+      Spawned thread : 4
+      Main thread : 5
+      Spawned thread : 5
+      Main thread : 6
+      Spawned thread : 6
+      Main thread : 7
+      Spawned thread : 7
+      Main thread : 8
+      Spawned thread : 8
+      Main thread : 9
+      Spawned thread : 9
+      Main thread : 10
+      Spawned thread : 10
+      Main thread : 11
+      Spawned thread : 11
+      Main thread : 12
+      Spawned thread : 12
+      Main thread : 13
+      Spawned thread : 13
+      Main thread : 14
+      Spawned thread : 14
+      Main thread : 15
+      Spawned thread : 15
+      Main thread : 16
+      Spawned thread : 16
+      Main thread : 17
+      Spawned thread : 17
+      Main thread : 18
+      Spawned thread : 18
+      Main thread : 19
+      Spawned thread : 19
+      Spawned thread : 20
+
+
+* The spawned thread is supposed to print out 25 times, and the main thread 
+  up to 20 but not including 20.
+
+  * As you can see main prints up to 19.
+  * however spawned thread count up to 20 instead of up to 24.
+    
+    * The reason is because there is no guarantee on when a thread will execute 
+      and if they will even complete execution on this current form.
+    
+    * If we want to guarantee they do finish execute, we call ``.join()`` which will
+      make sure the thread is going to complete. Then use ``.unwrap()`` which going 
+      to handle the result to pass back.
