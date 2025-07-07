@@ -151,3 +151,88 @@ they will complete execution.
     * If we want to guarantee they do finish execute, we call ``.join()`` which will
       make sure the thread is going to complete. Then use ``.unwrap()`` which going 
       to handle the result to pass back.
+
+4. Commit and tag the change so the result can be replicated ``git tag RS-016.0_v0.0.1``
+
+To make sure all thread are guaranteed to complete, make the following modification.
+
+5. Add these changes in main. 
+   
+   .. code-block:: diff
+
+      --- a/_resources/Examples/tut-016-concurrency/src/main.rs
+      +++ b/_resources/Examples/tut-016-concurrency/src/main.rs
+      @@ -16,7 +16,7 @@ fn main() {
+           // Create a thread with spawn which takes a closure.
+           // This thread will show how a thread does not necessarily to everything in
+           // time.
+      -    thread::spawn(|| {
+      +    let thread1 = thread::spawn(|| {
+               for i in 1..25 {
+                   // this tread cycle through and share outputting information to the screen
+                   println!("Spawned thread : {}", i);
+      @@ -32,4 +32,8 @@ fn main() {
+               thread::sleep(Duration::from_millis(1));
+           }
+
+      +    // We call join here so that the main thread executes with thread1
+      +    // unwrap handles the option Result which is Ok or Err
+      +    thread1.join().unwrap();
+      +
+       }
+
+#. Save and run
+   
+   .. code-block:: console 
+
+      $ cargo run
+         Compiling tut-016-concurrency v0.1.0 (C:\Users\ricky\Workspace-loc\Repos\Pers\docs_allTest\source\topics\Prog\Lang\Wiki_Rust-lang\Courses\Wiki_RustTutorialDerek\_resources\Examples\tut-016-concurrency)
+          Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.57s
+           Running `target\debug\tut-016-concurrency.exe`
+      Main thread : 1
+      Spawned thread : 1
+      Spawned thread : 2
+      Main thread : 2
+      Spawned thread : 3
+      Main thread : 3
+      Spawned thread : 4
+      Main thread : 4
+      Spawned thread : 5
+      Main thread : 5
+      Spawned thread : 6
+      Main thread : 6
+      Spawned thread : 7
+      Main thread : 7
+      Spawned thread : 8
+      Main thread : 8
+      Spawned thread : 9
+      Main thread : 9
+      Spawned thread : 10
+      Main thread : 10
+      Spawned thread : 11
+      Main thread : 11
+      Spawned thread : 12
+      Main thread : 12
+      Main thread : 13
+      Spawned thread : 13
+      Main thread : 14
+      Spawned thread : 14
+      Main thread : 15
+      Spawned thread : 15
+      Main thread : 16
+      Spawned thread : 16
+      Main thread : 17
+      Spawned thread : 17
+      Main thread : 18
+      Spawned thread : 18
+      Main thread : 19
+      Spawned thread : 19
+      Spawned thread : 20
+      Spawned thread : 21
+      Spawned thread : 22
+      Spawned thread : 23
+      Spawned thread : 24
+
+   * as you can see both thread finish their execution.
+
+#. Commit and tag the changes
