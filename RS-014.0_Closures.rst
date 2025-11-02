@@ -1,15 +1,25 @@
 Closures
 #########
 
-a closure is a function without a name and they are more likely 
-going to be stored in a variable and can be used to pass a function into another 
-function. 
+a closure 
+
+* is a function without a name and they are more likely 
+  going to be stored in a variable and can be used to pass a function into another 
+  function. [1]_ (Derek) 
+
+* Rust’s closures are **anonymous** functions you can save in a variable or pass 
+  as arguments to other functions. [2]_ 
+
+* A closure is any function which **closes over** the **environment** in which 
+  it was defined. [3]_
+  
+  * This means that it can access variables not in its parameter list
 
 The basic layout for creating a closure::
 
    let var_name = |parameter1, parameter2, ..., parameterN| -> return_type {Body}
 
-where each parameter is in the form ``variable_name: data_type``
+where each parameter is in the form ``parameter_name: data_type``
 
 Let's create a couple different closures:
 
@@ -202,3 +212,16 @@ let's show how this can be done.
       5 * 4 = 20
 
 #. Commit and tag this lesson.
+
+Further Readings and References 
+********************************
+
+.. [1] Youtube Course
+.. [2] `Closures (Rust book)`_ 
+.. [#] `Difference between closures and lambda (stackoverflow)`_
+
+* `Function pointers, Closures, and Lambda (StackOverflow)`_
+* `Advanced Functions and Closures(Rust book)`_
+* `Closures != Function Pointers (LinkedIn blog)`_ 
+
+.. include:: ../../relevant_urls.rst
